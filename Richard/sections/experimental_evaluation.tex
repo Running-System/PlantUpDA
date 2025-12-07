@@ -1,0 +1,76 @@
+\section{Experimental Evaluation of MQTT vs. REST}
+
+\subsection{Introduction to the Experiment}
+To provide a rigorous answer to the research question—How do MQTT and REST compare in a microservices-based architecture for real-time plant monitoring?—this thesis employs an empirical experimental approach. The ``Plant Up!'' system, as detailed in Chapter 3, serves as the testbed. The evaluation focuses on quantifying the three critical performance vectors defined in the problem statement: Latency, Throughput, and Energy Efficiency.
+
+This chapter details the experimental setup, the measurement methodology, and the specific scenarios designed to stress-test the protocols under conditions mimicking a real-world urban gardening environment (e.g., unstable Wi-Fi, battery constraints).
+
+\subsection{Experimental Setup}
+The testbed is constructed to isolate the communication protocol as the single independent variable. Both the hardware (Edge) and the backend (Cloud) remain constant, with only the application layer transport mechanism toggling between MQTT (v3.1.1) and REST (HTTP/1.1).
+
+\subsubsection{Hardware Configuration (Edge Layer)}
+The experiments utilize the ESP32-S3-DevKitC-1, selected for its relevance to the ``Plant Up!'' production specification.
+\begin{itemize}
+    \item \textbf{Microcontroller}: ESP32-S3 (Xtensa\textregistered\ 32-bit LX7 dual-core, 240 MHz).
+    \item \textbf{Network Interface}: Integrated 2.4 GHz Wi-Fi (802.11 b/g/n).
+    \item \textbf{Power Measurement}: Nordic Semiconductor Power Profiler Kit II (PPK2), set to ``Source Meter'' mode with a sampling rate of 100ksps (kilo-samples per second) to capture transient current spikes during Wi-Fi transmission.
+    \item \textbf{Sensors}: Simulated sensor data is used during load testing to ensure deterministic payload sizes, eliminating variance caused by sensor read times.
+\end{itemize}
+
+\subsubsection{Backend Environment (Cloud Layer)}
+The microservices backend is hosted on a local Kubernetes cluster (Minikube) to eliminate internet service provider (ISP) jitter from the latency measurements.
+\begin{itemize}
+    \item \textbf{Broker}: Eclipse Mosquitto (v2.0.11) deployed as a Docker container.
+    \item \textbf{API Gateway}: NGINX (v1.21) acting as the reverse proxy for REST requests.
+    \item \textbf{Database}: Supabase (v2.0) for time-series storage.
+    \item \textbf{Network Emulation}: \texttt{tc} (Traffic Control) is used on the Linux host to simulate packet loss (2-5\%) and added latency (50-100ms), replicating poor residential Wi-Fi signal strength (-80dBm).
+\end{itemize}
+
+The following infrastructure configuration ensures both protocols are available simultaneously for A/B testing:
+\begin{figure}[h]
+    \centering
+    % Placeholder for config/image
+    \begin{verbatim}
+    [A/B Testing Infrastructure Diagram/Config Placeholder]
+    \end{verbatim}
+    \caption{A/B Testing Infrastructure}
+\end{figure}
+
+\subsection{Methodology and Metrics}
+
+\subsubsection{Metric 1: End-to-End Latency ($L_{e2e}$)}
+Latency is defined as the time elapsed between the generation of a sensor reading at the Edge Node ($t_{gen}$) and its persistence in the Supabase database ($t_{ack}$).
+\[ L_{e2e} = t_{ack} - t_{gen} \]
+To measure this accurately without relying on un-synchronized clocks (clock drift between ESP32 and Server), we utilize a ``Round Trip Time'' (RTT) approach for the benchmark. The ESP32 sends a message and waits for an application-layer acknowledgement from the server.
+\begin{itemize}
+    \item \textbf{MQTT}: Time from \texttt{publish()} to arrival of \texttt{PUBACK} (QoS 1).
+    \item \textbf{REST}: Time from \texttt{http.POST()} to return of HTTP 200 OK.
+\end{itemize}
+
+Note: In the REST implementation, \texttt{http.begin()} often initiates the TCP handshake, heavily penalizing the latency score if Keep-Alive is not active.
+
+\subsubsection{Metric 2: Throughput and Congestion}
+Throughput is evaluated by increasing the message frequency ($f_{msg}$) from 1 Hz to 100 Hz. The metric is Successful Messages Per Second (SMPS).
+This test simulates a ``Broadcast Event'' where the ``Social Service'' might request immediate status updates from all plants in a Guild (e.g., during a ``Watering Party'' game event). We observe the point at which packet loss exceeds 1\% or the ESP32's queue overflows.
+
+\subsubsection{Metric 3: Energy Consumption}
+Using the DEBUG\_PIN triggers the Logic Analyzer to capture the exact current draw during the transmission window.
+\begin{figure}[h]
+    \centering
+    % Placeholder for image/data
+    \begin{verbatim}
+    [Power Consumption Graph/Data Placeholder]
+    \end{verbatim}
+    \caption{Power Consumption Analysis}
+\end{figure}
+
+\subsection{Data Consistency Evaluation Strategy}
+To evaluate Data Consistency, we induce network partitions (simulating a user walking out of Wi-Fi range with the portable sensor unit).
+
+\textbf{Scenario}: The device generates 100 messages while disconnected.
+\begin{itemize}
+    \item \textbf{REST Behavior}: The \texttt{HTTPClient} will return connection errors. We measure how many messages are lost vs. how many are successfully buffered in the ESP32's limited RAM (Ring Buffer) and sent upon reconnection.
+    \item \textbf{MQTT Behavior}: We test QoS 1 and QoS 2 with Persistent Sessions (CleanSession=false). The Broker should queue messages destined for the subscriber, but the Edge Node must also queue messages destined for the Cloud.
+\end{itemize}
+
+This evaluation specifically looks at the implementation of the Outbox Pattern on the embedded device, which is crucial for the ``Eventual Consistency'' required by the CAP theorem analysis in Chapter 2.4.

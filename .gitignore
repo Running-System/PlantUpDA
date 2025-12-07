@@ -1,0 +1,93 @@
+# ------------------------------
+# LaTeX build and auxiliary files
+# ------------------------------
+*.aux
+*.bbl
+*.blg
+*.brf
+*.idx
+*.ilg
+*.ind
+*.lof
+*.log
+*.lot
+*.out
+*.toc
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.nav
+*.snm
+*.vrb
+*.xdv
+*.run.xml
+*.bcf
+
+# ------------------------------
+# Editors / IDEs
+# ------------------------------
+# VS Code
+.vscode/
+# TeXstudio
+*.txssave
+*.synctex(busy)
+# TeXShop
+*.texpadtmp
+# LyX
+*.lyx~
+# Emacs / Vim
+*~
+.#*
+*.swp
+*.swo
+
+# ------------------------------
+# Build outputs
+# ------------------------------
+*.ps
+*.dvi
+
+# ------------------------------
+# Overleaf & collaboration tools
+# ------------------------------
+*.blx.bib
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.ist
+*.xdy
+*.lol
+*.lox
+*.fdb_latexmk
+*.fls
+
+# ------------------------------
+# Miscellaneous
+# ------------------------------
+*.bak
+*.backup
+*.tmp
+*.temp
+*.old
+*.orig
+*.synctex.gz(busy)
+*auto/*
+*.synctex(busy)
+
+# ------------------------------
+# System files
+# ------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ------------------------------
+# Output / distribution folders
+# ------------------------------
+build/
+output/
+out/
+dist/
