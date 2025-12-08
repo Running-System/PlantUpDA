@@ -1,4 +1,4 @@
-\section{Plant Up! System Architecture and Implementation}
+\section{Plant sUp! System Architecture and Implementation}
 
 \subsection{System Overview and Requirements}
 The ``Plant Up!'' system is architected as a distributed Cyber-Physical Social System (CPSS), designed to bridge the gap between biological monitoring and social interaction. Unlike traditional agricultural data loggers which function as isolated silos, ``Plant Up!'' requires a continuous, bi-directional flow of data between the physical edge (the plant) and the social cloud (the community).
@@ -15,36 +15,23 @@ The primary non-functional requirements driving this architecture are energy aut
 \subsection{Hardware Layer: The Edge Node}
 The physical interface of the ``Plant Up!'' ecosystem is the sensor node, built around the ESP32-S3 System-on-Chip (SoC). This specific microcontroller was selected for its dual-core architecture, enabling dedicated handling of Wi-Fi stacks on one core while sensor logic runs on the other, and its Ultra-Low Power (ULP) co-processor, which is critical for the deep sleep cycles required by the project.
 
+
 \subsubsection{Sensor Integration and Pinout}
 The hardware design integrates three primary environmental sensors. To minimize corrosion and ensure long-term stability, a capacitive soil moisture sensor (v1.2) is used instead of a resistive one.
 
-\begin{table}[h]
-    \centering
-    \begin{tabular}{|c|c|c|}
-        \hline
-        Sensor & Pin & Description \\
-        \hline
-        % Placeholder for table data
-        Soil Moisture & GPIO XX & Capacitive Analog Input \\
-        % Add more rows as needed based on missing source data
-        \hline
-    \end{tabular}
-    \caption{Plant Up! Sensor Pin Configuration}
-    \label{tab:pin_config}
-\end{table}
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{images/Sensor Reading Logic (BH1750 + LM393).png}
+    \captionof{figure}{Sensor Reading Logic (BH1750 + LM393)}
+    \label{fig:temp_image_sensor_logic}
+\end{center}
 
 \subsubsection{Firmware Implementation: The Deep Sleep Cycle}
 To achieve the target battery life, the firmware implements a ``duty-cycled'' operation. The device spends approximately 99\% of its time in Deep Sleep mode, waking only to sample data and transmit. The following code snippet from the ``Plant Up!'' firmware demonstrates the deep sleep initialization logic, ensuring that on-board peripherals are powered down to reduce current leakage.
-
-\begin{figure}[h]
-    \centering
-    % Placeholder for code snippet
-    \begin{verbatim}
-    // Code snippet placeholder: Deep Sleep Initialization
-    // rtc_gpio_hold_en logic goes here
-    \end{verbatim}
-    \caption{Deep Sleep Logic Snippet}
-\end{figure}
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{images/Full ESP32 Deep-Sleep Firmware Cycle.png}
+    \captionof{figure}{Full ESP32 Deep-Sleep Firmware Cycle}
+    \label{fig:temp_image_fw_cycle}
+\end{center}
 
 Note: The use of \texttt{rtc\_gpio\_hold\_en} is critical; without it, the floating pins could trigger sensor inputs or drain power through the voltage divider.
 
@@ -63,14 +50,11 @@ The system is decomposed into the following core services:
 \subsubsection{Infrastructure as Code (IaC)}
 To ensure reproducibility, the infrastructure is defined using Kubernetes manifests. The following snippet shows the deployment configuration for the Ingestion Service, highlighting the resource limits imposed to simulate a constrained cloud environment for the thesis evaluation.
 
-\begin{figure}[h]
-    \centering
-    % Placeholder for code snippet
-    \begin{verbatim}
-    # YAML Snippet Placeholder: Deployment Configuration
-    \end{verbatim}
-    \caption{Ingestion Service Deployment Manifest}
-\end{figure}
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{images/CSharp_Ingestion_Service_MQTT_Listener.png}
+    \captionof{figure}{C\# Ingestion Service MQTT Listener}
+    \label{fig:temp_image_ingestion}
+\end{center}
 
 This configuration ensures that the ingestion layer can handle concurrent connections from the MQTT broker without consuming excessive cluster resources.
 
@@ -79,26 +63,29 @@ The core conflict of this thesis—MQTT vs. REST—is implemented within the com
 
 \subsubsection{Strategy A: MQTT Implementation}
 In the MQTT mode, the device maintains a persistent TCP connection (when awake) and utilizes the Publish/Subscribe pattern. The topic structure is hierarchical, allowing the ``Social Service'' to subscribe to wildcards (e.g., \texttt{plantup/+/+/alert}) to detect issues across the entire user base efficiently.
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{images/ESP32 MQTT JSON Payload Construction.png}
+    \captionof{figure}{ESP32 MQTT JSON Payload Construction}
+    \label{fig:temp_image_payload}
+\end{center}
 
 Using \texttt{PubSubClient} allows for lightweight binary header transmission, theoretically reducing the ``radio-on'' time compared to HTTP.
 
 \subsubsection{Strategy B: REST Implementation}
 In the REST mode, the device opens a new TCP/TLS connection for every data transmission event. This follows a stateless request-response model.
 
-The \texttt{HTTPClient} library abstracts the complexity, but the \texttt{http.begin()} and \texttt{http.end()} calls represent significant energy expenditure for the SSL handshake on every wake-up cycle.
+
+The \texttt{HTTPClient} library abstracts the complexity, yet the \texttt{http.begin()} and \texttt{http.end()} calls entail significant energy expenditure due to the SSL handshake each cycle.
 
 \subsection{Social Gamification Logic Implementation}
 The ``Social Service'' is the differentiating factor of ``Plant Up!''. It processes the raw telemetry to generate ``Gamified Events.'' For instance, if a user maintains their plant's moisture within the ideal range for 7 consecutive days, the service triggers a ``Streak Badge.''
 
 This logic requires Data Consistency. If the MQTT broker drops a message, the user's streak might reset unfairly. The implementation uses an Eventual Consistency model where the ``Social Service'' acts as an idempotent consumer of the telemetry stream.
 
-\begin{figure}[h]
-    \centering
-    % Placeholder for code snippet
-    \begin{verbatim}
-    // JS Snippet Placeholder: Backend Data Gap Handling
-    \end{verbatim}
-    \caption{Backend Idempotency Logic}
-\end{figure}
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{images/JS Missing-Value Protection Logic.png}
+    \captionof{figure}{JS Missing-Value Protection Logic}
+    \label{fig:temp_image_js_logic}
+\end{center}
 
 This JavaScript snippet illustrates how the backend handles potential data gaps (network partitions) by checking for null values before penalizing the user, a necessary adaptation for the ``Availability over Consistency'' approach defined by the CAP theorem.

@@ -21,7 +21,12 @@
 \usepackage{color}					    %Für grauen Hintergrund in Listings
 \usepackage{setspace}					%Größerer Zeilenabstand
 \usepackage{graphicx}					%Grafiken einbinden
-\usepackage{sectsty}					%Format der Überschriften umändern
+\usepackage{titlesec}
+\titleformat*{\section}{\sffamily\Large\bfseries}
+\titleformat*{\subsection}{\sffamily\large\bfseries}
+\titleformat*{\subsubsection}{\sffamily\normalsize\bfseries}
+\titleformat*{\paragraph}{\sffamily\normalsize\bfseries}
+\titleformat*{\subparagraph}{\sffamily\normalsize\bfseries}
 \usepackage{hyperref}
 \usepackage{float}
 \usepackage{pdfpages}					%Fremde pdfs einbinden
@@ -214,7 +219,7 @@ label=Code Example
 
 \begin{document}
 	\sffamily						                        %Schriftart setzen
-	\allsectionsfont{\sffamily}		                        %Schrift für Überschrift setzen
+
 
 
     %\includepdf[pages=-]{pdf/druckensiebzig.pdf}

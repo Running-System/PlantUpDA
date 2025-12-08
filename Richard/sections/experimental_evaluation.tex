@@ -27,14 +27,8 @@ The microservices backend is hosted on a local Kubernetes cluster (Minikube) to 
 \end{itemize}
 
 The following infrastructure configuration ensures both protocols are available simultaneously for A/B testing:
-\begin{figure}[h]
-    \centering
-    % Placeholder for config/image
-    \begin{verbatim}
-    [A/B Testing Infrastructure Diagram/Config Placeholder]
-    \end{verbatim}
-    \caption{A/B Testing Infrastructure}
-\end{figure}
+% Image removed
+
 
 \subsection{Methodology and Metrics}
 
@@ -46,31 +40,37 @@ To measure this accurately without relying on un-synchronized clocks (clock drif
     \item \textbf{MQTT}: Time from \texttt{publish()} to arrival of \texttt{PUBACK} (QoS 1).
     \item \textbf{REST}: Time from \texttt{http.POST()} to return of HTTP 200 OK.
 \end{itemize}
-
 Note: In the REST implementation, \texttt{http.begin()} often initiates the TCP handshake, heavily penalizing the latency score if Keep-Alive is not active.
 
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{images/MQTT RTT Measurement (PUBACK timing).png}
+    \captionof{figure}{MQTT RTT Measurement (PUBACK timing)}
+    \label{fig:temp_image_rtt}
+\end{center}
 \subsubsection{Metric 2: Throughput and Congestion}
 Throughput is evaluated by increasing the message frequency ($f_{msg}$) from 1 Hz to 100 Hz. The metric is Successful Messages Per Second (SMPS).
 This test simulates a ``Broadcast Event'' where the ``Social Service'' might request immediate status updates from all plants in a Guild (e.g., during a ``Watering Party'' game event). We observe the point at which packet loss exceeds 1\% or the ESP32's queue overflows.
 
 \subsubsection{Metric 3: Energy Consumption}
 Using the DEBUG\_PIN triggers the Logic Analyzer to capture the exact current draw during the transmission window.
-\begin{figure}[h]
-    \centering
-    % Placeholder for image/data
-    \begin{verbatim}
-    [Power Consumption Graph/Data Placeholder]
-    \end{verbatim}
-    \caption{Power Consumption Analysis}
-\end{figure}
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{images/GPIO Toggle for Measurement Trigger.png}
+    \captionof{figure}{GPIO Toggle for Measurement Trigger}
+    \label{fig:temp_image_gpio}
+\end{center}
 
-\subsection{Data Consistency Evaluation Strategy}
 To evaluate Data Consistency, we induce network partitions (simulating a user walking out of Wi-Fi range with the portable sensor unit).
 
 \textbf{Scenario}: The device generates 100 messages while disconnected.
 \begin{itemize}
-    \item \textbf{REST Behavior}: The \texttt{HTTPClient} will return connection errors. We measure how many messages are lost vs. how many are successfully buffered in the ESP32's limited RAM (Ring Buffer) and sent upon reconnection.
+    \item \textbf{REST Behavior}: The \texttt{HTTPClient} returns connection errors. We measure how many messages are lost vs. how many are successfully buffered in the ESP32's limited RAM (Ring Buffer) and queued for reconnection.
     \item \textbf{MQTT Behavior}: We test QoS 1 and QoS 2 with Persistent Sessions (CleanSession=false). The Broker should queue messages destined for the subscriber, but the Edge Node must also queue messages destined for the Cloud.
 \end{itemize}
 
 This evaluation specifically looks at the implementation of the Outbox Pattern on the embedded device, which is crucial for the ``Eventual Consistency'' required by the CAP theorem analysis in Chapter 2.4.
+
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{images/Outbox Pattern Buffering on ESP32.png}
+    \captionof{figure}{Outbox Pattern Buffering on ESP32}
+    \label{fig:temp_image_outbox}
+\end{center}

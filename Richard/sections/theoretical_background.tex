@@ -8,7 +8,11 @@ Services are independently deployable components, allowing for the evolution of 
 
 \subsection{JSON Payload Design}
 Communication typically occurs via synchronous REST APIs or asynchronous messaging using JSON serialization [28]. Standardizing the data contract is vital [29].
+
+
 In contrast, a RESTful response from the Dashboard Service to a user's browser might utilize HATEOAS (Hypermedia as the Engine of Application State) to guide the client through the application state, a core tenet of RESTful theory.
+
+
 
 \subsubsection{Challenges of MSA in IoT}
 While MSA offers scalability, it introduces significant complexity, particularly for IoT applications like ``Plant Up!''.
@@ -32,6 +36,11 @@ The ESP32 operates in several power modes, each with distinct consumption profil
 \end{enumerate}
 
 \subsubsection{Energy Management Theory: The Duty Cycle}
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{images/ESP32 Deep Sleep Configuration.png}
+    \captionof{figure}{ESP32 Deep Sleep Configuration}
+    \label{fig:temp_image_deep_sleep}
+\end{center}
 \textbf{Connection Overhead}: The ESP32 does not maintain a Wi-Fi connection in Deep Sleep. Upon waking, it must re-associate with the Access Point (AP) and acquire an IP address via DHCP. This process typically takes 1 to 3 seconds, consuming $\sim$100-150mA on average [36]. This ``connection tax'' is paid regardless of the application layer protocol.
 
 \textbf{Protocol Handshake}:
@@ -71,14 +80,20 @@ This minimal overhead contrasts sharply with HTTP, where text-based headers (Use
 \end{enumerate}
 
 \textbf{MQTT Implementation on ESP32}: The following code snippet illustrates the use of the `PubSubClient` library for ``Plant Up!''. It demonstrates the connection logic and publishing mechanism. The `loop()` function is critical for maintaining the connection and processing incoming SUBACK or PUBACK messages.
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{images/MQTT Publish Data Function.png}
+    \captionof{figure}{MQTT Publish Data Function}
+    \label{fig:temp_image_mqtt_pub}
+\end{center}
 \textit{Analysis}: The `client.loop()` function is blocking in nature regarding network processing. If the connection is lost, `reconnect()` blocks execution. For Deep Sleep applications, the connection is torn down every cycle, meaning the `reconnect()` logic runs on every wake-up, incurring the full handshake cost.
+
 
 \subsubsection{REST (Representational State Transfer)}
 REST is an architectural style that utilizes the existing features of the web (HTTP) for communication. It is the standard for web APIs and integrates seamlessly with web-based microservices.
 
 \textbf{Request-Response Model}: REST is synchronous. The ESP32 sends a request (e.g., `POST /readings`) and waits for a response.
 \begin{itemize}
-    \item \textbf{Statelessness}: The server retains no session information. Each request must contain authentication tokens (e.g., JWT) and all context. This simplifies the server-side architecture for ``Plant Up!'' but increases the data payload size per message.
+    \item \textbf{Statelessness}: The server retains no session information. Each request must contain authentication tokens (e.g., JWT) and all context. This simplifies the server-side architecture for ``Plant Up!'' but adds to the payload size per message.
     \item \textbf{Simplicity}: REST over HTTP is text-based and easy to debug. It maps CRUD operations (Create, Read, Update, Delete) to HTTP verbs (POST, GET, PUT, DELETE).
 \end{itemize}
 
@@ -90,6 +105,11 @@ REST is an architectural style that utilizes the existing features of the web (H
 \end{itemize}
 
 \textbf{REST Implementation on ESP32}: The comparative implementation uses the `HTTPClient` library. This approach is conceptually simpler but requires explicit management of the JSON string construction.
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{images/HTTPClient Transmission Pattern.png}
+    \captionof{figure}{HTTPClient Transmission Pattern}
+    \label{fig:temp_image_http}
+\end{center}
 \textit{Analysis}: The `http.begin` and `http.end` sequence indicates a fresh connection setup and teardown. While simpler to implement than the MQTT state machine, the overhead of establishing the secure channel (`WiFiClientSecure`) on every loop is significant in terms of energy.
 
 \subsubsection{Comparative Summary}
