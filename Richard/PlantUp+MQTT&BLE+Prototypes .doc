@@ -1,0 +1,498 @@
+Date: Tue, 9 Dec 2025 10:49:12 +0000 (UTC)
+Message-ID: <840984187.35.1765277352460@5bb5d30f95a4>
+Subject: Exported From Confluence
+MIME-Version: 1.0
+Content-Type: multipart/related; 
+	boundary="----=_Part_34_682468537.1765277352459"
+
+------=_Part_34_682468537.1765277352459
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+Content-Location: file:///C:/exported.html
+
+<html xmlns:o=3D'urn:schemas-microsoft-com:office:office'
+      xmlns:w=3D'urn:schemas-microsoft-com:office:word'
+      xmlns:v=3D'urn:schemas-microsoft-com:vml'
+      xmlns=3D'urn:w3-org-ns:HTML'>
+<head>
+    <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8=
+">
+    <title>PlantUp MQTT&amp;BLE Prototypes=C2=A0</title>
+    <!--[if gte mso 9]>
+    <xml>
+        <o:OfficeDocumentSettings>
+            <o:TargetScreenSize>1024x640</o:TargetScreenSize>
+            <o:PixelsPerInch>72</o:PixelsPerInch>
+            <o:AllowPNG/>
+        </o:OfficeDocumentSettings>
+        <w:WordDocument>
+            <w:View>Print</w:View>
+            <w:Zoom>90</w:Zoom>
+            <w:DoNotOptimizeForBrowser/>
+        </w:WordDocument>
+    </xml>
+    <![endif]-->
+    <style>
+                <!--
+        @page Section1 {
+            size: 8.5in 11.0in;
+            margin: 1.0in;
+            mso-header-margin: .5in;
+            mso-footer-margin: .5in;
+            mso-paper-source: 0;
+        }
+
+        table {
+            border: solid 1px;
+            border-collapse: collapse;
+        }
+
+        table td, table th {
+            border: solid 1px;
+            padding: 5px;
+        }
+
+        td {
+            page-break-inside: avoid;
+        }
+
+        tr {
+            page-break-after: avoid;
+        }
+
+        div.Section1 {
+            page: Section1;
+        }
+
+        /* Confluence print stylesheet. Common to all themes for print medi=
+a */
+/* Full of !important until we improve batching for print CSS */
+
+@media print {
+    #main {
+        padding-bottom: 1em !important; /* The default padding of 6em is to=
+o much for printouts */
+    }
+
+    body {
+        font: var(--ds-font-body-small, Arial, Helvetica, FreeSans, sans-se=
+rif);
+    }
+
+    body, #full-height-container, #main, #page, #content, .has-personal-sid=
+ebar #content {
+        background: var(--ds-surface, #fff) !important;
+        color: var(--ds-text, #000) !important;
+        border: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+    }
+
+    a, a:link, a:visited, a:focus, a:hover, a:active {
+        color: var(--ds-text, #000);
+    }
+
+    #content h1,
+    #content h2,
+    #content h3,
+    #content h4,
+    #content h5,
+    #content h6 {
+        page-break-after: avoid;
+    }
+
+    pre {
+        font: var(--ds-font-code, Monaco, "Courier New", monospace);
+    }
+
+    #header,
+    .aui-header-inner,
+    #navigation,
+    #sidebar,
+    .sidebar,
+    #personal-info-sidebar,
+    .ia-fixed-sidebar,
+    .page-actions,
+    .navmenu,
+    .ajs-menu-bar,
+    .noprint,
+    .inline-control-link,
+    .inline-control-link a,
+    a.show-labels-editor,
+    .global-comment-actions,
+    .comment-actions,
+    .quick-comment-container,
+    #addcomment {
+        display: none !important;
+    }
+
+    /* CONF-28544 cannot print multiple pages in IE */
+    #splitter-content {
+        position: relative !important;
+    }
+
+    .comment .date::before {
+        content: none !important; /* remove middot for print view */
+    }
+
+    h1.pagetitle img {
+        height: auto;
+        width: auto;
+    }
+
+    .print-only {
+        display: block;
+    }
+
+    #footer {
+        position: relative !important; /* CONF-17506 Place the footer at en=
+d of the content */
+        margin: 0;
+        padding: 0;
+        background: none;
+        clear: both;
+    }
+
+    #poweredby {
+        border-top: none;
+        background: none;
+    }
+
+    #poweredby li.print-only {
+        display: list-item;
+        font-style: italic;
+    }
+
+    #poweredby li.noprint {
+        display: none;
+    }
+
+    /* no width controls in print */
+    .wiki-content .table-wrap,
+    .wiki-content p,
+    .panel .codeContent,
+    .panel .codeContent pre,
+    .image-wrap {
+        overflow: visible !important;
+    }
+
+    /* TODO - should this work? */
+    #children-section,
+    #comments-section .comment,
+    #comments-section .comment .comment-body,
+    #comments-section .comment .comment-content,
+    #comments-section .comment p {
+        page-break-inside: avoid;
+    }
+
+    #page-children a {
+        text-decoration: none;
+    }
+
+    /**
+     hide twixies
+
+     the specificity here is a hack because print styles
+     are getting loaded before the base styles. */
+    #comments-section.pageSection .section-header,
+    #comments-section.pageSection .section-title,
+    #children-section.pageSection .section-header,
+    #children-section.pageSection .section-title,
+    .children-show-hide {
+        padding-left: 0;
+        margin-left: 0;
+    }
+
+    .children-show-hide.icon {
+        display: none;
+    }
+
+    /* personal sidebar */
+    .has-personal-sidebar #content {
+        margin-right: 0px;
+    }
+
+    .has-personal-sidebar #content .pageSection {
+        margin-right: 0px;
+    }
+
+    .no-print, .no-print * {
+        display: none !important;
+    }
+}
+-->
+    </style>
+</head>
+<body>
+    <h1>PlantUp MQTT&amp;BLE Prototypes=C2=A0</h1>
+    <div class=3D"Section1">
+        <div class=3D"confluence-information-macro confluence-information-m=
+acro-information">
+<span class=3D"aui-icon aui-icon-small aui-iconfont-info confluence-informa=
+tion-macro-icon"></span>
+<div class=3D"confluence-information-macro-body">
+<p>Dokumentation regarding my Prototypes for PlantBox using MQTT and BLE to=
+ test the more suitable technology for our usecase. You find the Codebase f=
+or the Prototypes on the GitHub Repo under ESP32/Prototypes</p>
+</div>
+</div>
+<p>These two demos showcase how the <strong>PlantUp sensor (ESP32-based)</s=
+trong> transmits measurement data to an end device =E2=80=94 once via <stro=
+ng>Bluetooth Low Energy (BLE)</strong> and once using the <strong>MQTT prot=
+ocol (Wi-Fi)</strong>.<br>
+The main goal was to <strong>compare both communication methods in practice=
+</strong>, understand their technical flow, and <strong>analyze the latency=
+</strong> between the sensor and the client.</p>
+<hr>
+<h2 id=3D"PlantUpMQTT&amp;BLEPrototypes-BLEDemo(BluetoothLowEnergy)"><stron=
+g>BLE Demo (Bluetooth Low Energy)</strong></h2>
+<h3 id=3D"PlantUpMQTT&amp;BLEPrototypes-Concept"><strong>Concept</strong></=
+h3>
+<p>The BLE demo demonstrates how an ESP32 acts as a <strong>peripheral devi=
+ce</strong> (=E2=80=9CPlantUp Env=E2=80=9D) that sends its sensor data in r=
+eal time to a <strong>central device</strong> (such as a smartphone or a we=
+b app using the Web Bluetooth API).<br>
+BLE is ideal for <strong>energy-efficient, short-range communication</stron=
+g>, for example during setup or direct access without Internet connectivity=
+.</p>
+<hr>
+<h3 id=3D"PlantUpMQTT&amp;BLEPrototypes-TechnicalProcess"><strong>Technical=
+ Process</strong></h3>
+<h4 id=3D"PlantUpMQTT&amp;BLEPrototypes-AdvertisingandConnection"><strong>A=
+dvertising and Connection</strong></h4>
+<ul>
+<li>
+<p>The ESP32 periodically sends <strong>advertising packets</strong> announ=
+cing its available services.</p></li>
+<li>
+<p>A central device (e.g. a browser with Web Bluetooth support) scans for d=
+evices named <strong>=E2=80=9CPlantUp Env=E2=80=9D</strong> and establishes=
+ a <strong>GATT connection</strong> once selected.</p></li>
+</ul>
+<h4 id=3D"PlantUpMQTT&amp;BLEPrototypes-ServiceandCharacteristicStructure">=
+<strong>Service and Characteristic Structure</strong></h4>
+<ul>
+<li>
+<p>After the connection is established, the ESP32 exposes a <strong>GATT se=
+rvice</strong> with a <strong>characteristic</strong> used for data transfe=
+r.</p></li>
+<li>
+<p>The characteristic supports <strong>Notify</strong>, meaning the ESP32 a=
+utomatically pushes new sensor values to the client at fixed intervals.</p>=
+</li>
+</ul>
+<h4 id=3D"PlantUpMQTT&amp;BLEPrototypes-DataTransfer"><strong>Data Transfer=
+</strong></h4>
+<p>Every second, the ESP32 sends a JSON object, for example:</p>
+<div class=3D"code panel pdl" style=3D"border-width: 1px;">
+<div class=3D"codeContent panelContent pdl">
+<pre class=3D"syntaxhighlighter-pre" data-syntaxhighlighter-params=3D"brush=
+: java; gutter: false; theme: Confluence" data-theme=3D"Confluence">{"soil"=
+: 42.5, "light": 320.0, "ts_unix": 1700000000000}</pre>
+</div>
+</div>
+<p>The web interface displays these received values and calculates the <str=
+ong>latency</strong> between the transmission and reception timestamps.</p>
+<h4 id=3D"PlantUpMQTT&amp;BLEPrototypes-LatencyandTimeSynchronization"><str=
+ong>Latency and Time Synchronization</strong></h4>
+<p>Since the ESP32 synchronizes its internal clock via <strong>NTP</strong>=
+, while the browser uses the <strong>local system clock</strong>, small tim=
+ing differences occur.<br>
+To correct this, the client calculates an <strong>offset</strong> using the=
+ first received packet (difference between ESP and browser time).<br>
+This offset is then applied to subsequent messages, providing realistic lat=
+ency values (typically <strong>20=E2=80=9360 ms</strong>).</p>
+<hr>
+<h3 id=3D"PlantUpMQTT&amp;BLEPrototypes-BLEResults"><strong>BLE Results</st=
+rong></h3>
+<ul>
+<li>
+<p>Stable connection within a <strong>10=E2=80=9330 m range</strong>.</p></=
+li>
+<li>
+<p><strong>Low power consumption</strong> thanks to small data packets and =
+short transmission windows.</p></li>
+<li>
+<p>Demonstrates that BLE is <strong>perfect for local communication</strong=
+> (setup, debugging) but <strong>not suitable for cloud connectivity</stron=
+g> due to its limited range and lack of IP-based networking.</p></li>
+</ul>
+<hr>
+<h2 id=3D"PlantUpMQTT&amp;BLEPrototypes-MQTTDemo(Wi-Fi/WebSocket)"><strong>=
+MQTT Demo (Wi-Fi / WebSocket)</strong></h2>
+<h3 id=3D"PlantUpMQTT&amp;BLEPrototypes-Concept.1"><strong>Concept</strong>=
+</h3>
+<p>The second demo uses the ESP32 as an <strong>MQTT publisher</strong>.<br=
+>
+Instead of Bluetooth, sensor data is transmitted via <strong>Wi-Fi</strong>=
+ to a local <strong>MQTT broker (Mosquitto)</strong>.<br>
+The web application acts as a <strong>subscriber</strong> and receives iden=
+tical JSON data live through a <strong>WebSocket connection</strong>.</p>
+<hr>
+<h3 id=3D"PlantUpMQTT&amp;BLEPrototypes-TechnicalProcess.1"><strong>Technic=
+al Process</strong></h3>
+<h4 id=3D"PlantUpMQTT&amp;BLEPrototypes-ConnectionandTimeSync"><strong>Conn=
+ection and Time Sync</strong></h4>
+<ul>
+<li>
+<p>The ESP32 connects to the configured Wi-Fi network and again synchronize=
+s its clock via NTP.</p></li>
+<li>
+<p>It then connects to the MQTT broker (port 1883) and publishes messages t=
+o the topic:</p>
+<div class=3D"code panel pdl" style=3D"border-width: 1px;">
+<div class=3D"codeContent panelContent pdl">
+<pre class=3D"syntaxhighlighter-pre" data-syntaxhighlighter-params=3D"brush=
+: java; gutter: false; theme: Confluence" data-theme=3D"Confluence">plantup=
+/env/data</pre>
+</div>
+</div></li>
+</ul>
+<h4 id=3D"PlantUpMQTT&amp;BLEPrototypes-WebSocketSubscription"><strong>WebS=
+ocket Subscription</strong></h4>
+<ul>
+<li>
+<p>The browser client connects to the broker via port 9001 (<strong>MQTT ov=
+er WebSockets</strong>) and subscribes to the same topic.</p></li>
+<li>
+<p>This allows it to receive all sensor updates from the ESP32 in real time=
+.</p></li>
+</ul>
+<h4 id=3D"PlantUpMQTT&amp;BLEPrototypes-DataFormatandLatencyCalculation"><s=
+trong>Data Format and Latency Calculation</strong></h4>
+<p>Each message again includes an <strong>NTP-based timestamp (ts_unix)</st=
+rong>.<br>
+Upon reception, the web app notes the local time and computes the <strong>l=
+atency</strong>, again using the same offset-synchronization method to corr=
+ect clock drift.</p>
+<h4 id=3D"PlantUpMQTT&amp;BLEPrototypes-Visualization"><strong>Visualizatio=
+n</strong></h4>
+<p>The web interface displays:</p>
+<ul>
+<li>
+<p>All received JSON messages</p></li>
+<li>
+<p>The current connection state</p></li>
+<li>
+<p>Per-message latency</p></li>
+</ul>
+<p>Because WebSockets maintain a <strong>persistent open connection</strong=
+>, the data stream continues smoothly without reconnecting.</p>
+<hr>
+<h3 id=3D"PlantUpMQTT&amp;BLEPrototypes-MQTTResults"><strong>MQTT Results</=
+strong></h3>
+<ul>
+<li>
+<p>Typical latency: <strong>10=E2=80=9350 ms</strong>, depending on Wi-Fi q=
+uality.</p></li>
+<li>
+<p>Demonstrates <strong>real-time capability</strong> and reliability of MQ=
+TT.</p></li>
+<li>
+<p>Well-suited for <strong>cloud integration</strong> (e.g. Supabase, IoT p=
+latforms).</p></li>
+<li>
+<p>Compared to BLE, MQTT offers <strong>greater range</strong>, <strong>net=
+work connectivity</strong>, and <strong>multi-client communication</strong>=
+.</p></li>
+</ul>
+<hr>
+<h2 id=3D"PlantUpMQTT&amp;BLEPrototypes-OverallComparison"><strong>Overall =
+Comparison</strong></h2>
+<div class=3D"table-wrap">
+<table data-table-width=3D"760" data-layout=3D"default" data-local-id=3D"8a=
+42bcb1-351f-43c7-83f7-e0f9e3fce4db" class=3D"confluenceTable">
+<tbody>
+<tr>
+<th class=3D"confluenceTh">
+<p>Aspect</p></th>
+<th class=3D"confluenceTh">
+<p><strong>BLE (Bluetooth Low Energy)</strong></p></th>
+<th class=3D"confluenceTh">
+<p><strong>MQTT (Wi-Fi / WebSocket)</strong></p></th>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p><strong>Connection Type</strong></p></td>
+<td class=3D"confluenceTd">
+<p>Local wireless link (no Internet)</p></td>
+<td class=3D"confluenceTd">
+<p>IP-based network connection</p></td>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p><strong>Range</strong></p></td>
+<td class=3D"confluenceTd">
+<p>~10=E2=80=9330 m</p></td>
+<td class=3D"confluenceTd">
+<p>Depends on Wi-Fi (~50 m +)</p></td>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p><strong>Power Usage</strong></p></td>
+<td class=3D"confluenceTd">
+<p>Very low (ideal for battery devices)</p></td>
+<td class=3D"confluenceTd">
+<p>Higher due to Wi-Fi radio</p></td>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p><strong>Latency</strong></p></td>
+<td class=3D"confluenceTd">
+<p>~20=E2=80=9360 ms</p></td>
+<td class=3D"confluenceTd">
+<p>~10=E2=80=9350 ms</p></td>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p><strong>Data Throughput</strong></p></td>
+<td class=3D"confluenceTd">
+<p>Limited (small packets)</p></td>
+<td class=3D"confluenceTd">
+<p>High (supports larger payloads)</p></td>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p><strong>Reliability</strong></p></td>
+<td class=3D"confluenceTd">
+<p>Short range, simple pairing</p></td>
+<td class=3D"confluenceTd">
+<p>Persistent, multi-client capable</p></td>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p><strong>Best Use Case</strong></p></td>
+<td class=3D"confluenceTd">
+<p>Local setup, calibration, debugging</p></td>
+<td class=3D"confluenceTd">
+<p>Continuous data streaming, cloud integration</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+<h2 id=3D"PlantUpMQTT&amp;BLEPrototypes-Conclusion"><strong>Conclusion</str=
+ong></h2>
+<p>Both demos demonstrate two key communication layers within the <strong>P=
+lantUp system</strong>:</p>
+<ul>
+<li>
+<p><strong>BLE</strong> =E2=80=94 for <strong>initial pairing</strong> and =
+<strong>low-power local data exchange</strong>.</p></li>
+<li>
+<p><strong>MQTT</strong> =E2=80=94 for <strong>stable, networked operation<=
+/strong> and <strong>cloud connectivity</strong>.</p></li>
+</ul>
+<p>Both implementations include precise latency measurement with NTP-based =
+time synchronization, enabling a realistic performance comparison.<br>
+Together, they form the foundation for PlantUp=E2=80=99s <strong>final comm=
+unication module</strong>, which will dynamically switch between <strong>BL=
+E (setup phase)</strong> and <strong>MQTT (operational phase)</strong>.</p>
+    </div>
+</body>
+</html>
+------=_Part_34_682468537.1765277352459--

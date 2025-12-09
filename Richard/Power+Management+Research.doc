@@ -1,0 +1,474 @@
+Date: Tue, 9 Dec 2025 10:48:17 +0000 (UTC)
+Message-ID: <832747149.25.1765277297518@08a415fd1506>
+Subject: Exported From Confluence
+MIME-Version: 1.0
+Content-Type: multipart/related; 
+	boundary="----=_Part_24_706034479.1765277297518"
+
+------=_Part_24_706034479.1765277297518
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+Content-Location: file:///C:/exported.html
+
+<html xmlns:o=3D'urn:schemas-microsoft-com:office:office'
+      xmlns:w=3D'urn:schemas-microsoft-com:office:word'
+      xmlns:v=3D'urn:schemas-microsoft-com:vml'
+      xmlns=3D'urn:w3-org-ns:HTML'>
+<head>
+    <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8=
+">
+    <title>Power Management Research</title>
+    <!--[if gte mso 9]>
+    <xml>
+        <o:OfficeDocumentSettings>
+            <o:TargetScreenSize>1024x640</o:TargetScreenSize>
+            <o:PixelsPerInch>72</o:PixelsPerInch>
+            <o:AllowPNG/>
+        </o:OfficeDocumentSettings>
+        <w:WordDocument>
+            <w:View>Print</w:View>
+            <w:Zoom>90</w:Zoom>
+            <w:DoNotOptimizeForBrowser/>
+        </w:WordDocument>
+    </xml>
+    <![endif]-->
+    <style>
+                <!--
+        @page Section1 {
+            size: 8.5in 11.0in;
+            margin: 1.0in;
+            mso-header-margin: .5in;
+            mso-footer-margin: .5in;
+            mso-paper-source: 0;
+        }
+
+        table {
+            border: solid 1px;
+            border-collapse: collapse;
+        }
+
+        table td, table th {
+            border: solid 1px;
+            padding: 5px;
+        }
+
+        td {
+            page-break-inside: avoid;
+        }
+
+        tr {
+            page-break-after: avoid;
+        }
+
+        div.Section1 {
+            page: Section1;
+        }
+
+        /* Confluence print stylesheet. Common to all themes for print medi=
+a */
+/* Full of !important until we improve batching for print CSS */
+
+@media print {
+    #main {
+        padding-bottom: 1em !important; /* The default padding of 6em is to=
+o much for printouts */
+    }
+
+    body {
+        font: var(--ds-font-body-small, Arial, Helvetica, FreeSans, sans-se=
+rif);
+    }
+
+    body, #full-height-container, #main, #page, #content, .has-personal-sid=
+ebar #content {
+        background: var(--ds-surface, #fff) !important;
+        color: var(--ds-text, #000) !important;
+        border: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+    }
+
+    a, a:link, a:visited, a:focus, a:hover, a:active {
+        color: var(--ds-text, #000);
+    }
+
+    #content h1,
+    #content h2,
+    #content h3,
+    #content h4,
+    #content h5,
+    #content h6 {
+        page-break-after: avoid;
+    }
+
+    pre {
+        font: var(--ds-font-code, Monaco, "Courier New", monospace);
+    }
+
+    #header,
+    .aui-header-inner,
+    #navigation,
+    #sidebar,
+    .sidebar,
+    #personal-info-sidebar,
+    .ia-fixed-sidebar,
+    .page-actions,
+    .navmenu,
+    .ajs-menu-bar,
+    .noprint,
+    .inline-control-link,
+    .inline-control-link a,
+    a.show-labels-editor,
+    .global-comment-actions,
+    .comment-actions,
+    .quick-comment-container,
+    #addcomment {
+        display: none !important;
+    }
+
+    /* CONF-28544 cannot print multiple pages in IE */
+    #splitter-content {
+        position: relative !important;
+    }
+
+    .comment .date::before {
+        content: none !important; /* remove middot for print view */
+    }
+
+    h1.pagetitle img {
+        height: auto;
+        width: auto;
+    }
+
+    .print-only {
+        display: block;
+    }
+
+    #footer {
+        position: relative !important; /* CONF-17506 Place the footer at en=
+d of the content */
+        margin: 0;
+        padding: 0;
+        background: none;
+        clear: both;
+    }
+
+    #poweredby {
+        border-top: none;
+        background: none;
+    }
+
+    #poweredby li.print-only {
+        display: list-item;
+        font-style: italic;
+    }
+
+    #poweredby li.noprint {
+        display: none;
+    }
+
+    /* no width controls in print */
+    .wiki-content .table-wrap,
+    .wiki-content p,
+    .panel .codeContent,
+    .panel .codeContent pre,
+    .image-wrap {
+        overflow: visible !important;
+    }
+
+    /* TODO - should this work? */
+    #children-section,
+    #comments-section .comment,
+    #comments-section .comment .comment-body,
+    #comments-section .comment .comment-content,
+    #comments-section .comment p {
+        page-break-inside: avoid;
+    }
+
+    #page-children a {
+        text-decoration: none;
+    }
+
+    /**
+     hide twixies
+
+     the specificity here is a hack because print styles
+     are getting loaded before the base styles. */
+    #comments-section.pageSection .section-header,
+    #comments-section.pageSection .section-title,
+    #children-section.pageSection .section-header,
+    #children-section.pageSection .section-title,
+    .children-show-hide {
+        padding-left: 0;
+        margin-left: 0;
+    }
+
+    .children-show-hide.icon {
+        display: none;
+    }
+
+    /* personal sidebar */
+    .has-personal-sidebar #content {
+        margin-right: 0px;
+    }
+
+    .has-personal-sidebar #content .pageSection {
+        margin-right: 0px;
+    }
+
+    .no-print, .no-print * {
+        display: none !important;
+    }
+}
+-->
+    </style>
+</head>
+<body>
+    <h1>Power Management Research</h1>
+    <div class=3D"Section1">
+        <div class=3D"confluence-information-macro confluence-information-m=
+acro-information">
+<span class=3D"aui-icon aui-icon-small aui-iconfont-info confluence-informa=
+tion-macro-icon"></span>
+<div class=3D"confluence-information-macro-body">
+<p>This page shows our analysis to determine the most suitable power source=
+ for the Plant Box.</p>
+</div>
+</div>
+<p>Power consumption of all our hardware:</p>
+<p></p><a class=3D"external-link" data-card-appearance=3D"block" data-datas=
+ource=3D"{&quot;id&quot;:&quot;d8b75300-dfda-4519-b6cd-e49abbd50401&quot;,&=
+quot;parameters&quot;:{&quot;cloudId&quot;:&quot;97698a60-bfc7-418d-bd86-5f=
+d73c4a353e&quot;,&quot;jql&quot;:&quot;(text ~ \&quot;pu-235*\&quot; or sum=
+mary ~ \&quot;pu-235*\&quot; or key =3D pu-235) and project in (PU) ORDER B=
+Y created DESC&quot;},&quot;views&quot;:[{&quot;type&quot;:&quot;table&quot=
+;,&quot;properties&quot;:{&quot;columns&quot;:[{&quot;key&quot;:&quot;issue=
+type&quot;},{&quot;key&quot;:&quot;key&quot;},{&quot;key&quot;:&quot;summar=
+y&quot;},{&quot;key&quot;:&quot;assignee&quot;},{&quot;key&quot;:&quot;prio=
+rity&quot;},{&quot;key&quot;:&quot;status&quot;},{&quot;key&quot;:&quot;upd=
+ated&quot;}]}}]}" href=3D"https://running-system.atlassian.net/issues/?jql=
+=3D(text%20~%20%22pu-235*%22%20or%20summary%20~%20%22pu-235*%22%20or%20key%=
+20%3D%20pu-235)%20and%20project%20in%20(PU)%20ORDER%20BY%20created%20DESC" =
+rel=3D"nofollow">https://running-system.atlassian.net/issues/?jql=3D(text%2=
+0~%20%22pu-235*%22%20or%20summary%20~%20%22pu-235*%22%20or%20key%20%3D%20pu=
+-235)%20and%20project%20in%20(PU)%20ORDER%20BY%20created%20DESC</a>
+<div class=3D"table-wrap">
+<table data-table-width=3D"760" data-layout=3D"default" data-local-id=3D"55=
+eebeef-de29-4bf1-a6d1-df16430c7bbf" class=3D"confluenceTable">
+<tbody>
+<tr>
+<th class=3D"confluenceTh">
+<p>Component</p></th>
+<th class=3D"confluenceTh">
+<p>Description</p></th>
+<th class=3D"confluenceTh">
+<p>Typical Current</p></th>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p><strong>ESP32</strong></p></td>
+<td class=3D"confluenceTd">
+<p>Main microcontroller with Wi-Fi</p></td>
+<td class=3D"confluenceTd">
+<p>80=E2=80=93150 mA active (up to 240 mA peak =E2=86=92 rare), 0.01=E2=80=
+=930.15 mA in Deep Sleep</p></td>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p><strong>Soil Moisture (LM393)</strong></p></td>
+<td class=3D"confluenceTd">
+<p>Measures soil water level</p></td>
+<td class=3D"confluenceTd">
+<p>10=E2=80=9320 mA</p></td>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p><strong>Light Sensor (BH1750)</strong></p></td>
+<td class=3D"confluenceTd">
+<p>Measures light intensity in Lux</p></td>
+<td class=3D"confluenceTd">
+<p>0.12 mA</p></td>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p><strong>EC Sensor (Gravity V2)</strong></p></td>
+<td class=3D"confluenceTd">
+<p>Soil conductivity</p></td>
+<td class=3D"confluenceTd">
+<p>5=E2=80=9315 mA</p></td>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p><strong>Soil Temperature (DS18B20)</strong></p></td>
+<td class=3D"confluenceTd">
+<p>Soil temperature sensor</p></td>
+<td class=3D"confluenceTd">
+<p>1.5 mA active, =C2=B5A idle</p></td>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p><strong>IR Temperature (MLX90614)</strong></p></td>
+<td class=3D"confluenceTd">
+<p>Temperature sensor for leaves/air</p></td>
+<td class=3D"confluenceTd">
+<p>1.2 mA</p></td>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p><strong>SD Card Reader</strong></p></td>
+<td class=3D"confluenceTd">
+<p>Stores measurement data locally</p></td>
+<td class=3D"confluenceTd">
+<p>&lt;10=E2=80=9330 mA when writing</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id=3D"PowerManagementResearch-=E2=86=92WorstCase(allsensors+ESP32Wi-Fir=
+unning24/7):~168mAcontinuous=E2=86=924032mAhperDay"><strong>=E2=86=92 Worst=
+ Case</strong> (all sensors + ESP32 Wi-Fi running 24/7): ~168 mA continuous=
+ =E2=86=92 4032 mAh per Day</h2>
+<p>We calculated the worst case with all the sensors and the esp32 running =
+24/7(which will never happen) to see, what the maximum power consumption wo=
+uld be.</p>
+<h2 id=3D"PowerManagementResearch-->RealisticCase(DeepSleep+10minintervals)=
+:~2=E2=80=935mAaverage">-&gt; <strong>Realistic Case </strong>(Deep Sleep +=
+ 10 min intervals): ~2=E2=80=935 mA average</h2>
+<p>The realistic case is when the ESP32 is in deep sleep mode, where it con=
+sumes much less power. In our app, the data is only sent at a time-defined =
+interval, with 10 minutes as the default. The user can change this interval=
+ and make it shorter, which will of course use more power. Between the inte=
+rvals, the ESP32 stays in deep sleep, and the sensors only work when the ES=
+P32 wakes up to send data.</p>
+<p>This is the most efficient and also the most user-friendly power Strateg=
+y for our PlantBox.</p>
+<p></p>
+<h2 id=3D"PowerManagementResearch-PowerSupplier"><strong>Power Supplier</st=
+rong></h2>
+<p>The power supplier of the PlantBox is based on a rechargeable LiPo batte=
+ry. This battery can be charged either through a USB connection or with a c=
+onnected solar panel. With the solar option, the PlantBox can run almost en=
+dlessly outside, while USB charging is useful for indoor use, as a backup o=
+r if the sun isn=E2=80=99t shinning outside.</p>
+<p>The charging process is managed by a power management module, which make=
+s sure the battery is safely and that the ESP32 always gets a stable voltag=
+e. The system automatically uses either solar or USB, depending on what is =
+available.</p>
+<p>This setup makes the PlantBox independent and easy to use, without needi=
+ng to replace batteries often.</p>
+<p></p>
+<h2 id=3D"PowerManagementResearch-PowerSupplierComponents"><strong>Power Su=
+pplier Components</strong></h2>
+<ul>
+<li>
+<p><strong>Battery:</strong> LiPo 3.7 V with 3000=E2=80=935000 mAh capacity=
+</p></li>
+<li>
+<p><strong>Charging Module:</strong> Solar LiPo Charger (in our case <stron=
+g>BQ24074</strong>), supports both USB and solar charging</p></li>
+<li>
+<p><strong>Solar Panel:</strong> 5=E2=80=936 V, 1=E2=80=932 W, outdoor-proo=
+f</p></li>
+<li>
+<p><strong>Voltage Regulation:</strong> integrated in the charging module, =
+provides stable output for the ESP32</p></li>
+</ul>
+<p></p>
+<h2 id=3D"PowerManagementResearch-RealisticPowerConsumptionScenario"><stron=
+g>Realistic Power Consumption Scenario</strong></h2>
+<ul>
+<li>
+<p><strong>ESP32 im Deep Sleep:</strong> ~0.1 mA</p></li>
+<li>
+<p><strong>Alle 10 min aktiv:</strong> ~150 mA for about 3 seconds</p></li>
+<li>
+<p><strong>Sensoren + SD: </strong>about &lt;1 mA</p></li>
+</ul>
+<p><strong>=E2=86=92 Durchschnittsverbrauch</strong>:<strong> ~2=E2=80=935 =
+mA</strong> (realistisch gerechnet).</p>
+<p></p>
+<h2 id=3D"PowerManagementResearch-Battery(withoutchargingviaSolarorUSB)"><s=
+trong>Battery(without charging via Solar or USB)</strong></h2>
+<p><strong>3000 mAh LiPo (3.7 V)</strong></p>
+<ul>
+<li>
+<p>Consumption: ~3 mA (average)</p></li>
+<li>
+<p>Runtime: 3000 =C3=B7 3 =E2=89=88 1000 hours =3D <strong>approx. 41 days<=
+/strong></p></li>
+</ul>
+<p><strong>5000 mAh LiPo (3.7 V)</strong></p>
+<ul>
+<li>
+<p>Consumption: ~3 mA (average)</p></li>
+<li>
+<p>Runtime: 5000 =C3=B7 3 =E2=89=88 1666 hours =3D <strong>approx. 69 days =
+(over 2 months)</strong></p></li>
+</ul>
+<p></p>
+<h2 id=3D"PowerManagementResearch-PriceListwithlinks"><strong>Price List wi=
+th links</strong></h2>
+<div class=3D"table-wrap">
+<table data-table-width=3D"760" data-layout=3D"default" data-local-id=3D"3d=
+51c0e8-0f46-4d6d-b061-8a9359bd8831" class=3D"confluenceTable">
+<tbody>
+<tr>
+<th class=3D"confluenceTh">
+<p>Component</p></th>
+<th class=3D"confluenceTh">
+<p>Specs</p></th>
+<th class=3D"confluenceTh">
+<p>Example Price</p></th>
+<th class=3D"confluenceTh">
+<p>Link</p></th>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p><strong>LiPo Battery</strong></p></td>
+<td class=3D"confluenceTd">
+<p>3.7 V, 3500 mAh, JST-PH 2.0 mm</p></td>
+<td class=3D"confluenceTd">
+<p>~=E2=82=AC21</p></td>
+<td class=3D"confluenceTd">
+<p><a class=3D"external-link" data-card-appearance=3D"inline" href=3D"https=
+://amzn.eu/d/4fmkTbV" rel=3D"nofollow">https://amzn.eu/d/4fmkTbV</a></p></t=
+d>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p><strong>Solar Charger Module</strong></p></td>
+<td class=3D"confluenceTd">
+<p>BQ24074 (USB + Solar)</p></td>
+<td class=3D"confluenceTd">
+<p>~=E2=82=AC26</p></td>
+<td class=3D"confluenceTd">
+<p><a class=3D"external-link" data-card-appearance=3D"inline" href=3D"https=
+://www.amazon.de/Adafruit-Industries-Universal-Lithium-Ladeger%C3%A4t/dp/B0=
+929F5ZHW" rel=3D"nofollow">https://www.amazon.de/Adafruit-Industries-Univer=
+sal-Lithium-Ladeger%C3%A4t/dp/B0929F5ZHW</a></p></td>
+</tr>
+<tr>
+<td class=3D"confluenceTd">
+<p><strong>Solar Panel</strong></p>
+<p></p></td>
+<td class=3D"confluenceTd">
+<p>1.2W, 6V</p></td>
+<td class=3D"confluenceTd">
+<p>~=E2=82=AC11</p></td>
+<td class=3D"confluenceTd">
+<p><a class=3D"external-link" data-card-appearance=3D"inline" href=3D"https=
+://www.amazon.de/ZONADAH-Hangable-Ladeger%C3%A4t-Projekte-Ladewerkzeuge/dp/=
+B09CM1RJHY" rel=3D"nofollow">https://www.amazon.de/ZONADAH-Hangable-Ladeger=
+%C3%A4t-Projekte-Ladewerkzeuge/dp/B09CM1RJHY</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+    </div>
+</body>
+</html>
+------=_Part_24_706034479.1765277297518--
