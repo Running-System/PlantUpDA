@@ -1,20 +1,20 @@
 \section{Experimental Evaluation of MQTT vs.\ REST}
 
 \subsection{Introduction to the Experiment}
-The theoretical analysis presented in Chapter 2 suggests that while both MQTT and REST are viable protocols for IoT communication, their performance characteristics diverge significantly under the constraints of battery-powered operation. To empirically validate these theoretical assertions and determine the optimal ingestion strategy for the ``Plant Up!'' ecosystem, a controlled comparative experiment was designed and executed.
+Chapter 2 gave us the theory: MQTT is lightweight and fast, while REST is robust but heavy. But theory isn't enough when you're building real hardware. We need to know exactly how much ``heavier'' REST is. Does it drain the battery twice as fast? Ten times as fast? Or is the difference negligible?
 
-The primary objective of this experimental evaluation is to quantify the performance differential between the Message Queuing Telemetry Transport (MQTT) protocol and the Representational State Transfer (REST) architectural style. Specifically, the experiment seeks to isolate the variables of latency, transmission overhead, and energy efficiency within a realistic residential network environment. By subjecting both protocols to identical test conditions utilizing the specific hardware (ESP32-S3) and backend infrastructure (Supabase) of the target system, this evaluation provides concrete data to answer the core research question regarding protocol suitability for resource-constrained microservices architectures.
+To answer this, we didn't just run a simulation. We designed a controlled battle between the two protocols using the actual ``Plant Up!'' hardware and backend. The goal was simple: quantify the performance gap in a real-world setting. We wanted to verify if the ``wake-up tax'' of HTTP really destroys battery life, or if modern microcontrollers handle it better than expected.
 
 \subsection{Experimental Setup}
-To ensure the reproducibility and validity of the results, the experimental environment was rigorously standardized. The setup comprises three distinct, interconnected components:
+To make sure our results weren't a fluke, we rigorously standardized the environment. The setup had three main parts:
 
 \begin{enumerate}
-    \item \textbf{Edge Computing Node:} A standard production unit of the ``Plant Up!'' hardware (ESP32-S3) was employed as the device under test (DUT). The firmware was instrumented with high-resolution internal timers (microsecond precision) to capture the exact duration of each operational phase, from wake-up to deep sleep entry.
-    \item \textbf{Network Environment:} The device was connected to a consumer-grade 2.4\,GHz Wi-Fi network (802.11n) configured to simulate typical residential conditions. This included introducing variable signal strength (RSSI fluctuating between -65dBm and -75dBm) and occasional background traffic congestion to mimic real-world interference.
-    \item \textbf{Cloud Backend Infrastructure:} The receiving endpoint was the production Supabase PostgreSQL instance. This ensures that the measured latency includes the real-world processing overhead of the database, triggers, and microservice ingestion logic, rather than just network transport time.
+    \item \textbf{The Device (Edge Node):} We used a standard ESP32-S3 unit, identical to what a user would have in their plant pot. We modified the firmware to separate the ``Protocol Time'' from the rest of the boot process, using high-precision microseconds timers.
+    \item \textbf{The Network:} We didn't use a perfect lab network. We connected the device to a standard home 2.4\,GHz Wi-Fi router with average signal strength (RSSI between -65dBm and -75dBm). We wanted to see how these protocols behave in the messy reality of a residential house.
+    \item \textbf{The Backend:} The destination for all data was our live Supabase Production database. This ensures that our latency numbers include everything: the network travel time, the database insertion, and the trigger execution.
 \end{enumerate}
 
-To isolate the protocol overhead from sensor noise, the device did not read physical sensors during the test. Instead, it generated a static, pre-defined JSON payload matching the \texttt{Controllers} schema. This ensures that the payload size remains constant across all 200 trials (100 per protocol).
+To keep things fair, we removed the variable of ``reading sensors''. Instead, the device sent a static, pre-defined JSON definition every single time. This guarantees that the payload size was constant for all 200 tests.
 
 \begin{figure}[H]
     \centering
@@ -24,22 +24,23 @@ To isolate the protocol overhead from sensor noise, the device did not read phys
 \end{figure}
 
 \subsection{Methodology and Metric Acquisition}
-The data acquisition process was automated to eliminate human error. The firmware was programmed to execute a ``measurement loop'' consisting of the following phases:
+Data collection was fully automated to prevent human error. The firmware ran a rigid "measurement loop":
 \begin{enumerate}
-    \item \textbf{Initialization:} The device wakes from deep sleep and initializes the Wi-Fi stack.
-    \item \textbf{Connection:} It attempts to associate with the Access Point and acquire an IP address.
-    \item \textbf{Transmission:} It serializes the payload and initiates the transfer (HTTP POST or MQTT PUBLISH).
-    \item \textbf{Verification:} It waits for an application-layer acknowledgment (HTTP 200 OK or MQTT PUBACK).
-    \item \textbf{Termination:} It immediately enters deep sleep.
+    \item \textbf{Wake Up:} The device boots from deep sleep.
+    \item \textbf{Connect:} It negotiates with the Wi-Fi router.
+    \item \textbf{Send:} It serializes the JSON and pushes it out using either HTTP POST or MQTT PUBLISH.
+    \item \textbf{Verify:} It waits until the server replies ``I got it'' (HTTP 200 or MQTT PUBACK).
+    \item \textbf{Sleep:} It checks the clock, logs the time, and immediately powers down.
 \end{enumerate}
 
-During this cycle, performance metrics were captured using a combination of internal telemetry and external network analysis:
-
+We measured three things:
 \begin{itemize}
-    \item \textbf{End-to-End Latency:} Defined as the temporal delta between the timestamp $t_{wake}$ (initial boot) and $t_{ack}$ (receipt of confirmation). This encompasses Wi-Fi association, TCP/TLS handshakes, serialization, propagation delay, and server processing time.
-    \item \textbf{Effective Payload Size:} The total volume of data transmitted over the wire was captured using Wireshark packet analysis. This metric includes not just the JSON body, but all protocol headers (TCP, IP, HTTP/MQTT) to reveal the true ``cost'' of the transmission.
-    \item \textbf{Reliability Rate:} The percentage of successful transmissions relative to total attempts. A transmission is deemed successful only if the data is correctly persisted in the database, verified via a subsequent SQL query:
+    \item \textbf{End-to-End Latency:} The stopwatch time from ``Boot'' to ``Server Confirmation''. This counts everything: handshakes, serialization, and propagation.
+    \item \textbf{Effective Payload Size:} We used Wireshark to capture the actual packets. This reveals the hidden cost of protocols. You might send 50 bytes of JSON, but how many bytes of headers wrapped it?
+    \item \textbf{Reliability:} If we try to send 100 packets, how many actually land in the database?
 \end{itemize}
+
+We verified the arrival of every packet using a SQL query on the backend:
 
 \begin{figure}[H]
     \centering
@@ -49,7 +50,7 @@ During this cycle, performance metrics were captured using a combination of inte
 \end{figure}
 
 \subsection{Experimental Results}
-The collected data unequivocal demonstrates a substantial divergence in performance between the two approaches. The aggregated results from the 100 test iterations for each protocol are visualized in Figure \ref{fig:results_table_img}.
+The data speaks for itself. There is a massive performance gap between the two approaches. Figure \ref{fig:results_table_img} shows the aggregated results from our 100 test runs.
 
 \begin{figure}[H]
     \centering
@@ -58,12 +59,14 @@ The collected data unequivocal demonstrates a substantial divergence in performa
     \label{fig:results_table_img}
 \end{figure}
 
-As illustrated, MQTT consistently outperformed REST across all critical dimensions. The average latency for an MQTT transmission was recorded at 185ms, compared to 612ms for REST—a reduction of approximately 70\%. Similarly, the total data transmitted per cycle was significantly lower for MQTT (312 bytes) versus REST (982 bytes), primarily due to the compact binary header structure of the former.
+As you can see, MQTT is the clear winner. The average latency was just \textbf{185ms}, compared to a sluggish \textbf{612ms} for REST. That is a reduction of nearly 70\%. Even more telling is the data usage: MQTT used about \textbf{312 bytes} per cycle, while REST bloated to \textbf{982 bytes}.
 
 \subsection{Discussion}
-The results validate the hypothesis that the verbosity and connection overhead of HTTP are detrimental to battery-powered IoT applications. The significant latency disparity can be attributed to the connection setup phase. In the REST model, every single sensor reading triggers a full TCP three-way handshake followed by a TLS socket negotiation. This ``handshake tax'' consumes the majority of the active time.
+These results confirm our fears about HTTP. It's just too chatty for battery operation. The massive difference in latency comes down to the connection setup. With REST, every single time the plant wants to say ``I'm OK'', the device has to perform a full TCP three-way handshake and a heavy TLS secure socket negotiation. It spends more time shaking hands than actually talking.
 
-In contrast, while the MQTT test also required connection setup (due to the deep sleep tearing down the socket), the protocol's lightweight handshake and lack of verbose text headers (such as \texttt{User-Agent}, \texttt{Accept}, \texttt{Content-Type}) resulted in a much leaner transmission pipeline. Furthermore, the `Reliability` metric highlights a critical vulnerability in the REST approach involving high-latency networks: the strict timeout requirements of HTTP requests often lead to failures in poor signal conditions, whereas the asynchronous nature of MQTT is more resilient to packet fragmentation.
+MQTT, even though it also has to connect, cuts out all the fluff. It doesn't send massive text headers like \texttt{User-Agent} or \texttt{Content-Type}. It just opens the door, throws the binary packet in, and closes the door. The simpler handshake and binary structure make it far more efficient.
+
+Usefully, we also noticed that REST was more fragile. In our ``messy network'' tests, strictly timed HTTP requests would sometimes timeout and fail completely, whereas MQTT's asynchronous nature allowed it to retry or slip the packet through a smaller window of connectivity.
 
 \subsection{Conclusion}
-This experimental evaluation provides empirical evidence that MQTT is the superior protocol for the ``Plant Up!'' sensor ingestion layer. It offers a 3x improvement in latency and a corresponding reduction in energy consumption compared to REST. While REST architecture remains essential for the rich, interactive features of the mobile application layer, the constraints of the ESP32-S3 hardware dictate that sensor-to-cloud communication must prioritize efficiency. Consequently, the final system architecture will standardize on MQTT for all telemetry ingestion, reserving REST solely for user-facing API interactions.
+This experiment gives us empirical proof: MQTT is the superior choice for the ``Plant Up!'' sensor layer. It is 3x faster and significantly lighter on data usage. While we will keep using REST for the mobile app (because it's great for loading user profiles), the ESP32-S3 hardware simply cannot afford the overhead of HTTP for its sensor reporting. We are standardizing on MQTT for all telemetry ingestion. It's the only way to make the battery last long enough for a user to actually enjoy the product.

@@ -1,19 +1,19 @@
 \section{Theoretical Background}
 
 \subsection{Microservices Architecture (MSA)}
-Microservices Architecture (MSA) represents a fundamental paradigm shift in software engineering, moving away from traditional monolithic structures toward the decomposition of complex applications into a suite of small, autonomous, and loosely coupled services \cite{awsMicroservices}. In a monolithic architecture, all functional components—such as user management, data processing, and user interface logic—are tightly integrated into a single executable process. While this approach simplifies initial development, it often becomes a bottleneck for scalability and fault tolerance as the application grows \cite{fowlerMicroservices}.
+Microservices Architecture (MSA) represents a fundamental shift in how we build software, organizing applications not as single, monolithic giants, but as suites of small, autonomous services that work together \cite{awsMicroservices}. In a traditional monolith, everything, from user management to data processing, is tightly woven into one large codebase. While this makes starting a project easy, it often turns into a nightmare for scalability and fault tolerance as the application grows \cite{fowlerMicroservices}.
 
-In contrast, MSA defines the application as a collection of independent services, each running in its own process and communicating via lightweight mechanisms, typically HTTP-based APIs or asynchronous messaging buses \cite{newmanBuilding}. Each microservice is aligned with a specific business domain or ``bounded context''. For the ``Plant Up!'' ecosystem, this architectural style is particularly advantageous. It allows distinct subsystems—such as the high-throughput sensor ingestion pipeline, the user-facing social dashboard, and the periodic gamification logic—to be developed, deployed, and scaled independently. For instance, a surge in sensor data traffic during a synchronized wake-up event does not degrade the performance of the social media feed, as these concerns are handled by isolated services.
+MSA takes a different approach. It treats the application as a collection of independent services, each running in its own process and communicating through lightweight channels, like HTTP APIs or messaging buses \cite{newmanBuilding}. Each service acts as an expert in its own specific business domain. For ``Plant Up!'', this style is a perfect fit. It allows us to build and scale distinct parts of the system independently. For example, the service that ingests thousands of sensor readings per minute can be scaled up during a ``wake-up'' event without disturbing the social feed service, which might be quiet at that moment.
 
-The ``Plant Up!'' backend is structured around domain-oriented Supabase schemas, which serve as the data persistence layer for these microservices:
+The ``Plant Up!'' backend is organized around domain-specific schemas in Supabase, which act as the dedicated data stores for these microservices:
 \begin{itemize}
-    \item \texttt{user\_schema}: Manages identity, authentication, and user-specific state such as streaks and currency.
-    \item \texttt{social\_media\_schema}: Handles high-level logic: posts, comments, \& metadata.
-    \item \texttt{gamification}: Encapsulates the logic for quests, experience points (XP), and rewards.
-    \item \texttt{microcontroller\_schema}: Dedicated to the raw ingestion of high-frequency IoT sensor readings.
+    \item \texttt{user\_schema}: Handles everything related to who the user is: identity, authentication, and personal stats like streaks.
+    \item \texttt{social\_media\_schema}: Manages the community aspects: the posts you see and the comments you write.
+    \item \texttt{gamification}: Houses the logic that makes plant care fun: quests, experience points (XP), and rewards.
+    \item \texttt{microcontroller\_schema}: A high-speed lane dedicated solely to catching raw sensor data from the IoT devices.
 \end{itemize}
 
-A representative example of this domain separation is the table structure for environmental sensor readings, which remains isolated from user data:
+A clear example of this separation is how we store sensor readings. They live in their own isolated table, completely separate from the user data:
 
 \begin{figure}[H]
     \centering
@@ -22,13 +22,13 @@ A representative example of this domain separation is the table structure for en
     \label{fig:controllers_table}
 \end{figure}
 
-This strict separation promotes robustness; a failure in the reading processing service does not cascade to affect the gamification or social subsystems.
+This strict boundary improves robustness. If the sensor reading service crashes, it doesn't take the gamification or social features down with it.
 
 \subsection{Core Characteristics of Microservices in IoT}
-The application of Microservices Architecture within the Internet of Things (IoT) introduces unique requirements that emphasize specific architectural characteristics. IoT systems are inherently asynchronous, event-driven, and subject to unpredictable environmental factors.
+Applying Microservices Architecture to the Internet of Things (IoT) brings a unique set of challenges. IoT systems are messy: they are asynchronous, event-driven, and have to deal with the unpredictable real world.
 
 \subsubsection{Autonomy and Database per Service}
-A core tenet of MSA is ``Database per Service'', which ensures that services are loosely coupled not just in code, but in state \cite{richardsonDbPerService}. This prevents cross-service dependencies where a schema change in one service inadvertently breaks another. In ``Plant Up!'', the Gamification Service maintains its own view of player statistics, independent of the raw sensor data stream.
+One of the golden rules of MSA is ``Database per Service''. This means services are decoupled not just in their code, but also in their data state \cite{richardsonDbPerService}. It prevents the dangerous situation where changing a database table for one service accidentally breaks another. In ``Plant Up!'', the Gamification Service keeps its own scorecard of player statistics, which is completely independent of the raw stream of incoming sensor data.
 
 \begin{figure}[H]
     \centering
@@ -38,72 +38,72 @@ A core tenet of MSA is ``Database per Service'', which ensures that services are
 \end{figure}
 
 \subsubsection{Scalability and Elasticity}
-IoT workloads are often bursty. Thousands of devices may wake up simultaneously to report data. MSA allows the ``Ingestion Service'' to be scaled horizontally (adding more instances) to handle this load, without needing to scale the ``Social Service'', which may be experiencing low traffic.
+IoT workloads are notoriously ``bursty''. You might have silence for an hour, and then suddenly thousands of devices wake up to report their status. MSA allows us to handle this by scaling the ``Ingestion Service'' horizontally (adding more instances to share the load) without wasting resources on the ``Social Service'', which might not need the extra power.
 
 \subsection{Internet of Things (IoT) Constraints and Hardware}
-The ``Plant Up!'' project relies on the ESP32-S3 microcontroller, a powerful yet energy-constrained System-on-Chip (SoC) developed by Espressif Systems \cite{esp32s3Datasheet}. While capable, the selected software protocols directly dictate the hardware's active duration and battery life.
+At the heart of ``Plant Up!'' is the ESP32-S3 microcontroller. It is a powerful System-on-Chip (SoC) from Espressif Systems \cite{esp32s3Datasheet}, but it is still bound by the harsh reality of battery life. The software protocols choices we make dictate how long the hardware stays awake, and consequently, how long the battery lasts.
 
 \subsubsection{Power Consumption and Sleep Modes}
-The ESP32-S3 operates in several distinct power modes, each with vastly different energy profiles. Understanding these modes is critical for architectural decisions:
+The ESP32-S3 has several power modes, each consuming energy at a vastly different rate. Understanding these is key to our architecture:
 \begin{itemize}
-    \item \textbf{Active Mode:} The CPU and Wi-Fi radio are fully powered. In this state, the device consumes between \textbf{160mA and 260mA} \cite{lastMinuteActive}. This is the most expensive state and must be minimized.
-    \item \textbf{Modem Sleep:} The CPU is active, but the radio baseband is disabled. Consumption drops to approximately 20mA-30mA \cite{lastMinuteActive}.
-    \item \textbf{Deep Sleep:} The primary mode for ``Plant Up!'' during periods of inactivity. The CPU, Wi-Fi, and RAM are powered down, leaving only the Ultra-Low Power (ULP) coprocessor and RTC (Real-Time Clock) active. Consumption drops drastically to \textbf{10\textmu A – 150\textmu A} \cite{esp32s3Datasheet}.
+    \item \textbf{Active Mode:} Everything is on: CPU, Wi-Fi radio, the works. The device burns between \textbf{160mA and 260mA} \cite{lastMinuteActive}. This is expensive; we want to spend as little time here as possible.
+    \item \textbf{Modem Sleep:} The CPU is running, but the radio is off. Power drops to about 20mA-30mA \cite{lastMinuteActive}.
+    \item \textbf{Deep Sleep:} This is where the device spends most of its life. The CPU, Wi-Fi, and RAM are powered down. Only the tiny Ultra-Low Power (ULP) coprocessor and the Real-Time Clock tick away. Consumption plummets to a mere \textbf{10\textmu A – 150\textmu A} \cite{esp32s3Datasheet}.
 \end{itemize}
 
 \subsubsection{The Wake-Up Tax}
-Deep sleep provides exceptional energy savings, but it introduces a ``wake-up tax''. When the device wakes, it must re-initialize the Wi-Fi stack, associate with the access point, and acquire an IP address via DHCP. This process typically takes \textbf{1 to 3 seconds}, consuming significant energy (~150mA average) before a single byte of application data is transmitted \cite{adafruitWake}. The choice of application protocol (MQTT vs. REST) further compounds this overhead.
+Deep sleep saves a massive amount of energy, but it comes with a ``wake-up tax''. When the device wakes up, it has to re-initialize its Wi-Fi, find the access point, and ask for an IP address. This dance typically takes \textbf{1 to 3 seconds}, burning a lot of energy (~150mA average) before we even send a single byte of data \cite{adafruitWake}. The choice of protocol (MQTT vs. REST) determines how much heavier this tax becomes.
 
 \subsection{Communication Protocols: MQTT vs. REST}
-The selection of the communication protocol is the pivotal technical decision for the data synchronization layer. It influences energy efficiency, data latency, and reliability.
+Choosing the right communication protocol is arguably the most critical decision for our data layer. It directly impacts energy efficiency, latency, and reliability.
 
 \subsubsection{MQTT (Message Queuing Telemetry Transport)}
-MQTT is a lightweight, binary, publish-subscribe messaging protocol designed specifically for bandwidth-constrained and unreliable networks (ISO/IEC 20922).
+MQTT is a lightweight, binary messaging protocol designed specifically for networks that are unreliable or have limited bandwidth. It works on a publish-subscribe model.
 
 \textbf{ Architecture and Decoupling: }
-Unlike the point-to-point nature of REST, MQTT utilizes a \textbf{Broker} to decouple clients. The publisher (sensor) sends data to a topic (e.g., \texttt{plantup/sensor/01}) without knowing who consumes it. The Broker routes this message to any interested subscribers (e.g., the Ingestion Service). This provides both \textbf{Space Decoupling} (devices do not need to know each other's IP/Port) and \textbf{Time Decoupling} (messages can be queued).
+Unlike REST, which connects two points directly, MQTT uses a \textbf{Broker} in the middle. The sensor (Publisher) sends data to a topic (like \texttt{plantup/sensor/01}) without caring who is listening. The Broker handles the job of routing that message to anyone who subscribed (like the Ingestion Service). This decouples the devices in \textbf{Space} (they don't need to know each other's IP) and \textbf{Time} (messages can be queued if a service is down).
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/mqtt_converted.png}
-    \caption{MQTT Publish/Subscribe Model: The Broker distributes messages from the Sensor (Publisher) to multiple Subscribers (App, Logic, Irrigation) efficiently \cite{psiborg2024mqtt}.}
+    \caption{MQTT Publish/Subscribe Model: The Broker acts as a central hub, efficiently distributing messages from sensors to various services \cite{psiborg2024mqtt}.}
     \label{fig:mqtt_diagram}
 \end{figure}
 
 \textbf{Packet Structure:}
-MQTT is binary-encoded, minimizing overhead. The fixed header is only \textbf{2 bytes}. This contrasts sharply with text-based HTTP headers which can exceed hundreds of bytes.
+MQTT is binary, which means it cuts out the fluff. The fixed header is only \textbf{2 bytes}. Compare that to text-based HTTP headers, which can easily bloat to hundreds of bytes.
 
 \textbf{Quality of Service (QoS):}
-MQTT offers three levels of delivery assurance:
+MQTT gives us three levels of delivery assurance:
 \begin{itemize}
-    \item \textbf{QoS 0 (At most once):} Fire-and-forget. Lowest energy, but risks data loss.
-    \item \textbf{QoS 1 (At least once):} Guarantees delivery via acknowledgment (PUBACK). Ideal for critical alerts.
-    \item \textbf{QoS 2 (Exactly once):} High overhead four-step handshake, generally too heavy for battery operation.
+    \item \textbf{QoS 0 (At most once):} Fire-and-forget. It uses the least energy, but if the message is lost, it's gone for good.
+    \item \textbf{QoS 1 (At least once):} Guarantees delivery by waiting for an acknowledgment (PUBACK). Ideal for critical data.
+    \item \textbf{QoS 2 (Exactly once):} A heavy four-step handshake. Usually too much overhead for battery-powered devices.
 \end{itemize}
 
 \subsubsection{REST (Representational State Transfer)}
-REST is an architectural style utilizing standard HTTP methods. It is synchronous and resource-oriented.
+REST is the standard architectural style of the web, using standard HTTP methods. It is synchronous and resource-oriented.
 
 \textbf{Request-Response Model:}
-REST follows a strict client-server model. The client sends a request (GET, POST, PUT, DELETE) and waits for a response.
+REST is strictly client-server. The client asks for something (GET) or sends something (POST), and waits until the server replies.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/rest_converted.png}
-    \caption{REST Request-Response Workflow: Stateless clients send HTTP requests to API endpoints, incurring overhead for each connection \cite{dreamfactory2024rest}.}
+    \caption{REST Request-Response Workflow: Stateless clients must open a new connection for every request, incurring significant overhead \cite{dreamfactory2024rest}.}
     \label{fig:rest_diagram}
 \end{figure}
 
 \textbf{Statelessness and Overhead:}
-The server retains no session state between requests. This means every request must contain all necessary context (authentication tokens, headers). Furthermore, if the device sleeps between readings, it must perform a full TCP three-way handshake and often a TLS handshake for every single data transmission. This ``Connection Overhead'' makes REST significantly less energy-efficient for frequent, small data payloads compared to a persistent or lightweight MQTT session.
+The server remembers nothing between requests. This means every single request has to carry all its baggage (authentication tokens, headers, etc). Worse, if the device sleeps between readings, it has to perform a full TCP three-way handshake and often a TLS handshake for \textit{every single data transmission}. This ``Connection Overhead'' makes REST a power hog for frequent, small data packets compared to a persistent MQTT session.
 
 \subsection{Data Consistency and the CAP Theorem}
-In distributed systems, the CAP theorem states that it is impossible to simultaneously provide more than two of the following three guarantees: \textbf{Consistency (C)}, \textbf{Availability (A)}, and \textbf{Partition Tolerance (P)} \cite{brewerCap, jaiswalCAP}.
+In distributed systems, the CAP theorem (Consistency, Availability, Partition Tolerance) tells us that we can't have it all. When a network failure happens, we have to choose two out of three \cite{brewerCap, jaiswalCAP}.
 
-In the context of ``Plant Up!'', \textbf{Partition Tolerance (P)} is non-negotiable due to the unreliable nature of wireless sensor networks. Therefore, the system must choose between CP and AP:
+For ``Plant Up!'', \textbf{Partition Tolerance (P)} is non-negotiable. Wireless sensor networks are inherently unreliable. So, we have to choose between CP and AP:
 \begin{itemize}
-    \item \textbf{CP (Consistency + Partition Tolerance):} The system refuses requests if it cannot guarantee consistent data. This risks data loss during network glitches.
-    \item \textbf{AP (Availability + Partition Tolerance):} The system accepts data and serves requests even if some nodes are out of sync.
+    \item \textbf{CP (Consistency + Partition Tolerance):} We refuse requests if we can't guarantee the data is perfectly up-to-date. This risks losing data during network glitches.
+    \item \textbf{AP (Availability + Partition Tolerance):} We accept data and serve requests even if some nodes are slightly out of sync.
 \end{itemize}
 
-``Plant Up!'' prioritizes an \textbf{AP design}, embracing \textbf{Eventual Consistency}. It is acceptable for a user to see a slightly outdated soil moisture value for a few seconds, provided that the system remains responsive and no data is discarded. The MQTT broker facilitates this by acting as a buffer, ensuring that messages are eventually delivered to the microservices layer even after temporary network disruptions.
+``Plant Up!'' firmly chooses an \textbf{AP design}, embracing \textbf{Eventual Consistency}. It is acceptable if a user sees a soil moisture value that is a few seconds old, as long as the app stays responsive and doesn't crash. The MQTT broker acts as a shock absorber, buffering messages during network blips and ensuring they eventually reach the microservices layer.
