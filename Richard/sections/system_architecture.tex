@@ -1,27 +1,48 @@
 \section{Plant Up! System Architecture and Implementation}
 
-\subsection{System Overview and Requirements}
-The ``Plant Up!'' system integrates IoT hardware, microservices and a mobile application into a unified platform designed to support real-time plant monitoring and social interaction. The primary system objective is to collect environmental sensor data from consumer-grade hardware, synchronize it across distributed cloud services and present it to users in a gamified, socially engaging interface.
+\subsection{System Overview and Vision}
+The ``Plant Up!'' system integrates distributed IoT hardware, scalable cloud microservices, and a mobile application into a unified platform designed to support real-time plant monitoring and social interaction. This architecture is a realization of the Social Internet of Things (SIoT) paradigm, where objects (plants) are given a digital voice to interact with humans. The primary system objective is to collect high-resolution environmental sensor data from consumer-grade hardware, synchronize it across distributed cloud services, and present it to users in a gamified, socially engaging interface.
 
-To achieve this, the system must satisfy three key requirements:
+To achieve this holistic vision, the system must satisfy three key architectural requirements:
 \begin{itemize}
-    \item \textbf{Low-latency sensor synchronization:} Environmental data must be transmitted and processed fast enough to provide timely feedback on plant health.
-    \item \textbf{Energy-efficient operation:} IoT devices must conserve battery life through deep sleep cycles, lightweight payloads and minimal active radio time.
-    \item \textbf{Distributed consistency:} Since data is stored across multiple domain-specific schemas, the system must tolerate intermittent connectivity while ensuring eventual consistency.
+    \item \textbf{Low-latency sensor synchronization:} Environmental data must be transmitted and processed fast enough to provide timely feedback on plant health, closing the loop between biological need and human action.
+    \item \textbf{Energy-efficient operation:} IoT devices must conserve battery life through intelligent deep sleep cycles, lightweight payloads, and minimal active radio time to ensure they are ``install-and-forget'' appliances.
+    \item \textbf{Distributed consistency:} Since data is stored across multiple domain-specific schemas (User, Social, Hardware), the system must tolerate intermittent connectivity while ensuring eventual consistency across the platform.
 \end{itemize}
 
-These requirements shape the architectural decisions in both hardware and microservices. The system therefore follows a multi-layered design consisting of an edge node, a cloud microservices layer and a client application layer.
+These requirements shape the architectural decisions in both hardware and microservices. The system therefore follows a multi-layered design consisting of an edge node, a cloud microservices layer, and a client application layer.
 
 \subsection{Hardware Layer: The Edge Node}
-The hardware layer consists of an ESP32-S3 microcontroller equipped with sensors for temperature, humidity, light intensity, soil moisture and electrical conductivity. This configuration enables comprehensive monitoring of plant health. The device operates under strict energy constraints and therefore relies heavily on deep sleep modes. Upon waking, it performs three tasks:
-
+The hardware layer is the physical interface between the digital system and the biological plant. It consists of an ESP32-S3 microcontroller equipped with a suite of sensors for temperature, humidity, light intensity, soil moisture, and electrical conductivity. This configuration enables comprehensive monitoring of plant health. The device operates under strict energy constraints and therefore relies heavily on deep sleep modes. Upon waking, it performs three tasks:
 \begin{enumerate}
-    \item Reads environmental sensors.
-    \item Serializes the data into a compact JSON structure.
-    \item Sends the payload to the backend via MQTT or REST before returning to deep sleep.
+    \item \textbf{Acquisition:} Powers on sensors and reads environmental metrics.
+    \item \textbf{Serialization:} Formats the data into a compact JSON structure.
+    \item \textbf{Transmission:} Sends the payload to the backend via MQTT (or REST) before returning to deep sleep.
 \end{enumerate}
 
-The JSON payload corresponds to the structure of the \texttt{Controllers} table in the \texttt{microcontroller\_schema}:
+\subsubsection{Component Selection and Sensor Interface}
+The selected software protocols directly dictate the hardware's active duration and battery life.
+
+\textbf{Microcontroller: Espressif ESP32-S3}
+The core of the edge node is the ESP32-S3. It was selected for its dual-core architecture, built-in Wi-Fi and Bluetooth 5.0 (LE) capabilities, and extensive GPIO (General Purpose Input/Output) support. Its defining feature for this project is the Ultra-Low Power (ULP) co-processor, which allows the main CPU to sleep while basic monitoring continues. At a price point of approximately 20 Euro, it offers a high performance-to-cost ratio.
+
+\textbf{Soil Moisture Sensor: HiLetgo LM393}
+Soil moisture is the most critical metric for plant survival. The system uses the HiLetgo LM393 resistive sensor (approx. 7.89 Euro). This sensor measures the dielectric permittivity of the soil, which is a function of the water content. It provides immediate feedback on whether a plant requires watering.
+
+\textbf{Light Sensor: HiLetgo BH1750}
+To monitor photosynthetically active radiation levels, the BH1750 (approx. 11.39 Euro) is employed. Unlike simple photo-resistors, the BH1750 is a digital Ambient Light Sensor utilizing the I2C bus interface. It provides precise lux measurements, allowing the system to determine if a plant is receiving optimal light for its species.
+
+\textbf{Electrical Conductivity (EC) Sensor: DFRobot Gravity V2}
+The integration of the DFRobot Gravity Analog EC Sensor (approx. 12.10 Euro) represents a significant advancement over standard home monitors. Electrical Conductivity (EC) is a crucial parameter for precision agriculture as it correlates directly with soil nutrient levels and salinity.
+\begin{itemize}
+    \item \textit{Why EC?} Monitoring soil EC allows the system to predict nutrient regimes. A low EC value often indicates a lack of dissolved salts (fertilizer), prompting the user to feed the plant. This transforms the system from a simple ``watering alarm'' into a complete health monitor.
+\end{itemize}
+
+\textbf{Power Supply and Sustainability}
+To ensure sustainable outdoor operation, the unit is powered by a 0.5W Photo-voltaic Solar Panel (approx. 3.48 Euro) coupled with a lithium-ion battery. A USB-C interface provides an optional backup charging method.
+
+\subsubsection{Data Structure}
+The sensor data is aggregated into a JSON payload corresponding to the \texttt{Controllers} table in the \texttt{microcontroller\_schema}:
 
 \begin{figure}[H]
     \centering
@@ -34,26 +55,25 @@ The corresponding Supabase table is:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{images/Controllers table in microcontroller__schema.png}
+    \includegraphics[width=0.8\textwidth]{images/controllers_table.png}
     \caption{Controllers table receiving IoT data}
     \label{fig:controllers_table_rx}
 \end{figure}
 
-By timestamping each measurement, the backend can reconstruct time series data even when devices experience connectivity delays, enabling eventual consistency.
+By timestamping each measurement at the source, the backend can reconstruct accurate time-series data even when devices experience connectivity delays, enabling reliable eventual consistency.
 
 \subsection{Microservice Architecture Design}
 The backend adopts a microservices-inspired architecture grounded in Supabase schemas. Each schema represents a bounded context aligned with a specific domain:
-
 \begin{itemize}
-    \item \textbf{user\_schema}: Stores user profiles, streak data and virtual currency.
-    \item \textbf{social\_media\_schema}: Manages posts, comments, plants and plant metadata.
+    \item \textbf{user\_schema}: Stores user profiles, streak data, and virtual currency.
+    \item \textbf{social\_media\_schema}: Manages posts, comments, plants, and plant metadata.
     \item \textbf{microcontroller\_schema}: Stores IoT sensor measurements and device associations.
-    \item \textbf{gamification}: Contains quests, user quest progress and XP statistics.
+    \item \textbf{gamification}: Contains quests, user quest progress, and XP statistics.
 \end{itemize}
 
 This separation allows backend services to evolve independently and prevents cross-domain interference. For example, the creation of a post does not impact sensor ingestion, and a device update does not affect quest completion logic.
 
-An example of domain separation is evident in the \texttt{Plants} table:
+An example of this domain separation is evident in the \texttt{Plants} table within the social schema:
 
 \begin{figure}[H]
     \centering
@@ -65,17 +85,15 @@ An example of domain separation is evident in the \texttt{Plants} table:
 This table links user-owned plants to ideal environmental parameters in \texttt{Plant\_data}, enabling health comparisons by other services.
 
 \subsection{Real-Time Data Synchronization Mechanism}
-Real-time synchronization in ``Plant Up!'' requires balancing two competing goals: minimizing battery usage on the edge node while providing timely updates to the microservices layer. Two communication mechanisms are evaluated:
-
+Real-time synchronization within the ``Plant Up!'' ecosystem requires balancing two competing goals: minimizing battery usage on the edge node while providing timely updates to the microservices layer. Two communication mechanisms are evaluated in this thesis:
 \begin{itemize}
-    \item \textbf{REST (HTTPS)} offers structured, authenticated, synchronous transmission suitable for user-driven interactions but incurs significant overhead.
-    \item \textbf{MQTT} provides lightweight, publish/subscribe semantics with lower transmission cost, making it more suitable for the ESP32-S3.
+    \item \textbf{REST (HTTPS)}: Offers structured, authenticated, synchronous transmission. It is suitable for user-driven interactions (e.g., loading a profile) but incurs significant overhead for small, frequent sensor packets.
+    \item \textbf{MQTT}: Provides lightweight, publish/subscribe semantics with lower transmission cost, making it theoretically more suitable for the ESP32-S3 edge node.
 \end{itemize}
 
-Sensor data is synchronized using a hybrid approach. IoT controllers publish sensor payloads through MQTT for efficiency. The backend processes the incoming data and stores it in \texttt{microcontroller\_schema.Controllers}. User-facing services such as the mobile app retrieve the aggregated data via REST.
+Sensor data is synchronized using a hybrid approach. IoT controllers publish sensor payloads through MQTT for efficiency. The backend processing service ingests this data and commits it to the \texttt{microcontroller\_schema.Controllers} table. User-facing services, such as the mobile app, then retrieve this aggregated data via standard REST APIs.
 
 A typical ingestion operation is represented by:
-
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/Insert example for sensor readings.png}
@@ -85,40 +103,40 @@ A typical ingestion operation is represented by:
 
 Since devices may reconnect sporadically, synchronization follows an eventually consistent model rather than strict ordering guarantees.
 
-\subsection{Social Gamification Logic Implementation}
-Gamification is integrated into the Plant Up! experience to motivate sustained engagement. The gamification subsystem relies on three core tables:
+\subsection{User Engagement and Data Processing}
+The ``Social'' and ``Gamification'' aspects of Plant Up! are designed to motivate sustained user engagement through behavioral incentives. This logic is encapsulated in the \texttt{gamification} schema and relies on the processing of data generated by the other layers.
 
+The subsystem relies on three core tables:
 \begin{itemize}
-    \item \textbf{Quests}: Defines daily and weekly goals.
-    \item \textbf{User\_quests}: Tracks per-user quest progression.
-    \item \textbf{player\_stats}: Stores XP and level totals.
+    \item \textbf{Quests}: Defines daily and weekly goals (e.g., ``Water your Monstera'').
+    \item \textbf{User\_quests}: Tracks the progress of a specific user against these goals.
+    \item \textbf{player\_stats}: Stores Experience Points (XP) and level totals.
 \end{itemize}
 
-For example, the quests table is defined as:
-
+For example, the quests table defines the available incentives:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{images/Quests table in gamification schema.png}
+    \includegraphics[width=0.8\textwidth]{images/quests_table.png}
     \caption{Quests table in gamification schema}
     \label{fig:quests_table}
 \end{figure}
 
-When a user completes an action, such as watering a plant or posting an update, the backend increments their quest progress:
+When the sensor layer detects an event—such as a soil moisture increase after watering—the processing service triggers an update to the user's progress. This creates a feedback loop where physical actions result in digital rewards:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{images/User quest progression.png}
+    \includegraphics[width=0.8\textwidth]{images/user_quest.png}
     \caption{User quest progression}
     \label{fig:user_quest_progression}
 \end{figure}
 
-Once the target count is met, XP is awarded:
+Once the target count is met (e.g., watering 3 times), the system awards XP, closing the engagement loop:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{images/Awarding XP to player_stats.png}
+    \includegraphics[width=0.8\textwidth]{images/awarding_xp.png}
     \caption{Awarding XP to player\_stats}
     \label{fig:xp_award}
 \end{figure}
 
-This modular design ensures that the gamification logic remains independent of the sensor ingestion pipeline, social media features and plant data system.
+This modular design ensures that the engagement logic remains independent of the sensor ingestion pipeline, social media features, and plant data system, allowing the game mechanics to be tuned without requiring firmware updates on the edge devices.
