@@ -1,0 +1,226 @@
+\section{Experimental Methodology}
+
+The comparative evaluation of MQTT versus REST in the ``Plant Up!'' system follows a controlled quasi-experimental design that isolates the impact of protocol choice on latency, payload efficiency, and inferred energy consumption. This chapter details the research design, experimental apparatus, measurement instruments, and validity considerations.
+
+\subsection{Research Design and Hypotheses}
+The experiment employs a within-subjects design where the same hardware apparatus is tested under both protocol conditions, minimizing confounding variables related to device variability, network infrastructure, or environmental conditions.
+
+\subsubsection{Independent Variable}
+The sole manipulated independent variable is the \textbf{communication protocol}, with two levels:
+\begin{itemize}
+    \item \textbf{MQTT}: Using the Eclipse Mosquitto open-source broker, QoS level 0 (at-most-once delivery), no TLS encryption, persistent TCP connection established during device wake.
+    \item \textbf{REST}: Using Supabase PostgREST API over HTTPS (TLS 1.2/1.3), stateless request-response model, connection established per transmission cycle.
+\end{itemize}
+
+\subsubsection{Dependent Variables}
+Three outcome variables are measured:
+\begin{enumerate}
+    \item \textbf{End-to-End Latency (ms):} Elapsed time from device boot (wake from deep sleep) to server acknowledgment receipt. This encompasses Wi-Fi association, DHCP negotiation, connection establishment, payload transmission, and acknowledgment.
+    
+    \item \textbf{Effective Payload Size (bytes):} Total bytes transmitted on the wire, including all protocol headers, measured via packet capture at the network interface. This accounts for TCP/IP overhead, application protocol headers (MQTT fixed header vs. HTTP headers), and the JSON payload itself.
+    
+    \item \textbf{Reliability (packet loss rate):} Proportion of transmission attempts that fail to receive server acknowledgment within a 10-second timeout window. This serves as a proxy for robustness under real-world network conditions.
+\end{enumerate}
+
+\subsubsection{Hypotheses}
+Based on theoretical analysis presented in Chapter 2, the following null and alternative hypotheses are formulated:
+
+\textbf{H1 (Latency):}
+\begin{itemize}
+    \item $H_{1,0}$: There is no significant difference in end-to-end latency between MQTT and REST protocols.
+    \item $H_{1,A}$: MQTT exhibits significantly lower end-to-end latency than REST under identical network conditions.
+\end{itemize}
+
+\textbf{H2 (Payload Efficiency):}
+\begin{itemize}
+    \item $H_{2,0}$: MQTT and REST transmit equivalent byte quantities per message exchange.
+    \item $H_{2,A}$: MQTT transmits significantly fewer bytes per exchange due to minimal header overhead.
+\end{itemize}
+
+\textbf{H3 (Energy Efficiency):}
+\begin{itemize}
+    \item $H_{3,0}$: The energy cost per transmission is equivalent for MQTT and REST.
+    \item $H_{3,A}$: MQTT incurs lower energy cost per transmission due to reduced radio-on time (inferred from latency reduction).
+\end{itemize}
+
+Note: $H_3$ is evaluated indirectly via latency measurements, as radio-on time is the dominant contributor to active-mode energy consumption (~200mA constant draw).
+
+\subsection{Hardware and Software Configuration}
+To ensure reproducibility, the exact hardware and software configuration is documented in detail.
+
+\subsubsection{Edge Device Specification}
+\begin{itemize}
+    \item \textbf{Microcontroller:} ESP32-S3-WROOM-1 module (Espressif Systems)
+    \item \textbf{CPU:} Dual-core Xtensa LX7 @ 240 MHz
+    \item \textbf{RAM:} 512 KB SRAM, 384 KB ROM
+    \item \textbf{Flash:} 4 MB
+    \item \textbf{Wi-Fi:} 802.11 b/g/n (2.4 GHz), configured for 802.11n with WPA2-PSK authentication
+    \item \textbf{Transmit Power:} 19.5 dBm (typical)
+    \item \textbf{Sensors Attached:} LM393 (soil moisture), BH1750 (light), DFRobot Gravity V2 (EC), MLX90614 (IR temperature). Note: For this experiment, sensors are powered but \textit{not} sampled; static dummy data is used to eliminate sensor acquisition time as a confounding variable.
+    \item \textbf{Power Supply:} USB power (5V) to eliminate battery voltage sag effects; battery operation is not tested in this experiment.
+\end{itemize}
+
+\subsubsection{Firmware Specification}
+\begin{itemize}
+    \item \textbf{Framework:} ESP-IDF v5.2 (Espressif IoT Development Framework)
+    \item \textbf{RTOS:} FreeRTOS 10.5.1
+    \item \textbf{MQTT Library:} ESP-MQTT (native ESP-IDF component), configured for QoS 0, clean session, 60-second keep-alive
+    \item \textbf{HTTP Library:} esp\_http\_client (native ESP-IDF component), configured for HTTP 1.1, TLS 1.2/1.3 via mbedTLS
+    \item \textbf{JSON Library:} cJSON (included in ESP-IDF)
+    \item \textbf{Timing Measurement:} High-resolution microsecond timer (\texttt{esp\_timer\_get\_time()}) with 1 $\mu$s resolution, used to timestamp key events: boot start, Wi-Fi connected, payload sent, acknowledgment received, sleep initiated.
+\end{itemize}
+
+Static JSON payload used for both protocols (eliminating serialization time variability):
+\begin{verbatim}
+{
+  "device_id": "plant_test_01",
+  "timestamp": "2025-12-09T15:00:00Z",
+  "soil_moisture_pct": 45.0,
+  "light_lux": 10000,
+  "ec_us_cm": 800,
+  "temperature_c": 21.5
+}
+\end{verbatim}
+
+Payload size: 152 bytes (verified via \texttt{strlen()}).
+
+\subsection{Network Infrastructure Configuration}
+\begin{itemize}
+    \item \textbf{Wi-Fi Router:} Consumer-grade 802.11n router (TP-Link Archer C7), 2.4 GHz band, channel 6 (chosen for minimal interference in test environment)
+    \item \textbf{Network Topology:} ESP32-S3 → Wi-Fi router → Internet → Cloud services
+    \item \textbf{RSSI Range:} Device positioned 3-5 meters from router, achieving RSSI between --65 dBm and --75 dBm (verified via \texttt{esp\_WiFi\_sta\_get\_rssi()})
+    \item \textbf{MQTT Broker:} Eclipse Mosquitto 2.0.18, hosted on AWS EC2 t3.micro instance (1 vCPU, 1 GB RAM), located in eu-central-1 region
+    \item \textbf{REST Endpoint:} Supabase Production instance, PostgreSQL 15, PostgREST API, located in eu-central-1 region (co-located with MQTT broker to minimize network latency asymmetry)
+\end{itemize}
+
+\subsection{Measurement Instruments and Data Collection}
+Four complementary measurement techniques are employed to ensure data validity.
+
+\subsubsection{On-Device Microsecond Timers}
+The ESP32-S3 firmware instruments the wake-sleep cycle with high-precision timestamps at each phase transition:
+\begin{enumerate}
+    \item $T_0$ (Boot): Timestamp immediately upon \texttt{app\_main()} entry
+    \item $T_1$ (Wi-Fi Connected): Timestamp in Wi-Fi event handler upon \texttt{IP\_EVENT\_STA\_GOT\_IP}
+    \item $T_2$ (Payload Sent): Timestamp immediately after \texttt{mqtt\_publish()} or \texttt{http\_perform\_request()}
+    \item $T_3$ (ACK Received): Timestamp upon MQTT PUBACK receipt or HTTP 200 OK response
+    \item $T_4$ (Sleep Initiated): Timestamp immediately before \texttt{esp\_deep\_sleep\_start()}
+\end{enumerate}
+
+End-to-end latency is computed as $L = T_3 - T_0$. These timestamps are logged to a circular buffer in RAM and transmitted via UART to a connected PC for offline analysis (to avoid filesystem I/O affecting measurements).
+
+\subsubsection{SQL Verification and Server-Side Logging}
+After each transmission attempt, a verification query is executed against the Supabase database to confirm record insertion:
+\begin{verbatim}
+SELECT EXISTS(
+  SELECT 1 FROM microcontroller_schema.Controllers
+  WHERE device_id = 'plant_test_01'
+    AND timestamp > (NOW() - INTERVAL '30 seconds')
+);
+\end{verbatim}
+
+This provides ground truth for successful delivery. MQTT broker logs (Mosquitto \texttt{--verbose} mode) are separately archived to cross-reference PUBLISH receipt timestamps.
+
+\subsubsection{Packet Capture with Wireshark}
+Network traffic is captured at the Wi-Fi router using port mirroring to a laptop running Wireshark 4.0.3. Capture filters isolate traffic to/from the ESP32-S3 MAC address. For each transmission:
+\begin{itemize}
+    \item MQTT: Total bytes = Ethernet frame(s) containing: IP header (20 bytes), TCP header (20 bytes min), MQTT fixed header (2-5 bytes), topic string (~25 bytes), JSON payload (152 bytes).
+    \item REST: Total bytes = Sum of all frames in HTTP transaction (TCP handshake, TLS handshake, HTTP request/response).
+\end{itemize}
+
+Post-processing scripts (Python with \texttt{scapy}) parse PCAP files to extract byte counts per transaction.
+
+\subsubsection{Power Consumption Inference}
+Direct power measurement (via INA219 or similar current-sense IC) is \textit{not} performed in this experiment due to hardware limitations. Instead, energy consumption is inferred from active-mode duration and nominal current draw:
+\[
+E_{estimated} = I_{active} \cdot (T_3 - T_1) \cdot V_{supply}
+\]
+where $I_{active} \approx 200$ mA (manufacturer specification), $V_{supply} = 3.3$ V. This provides a first-order approximation; actual consumption varies with transmit power and CPU load.
+
+\subsection{Experimental Procedure and Repetition Strategy}
+To achieve statistical power and account for network variability, each protocol condition undergoes 200 independent transmission cycles.
+
+\subsubsection{Trial Procedure (Single Cycle)}
+\begin{enumerate}
+    \item Device resets via hardware button press or watchdog timer, clearing all RAM.
+    \item Device boots, connects to Wi-Fi, transmits static payload via configured protocol (MQTT or REST).
+    \item Device awaits acknowledgment with 10-second timeout.
+    \item Upon acknowledgment (or timeout), device logs timestamps via UART, enters deep sleep for 5 seconds (artificially short for rapid data collection).
+    \item Wake → Repeat.
+\end{enumerate}
+
+\subsubsection{Protocol Alternation and Randomization}
+To mitigate temporal confounds (e.g., time-of-day network congestion), the 200 trials per protocol are interleaved rather than blocked:
+\begin{itemize}
+    \item Block randomization: Generate random sequence of 400 trials (200 MQTT, 200 REST).
+    \item Execute trials sequentially per randomized order.
+    \item Each trial completes before the next begins (no concurrent transmissions).
+\end{itemize}
+
+Total experiment duration: ~(400 cycles) × (average 20 seconds/cycle) = ~2.2 hours.
+
+\subsubsection{Environmental Controls}
+\begin{itemize}
+    \item \textbf{Time Window:} All trials conducted between 14:00-17:00 local time to minimize diurnal network load variation.
+    \item \textbf{Background Traffic:} Other devices on test network instructed to remain idle (no video streaming, large downloads, etc.).
+    \item \textbf{Physical Environment:} Device and router positions fixed throughout experiment; no movement or obstructions introduced.
+\end{itemize}
+
+\subsection{Data Analysis Plan}
+Collected data (device-side timestamps, packet captures, SQL verification logs) are merged into a unified dataset. For each trial, the record includes:
+\begin{itemize}
+    \item Protocol (MQTT or REST)
+    \item End-to-end latency $L = T_3 - T_0$ (ms)
+    \item Wi-Fi acquisition time $T_{WiFi} = T_1 - T_0$ (ms)
+    \item Transmission time $T_{TX} = T_3 - T_1$ (ms)
+    \item Effective payload size from PCAP (bytes)
+    \item Delivery success (Boolean)
+\end{itemize}
+
+Descriptive statistics (mean, median, standard deviation, range) are computed per protocol. Hypothesis testing employs:
+\begin{itemize}
+    \item Independent samples t-test (or Mann-Whitney U if non-normal) for latency comparison.
+    \item Effect size quantification via Cohen's d.
+    \item Significance threshold $\alpha = 0.05$.
+\end{itemize}
+
+\subsection{Validity and Reproducibility Measures}
+\subsubsection{Internal Validity}
+\begin{itemize}
+    \item \textbf{Control of Confounds:} Static payload, fixed network infrastructure, interleaved trial order, consistent environmental conditions.
+    \item \textbf{Measurement Precision:} Microsecond-resolution timers minimize measurement error relative to millisecond-scale latencies.
+\end{itemize}
+
+\subsubsection{External Validity}
+\begin{itemize}
+    \item \textbf{Generalizability Limitations:} Results obtained in a single residential Wi-Fi environment may not generalize to enterprise networks, cellular (LTE/5G), or outdoor deployments.
+    \item \textbf{Hardware Specificity:} ESP32-S3 results may not extend to other microcontrollers with different Wi-Fi subsystems or power profiles.
+\end{itemize}
+
+\subsubsection{Reproducibility}
+To facilitate replication:
+\begin{itemize}
+    \item Complete source code (firmware, analysis scripts) version-controlled and publicly available.
+    \item Exact hardware bill-of-materials (BOM) and part numbers documented.
+    \item Raw experimental data (timestamped logs, PCAP files) archived and available upon request.
+    \item Configuration files for MQTT broker and Supabase schema provided.
+\end{itemize}
+
+\subsection{Ethical Considerations and Limitations Disclosure}
+\subsubsection{Limitations}
+The experimental design incorporates several simplifications that constrain the interpretation of results:
+\begin{enumerate}
+    \item \textbf{No TLS for MQTT:} MQTT transmissions are unencrypted, whereas REST uses HTTPS (TLS). Enabling TLS for MQTT would increase handshake overhead and narrow the performance gap, but was omitted due to broker configuration complexity.
+    
+    \item \textbf{QoS 0 Only:} Only MQTT QoS 0 (fire-and-forget) is tested. Higher QoS levels (1 or 2) would introduce additional acknowledgment rounds, increasing latency and potentially altering conclusions.
+    
+    \item \textbf{Home Wi-Fi Variability:} The test network is a typical consumer environment prone to interference, signal fluctuations, and shared bandwidth. Results may not generalize to controlled laboratory or industrial settings.
+    
+    \item \textbf{Inferred Power Measurement:} Energy consumption is estimated from timing data and nominal current specifications, not measured directly with precision instrumentation (e.g., INA219 shunt monitor). This introduces uncertainty in energy comparisons.
+    
+    \item \textbf{Single Geographic Location:} Both MQTT broker and Supabase instance are co-located in eu-central-1. Results may differ if backend services are geographically distributed or exhibit higher network latency.
+    
+    \item \textbf{No Battery Operation:} Devices powered via USB at constant 5V. Battery voltage sag under load is not characterized, though this primarily affects transmit power stability.
+\end{enumerate}
+
+\subsubsection{Ethical Considerations}
+No human subjects or personal data are involved in this experiment. All network communication occurs within controlled infrastructure (personal Wi-Fi, owned cloud accounts). No privacy or security risks are introduced.

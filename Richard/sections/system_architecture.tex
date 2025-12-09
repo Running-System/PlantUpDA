@@ -1,97 +1,206 @@
 \section{Plant Up! System Architecture and Implementation}
 
 \subsection{System Overview and Vision}
-The ``Plant Up!'' platform is where the physical world of botany meets the digital world of social networking. It integrates distributed IoT hardware, a scalable cloud microservices backend, and a vibrant mobile application into a single, unified ecosystem. This is the practical realization of the Social Internet of Things (SIoT) concept: giving plants a digital ``voice'' to tell us how they feel. The primary goal is straightforward but technically demanding: collect high-precision environmental data from our custom edge devices, synchronize it through the cloud, and present it to users in a way that feels like a game, not a chore.
+The ``Plant Up!'' platform represents the physical instantiation of the Social Internet of Things (SIoT) paradigm applied to urban horticulture. It integrates distributed IoT hardware, a scalable cloud microservices backend, and a mobile application into a unified ecosystem. The system gives plants a digital ``voice'' to communicate their physiological status to human caretakers. The primary objective is technically demanding: collect high-precision environmental telemetry from battery-powered edge devices, synchronize it through cloud infrastructure, and present it to users through a gamified interface that transforms routine maintenance into an engaging activity.
 
-To bring this vision to life, our architecture must solve three critical puzzles:
+To realize this vision, the architecture must address three fundamental challenges:
 \begin{itemize}
-    \item \textbf{Low-latency sensor synchronization:} When a plant is thirsty, the user needs to know \textit{now}. We must close the loop between the biological need and the human action as fast as possible.
-    \item \textbf{Energy-efficient operation:} No one wants to charge their plant pot every day. Our IoT devices need to be ``install-and-forget'', sipping battery power through intelligent deep sleep cycles and minimal radio usage.
-    \item \textbf{Distributed consistency:} With data scattered across User, Social, and Hardware domains, the system has to keep everything in sync, even when the Wi-Fi acts up.
+    \item \textbf{Low-latency sensor synchronization:} The system must close the feedback loop between biological events (e.g., soil moisture depletion) and human perception with minimal delay to maintain engagement.
+    \item \textbf{Energy-efficient operation:} Battery-powered sensor nodes must operate for months without intervention, necessitating aggressive power management through intelligent deep-sleep cycles and minimal radio usage.
+    \item \textbf{Distributed data consistency:} With state partitioned across user, social, and hardware microservices, the system must maintain coherent views despite network partitions and asynchronous updates.
 \end{itemize}
 
-These requirements drive every choice we made, from the specific sensors we soldered to the board to the way we structured our microservices. The result is a multi-layered design: the Edge Node, the Cloud Layer, and the Application Layer.
+These requirements inform every architectural decision, from sensor selection and firmware logic to protocol choice and microservice boundaries. The resulting design comprises three layers: the Edge Node (hardware), the Cloud Layer (backend microservices), and the Application Layer (mobile client).
 
 \subsection{Hardware Layer: The Edge Node}
-The hardware layer is the physical ``nervous system'' of our project. It builds a bridge between the digital cloud and the soil in the pot. We built it around the ESP32-S3 microcontroller and equipped it with a comprehensive suite of sensors for temperature, humidity, light, soil moisture, and electrical conductivity. This gives us a complete picture of the plant's health. But because it runs on a battery, it spends most of its life asleep. Its routine is simple but strict:
+The hardware layer serves as the system's physical sensing apparatus, bridging the digital cloud infrastructure with the analog environment of soil, air, and light. At its core is an ESP32-S3 microcontroller augmented with a suite of environmental sensors: temperature, humidity, light intensity, soil moisture, and electrical conductivity. Operating on battery power imposes a strict duty cycle: the device spends the majority of its operational time in deep sleep, waking periodically to execute a rapid measurement sequence.
+
+The firmware implements a deterministic wake-measure-serialize-transmit-sleep cycle:
 \begin{enumerate}
-    \item \textbf{Acquisition:} Wake up, power on the sensors, and take a quick snapshot of the environment.
-    \item \textbf{Serialization:} Pack those numbers into a compact JSON format.
-    \item \textbf{Transmission:} Fire that packet off to the cloud (using MQTT or REST) and go back to sleep immediately.
+    \item \textbf{Acquisition:} Exit deep sleep, power on sensor array, acquire raw ADC or I2C readings.
+    \item \textbf{Serialization:} Map raw values to calibrated units, construct JSON payload.
+    \item \textbf{Transmission:} Transmit payload via MQTT or REST, await acknowledgment.
+    \item \textbf{Sleep Transition:} Immediately re-enter deep sleep to conserve energy.
 \end{enumerate}
 
-\subsubsection{Component Selection and Sensor Interface}
-Hardware selection isn't just about features; it's about the trade-off between capability and longevity.
+This cycle typically completes in 3-7 seconds depending on protocol and network conditions, with the device remaining in deep sleep for the remaining 590+ seconds of a 10-minute reporting interval.
 
-\textbf{Microcontroller: Espressif ESP32-S3}
-The brain of our operation is the ESP32-S3. We chose it for its perfect balance of power and efficiency. It has a dual-core processor and built-in Wi-Fi and Bluetooth, but the real star is its Ultra-Low Power (ULP) co-processor. This little chip allows the main power-hungry CPU to sleep while basic monitoring continues in the background. At around 20 Euro, it gives us incredible bang for our buck.
+\subsection{Firmware Architecture: Detailed Wake-Measure-Serialize-Transmit-Sleep Cycle}
+The ESP32-S3 firmware is structured around FreeRTOS tasks that orchestrate sensor acquisition, data formatting, and network communication. Understanding this low-level architecture is essential for evaluating protocol trade-offs.
 
-\textbf{Soil Moisture Sensor: HiLetgo LM393}
-Water is life, and the HiLetgo LM393 (approx. 7.89 Euro) allows us to measure it. Unlike cheaper sensors that corrode in weeks, this resistive sensor measures the dielectric permittivity of the soil. It gives us that critical ``I'm thirsty'' signal.
+\subsubsection{Boot and Initialization Sequence}
+Upon exiting deep sleep (triggered by an RTC timer), the ESP32-S3 bootloader loads the application from flash and transfers control to the FreeRTOS scheduler. The first task performs the following initialization:
+\begin{enumerate}
+    \item Restore configuration from RTC memory (which persists across deep sleep). This includes Wi-Fi credentials, MQTT broker address, and device identifier.
+    \item Initialize Wi-Fi subsystem and initiate association with the configured access point. This phase dominates wake-time, typically consuming 1-2 seconds and ~150mA.
+    \item Obtain IP address via DHCP (if not using a static assignment).
+    \item For MQTT: Establish TCP connection to broker, send CONNECT packet, await CONNACK.
+    \item For REST: No persistent connection is established; connection setup occurs per-request.
+\end{enumerate}
 
-\textbf{Light Sensor: HiLetgo BH1750}
-Plants eat light, so we need to measure it accurately. We use the BH1750 (approx. 11.39 Euro). It's a digital I2C sensor, not a cheap photo-resistor. It gives us precise lux readings, so the system can tell you, ``Hey, I need more sun,'' or ``I'm getting sunburned!''
+\subsubsection{Sensor Acquisition and Calibration}
+Once network connectivity is confirmed, the firmware powers the sensor array via GPIO-controlled MOSFETs (to prevent parasitic drain during sleep). Each sensor is read sequentially:
 
-\textbf{Electrical Conductivity (EC) Sensor: DFRobot Gravity V2}
-This is where we go beyond the basics. The DFRobot Gravity Analog EC Sensor (approx. 12.10 Euro) measures Electrical Conductivity, which is essentially the salt content of the soil.
+\textbf{LM393 Soil Moisture Sensor:}
+Contrary to earlier documentation, the LM393 is a resistive sensor that measures soil conductivity, not dielectric permittivity. The sensor outputs an analog voltage inversely proportional to soil water content. The ESP32-S3's 12-bit ADC (range 0-4095) samples this voltage, which is then linearized via a calibration polynomial stored in flash:
+\[
+\text{moisture\_percent} = a_0 + a_1 \cdot V_{ADC} + a_2 \cdot V_{ADC}^2
+\]
+where $a_0, a_1, a_2$ are determined via two-point calibration (dry air and saturated soil).
+
+\textbf{BH1750 Light Sensor:}
+The BH1750 is an I2C digital ambient light sensor providing lux measurements. It offers a practical range up to approximately 65,000 lux with limited accuracy (±20\% typical). The firmware configures the sensor for One-Time High Resolution Mode (1 lux resolution), issues a measurement command, and polls the I2C bus for the 16-bit result. No complex calibration is required as the sensor outputs directly in lux units.
+
+\textbf{DFRobot Gravity V2 EC Sensor:}
+This sensor measures ionic conductivity (electrical conductivity in units of microsiemens per centimeter, $\mu$S/cm), which correlates with dissolved nutrient concentration. It is \textit{not} a direct ``salt content'' meter, but rather an indicator of total dissolved solids (TDS). The analog output is sampled via ADC and temperature-compensated using a stored soil temperature reference (ideally from a separate thermometer, or a fixed compensation factor).
+
+\textbf{MLX90614 Infrared Sensor:}
+The MLX90614 measures surface temperature via infrared radiation, not ambient air temperature. It communicates over I2C and directly outputs calibrated temperature in degrees Celsius. This non-contact measurement is useful for detecting canopy temperature, which differs from air temperature under direct sunlight.
+
+\subsubsection{JSON Payload Construction and Rationale}
+Sensor readings are serialized into a JSON object structure:
+
+\begin{verbatim}
+{
+  "device_id": "plant_01",
+  "timestamp": "2025-12-09T16:30:00Z",
+  "soil_moisture_pct": 42.5,
+  "light_lux": 12500,
+  "ec_us_cm": 750,
+  "temperature_c": 22.3
+}
+\end{verbatim}
+
+JSON was selected as the payload format despite its verbosity (compared to binary encodings like Protocol Buffers or CBOR) for several pragmatic reasons:
 \begin{itemize}
-    \item \textit{Why EC?} EC correlates directly with nutrients. A droopy plant might be watered perfectly but starving for nitrogen. This sensor allows ``Plant Up!'' to predict when you need to fertilize, turning it from a simple watering alarm into a true health monitor.
+    \item \textbf{Human Readability:} JSON payloads can be inspected directly in broker logs and network packet captures, simplifying debugging during development.
+    \item \textbf{Language Agnosticism:} Every modern backend framework and mobile SDK provides robust JSON parsing libraries, eliminating the need for custom deserialization code.
+    \item \textbf{Supabase Integration:} Supabase/PostgREST natively consumes JSON, allowing direct POST requests to database tables without intermediate parsing layers.
+    \item \textbf{Marginal Overhead:} For the small payloads transmitted (typically <100 bytes of application data), the overhead difference between JSON and binary encodings (perhaps 20-30 bytes) is negligible compared to protocol headers (MQTT fixed header: ~2-5 bytes; HTTP headers: ~200+ bytes).
 \end{itemize}
 
+The critical insight is that JSON's verbosity disadvantage is dwarfed by HTTP's header overhead in the REST case, and nearly irrelevant in the MQTT case where the fixed header is already minimal.
+
+\subsubsection{Transmission Phase: MQTT vs. REST Divergence}
+After JSON payload construction, the firmware follows one of two transmission paths depending on build-time configuration:
+
+\textbf{MQTT Path:}
+\begin{enumerate}
+    \item Construct PUBLISH packet: fixed header (1-5 bytes), topic name (e.g., \texttt{plantup/sensor/plant\_01}, ~25 bytes), JSON payload.
+    \item Send packet to broker over existing TCP connection.
+    \item For QoS 0: No acknowledgment awaited; proceed immediately to sleep.
+    \item For QoS 1: Await PUBACK from broker; retransmit on timeout.
+    \item Total transmission time (network RTT dependent): ~50-200ms for QoS 0, +50-100ms for QoS 1.
+\end{enumerate}
+
+\textbf{REST Path:}
+\begin{enumerate}
+    \item Establish TCP connection to Supabase endpoint (if not persistent): 3-way handshake (~1 RTT).
+    \item Perform TLS handshake: ClientHello, ServerHello, Key Exchange, Finished (~2 RTT for TLS 1.2).
+    \item Construct HTTP POST request:
+\begin{verbatim}
+POST /rest/v1/Controllers HTTP/1.1
+Host: <supabase-instance>.supabase.co
+Content-Type: application/json
+Authorization: Bearer <API_KEY>
+Content-Length: <len>
+
+{<JSON payload>}
+\end{verbatim}
+    \item Await HTTP 200 OK response from server.
+    \item Close TCP connection (or maintain keep-alive, though this consumes radio power).
+    \item Total transmission time: ~300-600ms depending on network conditions.
+\end{enumerate}
+
+The quantitative difference stems primarily from the REST requirement to amortize connection setup overhead across a single payload, whereas MQTT amortizes the broker connection across potentially hundreds of publishes.
+
+\subsubsection{Return to Deep Sleep}
+Immediately upon receiving transmission acknowledgment (or timeout), the firmware:
+\begin{enumerate}
+    \item Powers down the sensor array via GPIO.
+    \item Stores critical state (e.g., next wake time, sequence number) in RTC memory.
+    \item Configures RTC timer for next wake event (e.g., 10 minutes).
+    \item Invokes \texttt{esp\_deep\_sleep\_start()}, which powers down CPU, Wi-Fi, and RAM.
+\end{enumerate}
+
+Only the RTC and ULP coprocessor remain active, consuming ~10-150 $\mu$A until the next wake event.
+
+\subsection{Component Selection and Sensor Interface}
+Hardware selection balances capability, cost, power consumption, and reliability.
+
+\textbf{Microcontroller: Espressif ESP32-S3}
+The ESP32-S3 provides a dual-core Xtensa LX7 processor, integrated Wi-Fi 4 and Bluetooth 5 (LE), and an Ultra-Low-Power (ULP) RISC-V coprocessor capable of autonomous sensor monitoring during deep sleep. At approximately 20 EUR in development board form, it offers exceptional value for prototyping. Production deployments would use the bare module (~5 EUR) to reduce cost and footprint.
+
+\textbf{Soil Moisture Sensor: HiLetgo LM393 (Resistive)}
+The LM393 module (~7.89 EUR) employs a resistive measurement principle: two probes inserted into soil form a variable resistor whose resistance decreases with moisture content. An onboard comparator outputs a digital signal, while a second output provides an analog voltage for ADC sampling. The resistive approach is less accurate than capacitive sensors but significantly more cost-effective. Note: as a resistive sensor, it measures conductivity, \textit{not} dielectric permittivity as is sometimes erroneously stated.
+
+\textbf{Light Sensor: HiLetgo BH1750}
+The BH1750 (~11.39 EUR) is a digital I2C ambient light sensor providing direct lux output. Unlike analog photoresistors, it offers linearized response and automatic gain adjustment. The sensor's practical range extends to ~65,000 lux, sufficient for full sunlight detection, though accuracy degrades at extreme levels (±20\% typical).
+
+\textbf{Electrical Conductivity Sensor: DFRobot Gravity V2}
+The DFRobot Gravity Analog EC Sensor (~12.10 EUR) measures ionic conductivity ($\mu$S/cm), an indirect indicator of dissolved nutrient concentration. The sensor excites the solution with an AC signal (to prevent electroplating) and measures the resulting current. Higher EC typically correlates with higher fertilizer content, though the relationship is affected by temperature and ion composition.
+
+\textbf{Temperature Sensor: MLX90614 (Infrared Non-Contact)}
+The MLX90614 measures surface temperature via infrared radiation, not ambient air temperature. This distinction is critical: leaf surface temperature can differ substantially from air temperature under direct sunlight or during transpiration. The non-contact measurement avoids thermal mass effects that slow conventional thermistors.
+
 \textbf{Power Supply and Sustainability}
-To keep this running remotely, we pair a lithium-ion battery with a 0.5W Photo-voltaic Solar Panel (approx. 3.48 Euro). It's designed to be self-sustaining, but we included a USB-C port just in case.
+The system employs a 3.7V lithium-ion battery (e.g., 18650 cell, ~2000-3000 mAh) supplemented by a 0.5W photovoltaic solar panel (~3.48 EUR) for trickle charging. A TP4056-based charge controller prevents overcharging. The system includes a USB-C port for manual charging during extended low-light periods.
 
-\subsubsection{Data Structure}
-All this sensor data gets wrapped up into a tidy JSON payload. This maps directly to the \texttt{Controllers} table in our backend `microcontroller_schema`:
+\subsection{Microservice Architecture Design}
+The backend is partitioned into domain-specific microservices implemented as isolated Supabase schemas. Each schema functions as a bounded context in domain-driven design terminology:
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{images/Sensor payload structure.png}
-    \caption{JSON payload sent by the edge node}
-    \label{fig:edge_json_payload}
-\end{figure}
+\begin{itemize}
+    \item \textbf{user\_schema}: Manages user identity, authentication (via Supabase Auth), and personal metrics like maintenance streaks.
+    \item \textbf{social\_media\_schema}: Handles community features including user posts, comments, plant profiles, and follower relationships.
+    \item \textbf{gamification}: Implements engagement mechanics: quest definitions, user quest progress tracking, experience points (XP), and level progression.
+    \item \textbf{microcontroller\_schema}: Dedicated high-throughput ingestion pipeline for raw sensor telemetry.
+\end{itemize}
 
-And here is where it lands in Supabase:
+This separation provides several advantages:
+\begin{itemize}
+    \item \textbf{Independent Scaling:} The sensor ingestion service can be horizontally scaled during peak periods (e.g., synchronized wake events) without affecting social or gamification services.
+    \item \textbf{Fault Isolation:} A crash in the gamification service does not impede telemetry ingestion.
+    \item \textbf{Development Velocity:} Teams can modify service logic without cross-team coordination, provided schema contracts remain stable.
+\end{itemize}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/controllers_table.png}
-    \caption{Controllers table receiving IoT data}
+    \caption{Controllers table in microcontroller\_schema receives sensor telemetry}
     \label{fig:controllers_table_rx}
 \end{figure}
 
-Crucially, we timestamp every measurement right at the source (the edge node). This means that even if the Wi-Fi is down for an hour, when the data finally arrives, the backend knows exactly when it was recorded. This allows us to reconstruct accurate historical charts despite network hiccups.
+\subsection{Hybrid Communication Architecture and Data Ingestion Pipeline}
+The system employs a hybrid communication strategy optimized for the distinct requirements of edge devices and mobile clients:
 
-\subsection{Microservice Architecture Design}
-Our backend isn't a tangled mess of code; it's a family of microservices organized around Supabase schemas. Each schema acts as a ``Bounded Context'', which is a fancy way of saying it minds its own business:
+\textbf{Edge-to-Cloud: MQTT}
+Sensor nodes publish telemetry to an MQTT broker (e.g., Mosquitto or HiveMQ Cloud) using QoS 0 for routine measurements. The broker forwards messages to a backend ingestion service (implemented as a Node.js worker or Python subscriber) that translates MQTT messages into Supabase database inserts. This architecture provides:
 \begin{itemize}
-    \item \textbf{user\_schema}: Handles the players: profiles, streaks, and virtual wallets.
-    \item \textbf{social\_media\_schema}: Handles the community: posts, comments, and plant profiles.
-    \item \textbf{microcontroller\_schema}: The data warehouse for all those sensor readings.
-    \item \textbf{gamification}: The game engine: quests, progress, and XP.
+    \item \textbf{Low Latency:} Minimal protocol overhead (~2-5 byte fixed header).
+    \item \textbf{Energy Efficiency:} No per-message connection setup.
+    \item \textbf{Decoupling:} Sensor nodes remain agnostic to backend schema changes; only the ingestion service requires updates.
 \end{itemize}
 
-This separation is a lifesaver for development. We can tweak the way quests work without worrying about breaking the sensor ingestion pipeline. A problem in one area doesn't cascade into a total system failure.
-
-For instance, the \texttt{Plants} table in the social schema links a user's plant to its ideal growing conditions in \texttt{Plant\_data}. This allows other services to look up ``What does a Monstera need?'' without cluttering the social database with botanical encyclopedias.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{images/Plants table.png}
-    \caption{Plants table in social\_media\_schema}
-    \label{fig:plants_table_arch}
-\end{figure}
-
-\subsection{Real-Time Data Synchronization Mechanism}
-Synchronization is a balancing act. We want the user to see fresh data instantly, but we don't want to kill the sensor's battery. We evaluated two main contenders:
+\textbf{Mobile-to-Cloud: REST (Supabase PostgREST)}
+The Flutter mobile application consumes data via Supabase's auto-generated REST API (PostgREST). This provides:
 \begin{itemize}
-    \item \textbf{REST (HTTPS)}: The standard web way. It's structured and familiar, great for when a user loads their profile. But for sending tiny sensor packets every few minutes? The overhead is heavy.
-    \item \textbf{MQTT}: The IoT specialist. It's lightweight and uses a publish/subscribe model. Theoretically, this is the perfect match for our battery-constrained ESP32.
+    \item \textbf{Rich Querying:} URL-based filtering, sorting, pagination (e.g., \texttt{GET /Controllers?plant\_id=eq.01\&order=timestamp.desc\&limit=10}).
+    \item \textbf{Developer Ergonomics:} No custom API implementation; endpoints auto-generate from schema.
+    \item \textbf{Real-Time Updates:} Supabase Realtime (WebSocket-based) pushes database changes to subscribed mobile clients.
 \end{itemize}
 
-We ended up using a hybrid approach. The IoT devices talk MQTT because it's efficient. A backend service listens to that chatter and commits it to the database. The user's phone app then talks to the database using standard REST APIs. It's the best of both worlds.
+\textbf{End-to-End Ingestion Flow:}
+\begin{enumerate}
+    \item ESP32-S3 wakes, acquires sensor readings, constructs JSON payload.
+    \item Publishes payload to MQTT topic \texttt{plantup/sensor/<device\_id>}.
+    \item MQTT broker forwards to ingestion service subscriber.
+    \item Ingestion service authenticates using service role key, inserts record into \texttt{microcontroller\_schema.Controllers} table via Supabase client library.
+    \item Supabase RLS policy permits insert (service role bypasses RLS by default).
+    \item Supabase Realtime detects INSERT, pushes notification to subscribed mobile clients via WebSocket.
+    \item Mobile app receives update, refreshes sensor data view.
+\end{enumerate}
 
-A typical data ingestion looks like this:
+Total end-to-end latency (sensor wake to mobile display update) is typically 200-500ms under normal network conditions.
 
 \begin{figure}[H]
     \centering
@@ -100,41 +209,53 @@ A typical data ingestion looks like this:
     \label{fig:insert_op_sync}
 \end{figure}
 
-\subsection{User Engagement and Data Processing}
-The ``Social'' and ``Gamification'' parts of Plant Up! aren't just cosmetic; they are the engine that drives user behavior. This logic lives in the \texttt{gamification} schema, and it watches the data streaming in from the other layers.
+\subsection{Data Consistency Handling and Supabase RLS Policies}
+The distributed architecture spanning multiple schemas and clients necessitates careful consistency management. The system adopts an AP (Available, Partition-tolerant) design with eventual consistency.
 
-It relies on three core tables:
+\textbf{Row-Level Security (RLS) Policies:}
+Supabase enforces data access control at the database row level via PostgreSQL RLS policies. Example policies include:
 \begin{itemize}
-    \item \textbf{Quests}: The menu of challenges, like "Water your Monstera" or "Check the light level".
-    \item \textbf{User\_quests}: The user's personal to-do list.
-    \item \textbf{player\_stats}: The scorecard: XP and levels.
+    \item \textbf{Ingestion Service INSERT Policy:} Only authenticated requests with the service role key can insert into \texttt{Controllers}.
+    \item \textbf{User SELECT Policy:} Authenticated mobile users can SELECT only records where \texttt{user\_id} matches their JWT claim.
+    \item \textbf{Social Media Policy:} Users can UPDATE/DELETE only their own posts.
 \end{itemize}
 
-The \texttt{quests} table sets the stage:
+These policies ensure that even if application-layer authorization is compromised, the database enforces access boundaries.
+
+\textbf{Eventual Consistency Trade-offs:}
+When network partitions occur (e.g., sensor node loses Wi-Fi connectivity), the MQTT broker buffers messages.  Once connectivity restores, buffered messages are delivered and inserted into the database. During the partition, mobile clients may observe stale data, but no data is lost. This design prioritizes availability and user experience over strict real-time consistency, a trade-off appropriate for non-critical monitoring applications.
+
+\subsection{User Engagement and Gamification Data Processing}
+The gamification layer transforms raw telemetry into actionable feedback and rewards, creating a psychological reinforcement loop that encourages sustained engagement.
+
+The gamification microservice monitors incoming sensor data for event triggers:
+\begin{itemize}
+    \item \textbf{Watering Detection:} Soil moisture increase >10\% within 5-minute window.
+    \item \textbf{Light Exposure:} Cumulative lux-hours exceeding daily target.
+    \item \textbf{Consistency Streak:} Plant maintained within optimal ranges for N consecutive days.
+\end{itemize}
+
+Upon detecting a trigger, the service updates \texttt{user\_quests.progress}, increments \texttt{player\_stats.xp}, and potentially unlocks achievements. These updates propagate to the mobile app via Supabase Realtime, providing near-instant positive feedback.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/quests_table.png}
-    \caption{Quests table in gamification schema}
+    \caption{Quests table defines available challenges}
     \label{fig:quests_table}
 \end{figure}
-
-Here is the magic: When the sensor layer detects that the soil moisture just shot up, the system implies, ``Aha! The user watered the plant.'' The processing service triggers an update to the user's quest progress. Physical action -> Digital Notification.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/user_quest.png}
-    \caption{User quest progression}
+    \caption{User quest progression tracking}
     \label{fig:user_quest_progression}
 \end{figure}
-
-And when the goal is met (say, watering 3 times in a week), the system showers the user with XP.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/awarding_xp.png}
-    \caption{Awarding XP to player\_stats}
+    \caption{Experience point award to player\_stats upon quest completion}
     \label{fig:xp_award}
 \end{figure}
 
-This modular design keeps the fun stuff separate from the serious plumbing. We can tune the game mechanics, such as making quests harder or adding holiday events, without ever having to touch the firmware on the edge devices.
+This modular separation allows tuning gamification mechanics (quest difficulty, XP rewards, decay rates) independently of firmware or core telemetry processing, enabling rapid iteration based on user engagement metrics.

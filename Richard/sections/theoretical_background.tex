@@ -1,19 +1,26 @@
 \section{Theoretical Background}
 
-\subsection{Microservices Architecture (MSA)}
-Microservices Architecture (MSA) represents a fundamental shift in how we build software, organizing applications not as single, monolithic giants, but as suites of small, autonomous services that work together \cite{awsMicroservices}. In a traditional monolith, everything, from user management to data processing, is tightly woven into one large codebase. While this makes starting a project easy, it often turns into a nightmare for scalability and fault tolerance as the application grows \cite{fowlerMicroservices}.
+\subsection{Event-Driven Architecture in IoT}
+Event-driven architecture (EDA) represents a paradigm shift in how distributed systems process and react to state changes. Unlike traditional request-response models where clients poll servers for updates, EDA inverts this relationship: components emit events when significant state transitions occur, and interested subscribers react to those events asynchronously. This decoupling provides substantial advantages for resource-constrained IoT deployments.
 
-MSA takes a different approach. It treats the application as a collection of independent services, each running in its own process and communicating through lightweight channels, like HTTP APIs or messaging buses \cite{newmanBuilding}. Each service acts as an expert in its own specific business domain. For ``Plant Up!'', this style is a perfect fit. It allows us to build and scale distinct parts of the system independently. For example, the service that ingests thousands of sensor readings per minute can be scaled up during a ``wake-up'' event without disturbing the social feed service, which might be quiet at that moment.
+In the context of battery-powered sensor nodes, EDA minimizes unnecessary wake cycles. Rather than polling sensors at fixed intervals regardless of environmental changes, an event-driven system can trigger measurements only when thresholds are crossed or timers expire. For example, the ESP32-S3's ULP coprocessor can monitor a threshold crossing (e.g., soil moisture dropping below a critical level) and generate a wake event for the main processor only when intervention is necessary. This selective wake behavior dramatically reduces average power consumption compared to periodic polling strategies.
+
+Moreover, EDA aligns naturally with the publish-subscribe model employed by MQTT. When a sensor node publishes a measurement event to a topic, it does not need to maintain awareness of which backend services will consume that data. New analytics services can be added by simply subscribing to existing topics, without modifications to the edge firmware. This temporal and spatial decoupling enhances system evolvability and fault tolerance, Properties that are critical when devices operate unattended for extended periods \cite{awsMicroservices}.
+
+\subsection{Microservices Architecture (MSA)}
+Microservices Architecture (MSA) represents a fundamental shift in how we build software, organizing applications not as single, monolithic giants, but as suites of small, autonomous services that work together \cite{awsMicroservices}. In a traditional monolith, everything, from user management to data processing, is tightly woven into one large codebase. While this makes starting a project easy, it often turns into a bottleneck for scalability and fault tolerance as the application grows \cite{fowlerMicroservices}.
+
+MSA takes a different approach. It treats the application as a collection of independent services, each running in its own process and communicating through lightweight channels, like HTTP APIs or messaging buses \cite{newmanBuilding}. Each service acts as a specialist in its own specific business domain. For ``Plant Up!'', this architectural style is particularly well-suited. It allows us to build and scale distinct parts of the system independently. For example, the service that ingests thousands of sensor readings per minute can be scaled up during peak periods without disturbing the social feed service, which might experience different load patterns.
 
 The ``Plant Up!'' backend is organized around domain-specific schemas in Supabase, which act as the dedicated data stores for these microservices:
 \begin{itemize}
-    \item \texttt{user\_schema}: Handles everything related to who the user is: identity, authentication, and personal stats like streaks.
-    \item \texttt{social\_media\_schema}: Manages the community aspects: the posts you see and the comments you write.
-    \item \texttt{gamification}: Houses the logic that makes plant care fun: quests, experience points (XP), and rewards.
-    \item \texttt{microcontroller\_schema}: A high-speed lane dedicated solely to catching raw sensor data from the IoT devices.
+    \item \texttt{user\_schema}: Handles everything related to user identity, authentication, and personal statistics like care streaks.
+    \item \texttt{social\_media\_schema}: Manages the community aspects including user posts and comment threads.
+    \item \texttt{gamification}: Houses the logic that transforms plant care into an engaging experience through quests, experience points (XP), and rewards.
+    \item \texttt{microcontroller\_schema}: A dedicated high-throughput channel for ingesting raw sensor telemetry from IoT devices.
 \end{itemize}
 
-A clear example of this separation is how we store sensor readings. They live in their own isolated table, completely separate from the user data:
+A clear example of this separation is how we isolate sensor readings. They reside in their own table, completely decoupled from user data:
 
 \begin{figure}[H]
     \centering
@@ -22,13 +29,13 @@ A clear example of this separation is how we store sensor readings. They live in
     \label{fig:controllers_table}
 \end{figure}
 
-This strict boundary improves robustness. If the sensor reading service crashes, it doesn't take the gamification or social features down with it.
+This strict domain boundary improves system robustness. If the sensor ingestion service experiences a fault, it does not cascade to the gamification or social features.
 
 \subsection{Core Characteristics of Microservices in IoT}
-Applying Microservices Architecture to the Internet of Things (IoT) brings a unique set of challenges. IoT systems are messy: they are asynchronous, event-driven, and have to deal with the unpredictable real world.
+Applying Microservices Architecture to the Internet of Things brings a unique set of challenges. IoT systems are inherently asynchronous, event-driven, and must cope with the unpredictable physical world.
 
 \subsubsection{Autonomy and Database per Service}
-One of the golden rules of MSA is ``Database per Service''. This means services are decoupled not just in their code, but also in their data state \cite{richardsonDbPerService}. It prevents the dangerous situation where changing a database table for one service accidentally breaks another. In ``Plant Up!'', the Gamification Service keeps its own scorecard of player statistics, which is completely independent of the raw stream of incoming sensor data.
+One of the foundational principles of MSA is`` Database per Service''. This pattern mandates that services are decoupled not only in their application logic but also in their persistent state \cite{richardsonDbPerService}. It eliminates the risk of unintended coupling where a schema change in one service inadvertently breaks another. In ``Plant Up!'', the Gamification Service maintains its own denormalized view of player statistics, which is completely independent of the raw time-series stream of incoming sensor measurements.
 
 \begin{figure}[H]
     \centering
@@ -38,72 +45,129 @@ One of the golden rules of MSA is ``Database per Service''. This means services 
 \end{figure}
 
 \subsubsection{Scalability and Elasticity}
-IoT workloads are notoriously ``bursty''. You might have silence for an hour, and then suddenly thousands of devices wake up to report their status. MSA allows us to handle this by scaling the ``Ingestion Service'' horizontally (adding more instances to share the load) without wasting resources on the ``Social Service'', which might not need the extra power.
+IoT workloads exhibit extreme temporal variability. Traffic patterns are often characterized by long quiescent periods punctuated by sharp bursts when large cohorts of devices wake simultaneously. MSA enables selective horizontal scaling: only the ``Ingestion Service'' needs additional instances during burst periods, while the ``Social Service'' can remain at nominal capacity. This elasticity reduces infrastructure costs and improves resource utilization compared to monolithic architectures that must scale as a single unit.
 
-\subsection{Internet of Things (IoT) Constraints and Hardware}
-At the heart of ``Plant Up!'' is the ESP32-S3 microcontroller. It is a powerful System-on-Chip (SoC) from Espressif Systems \cite{esp32s3Datasheet}, but it is still bound by the harsh reality of battery life. The software protocols choices we make dictate how long the hardware stays awake, and consequently, how long the battery lasts.
+\subsection{Supabase and PostgREST as Microservice Enablers}
+Supabase provides a managed PostgreSQL database combined with an automatically generated RESTful API layer (PostgREST) and real-time subscription capabilities via WebSockets. This combination significantly reduces the boilerplate required to implement microservices by auto-generating CRUD endpoints directly from the database schema.
 
-\subsubsection{Power Consumption and Sleep Modes}
-The ESP32-S3 has several power modes, each consuming energy at a vastly different rate. Understanding these is key to our architecture:
+Each schema in the ``Plant Up!'' backend (e.g., \texttt{user\_schema}, \texttt{microcontroller\_schema}) corresponds to a bounded context in domain-driven design terminology. Supabase enforces data ownership and access control through Row-Level Security (RLS) policies defined at the database level. For instance, an RLS policy on the \texttt{Controllers} table ensures that only the MQTT ingestion service (authenticated via a service role key) can INSERT records, while mobile clients (authenticated via user JWT tokens) can only SELECT their own plant records.
+
+This database-centric security model offers several advantages:
 \begin{itemize}
-    \item \textbf{Active Mode:} Everything is on: CPU, Wi-Fi radio, the works. The device burns between \textbf{160mA and 260mA} \cite{lastMinuteActive}. This is expensive; we want to spend as little time here as possible.
-    \item \textbf{Modem Sleep:} The CPU is running, but the radio is off. Power drops to about 20mA-30mA \cite{lastMinuteActive}.
-    \item \textbf{Deep Sleep:} This is where the device spends most of its life. The CPU, Wi-Fi, and RAM are powered down. Only the tiny Ultra-Low Power (ULP) coprocessor and the Real-Time Clock tick away. Consumption plummets to a mere \textbf{10\textmu A – 150\textmu A} \cite{esp32s3Datasheet}.
+    \item \textbf{Defense in Depth}: Even if application-layer authorization is bypassed, the database enforces access controls.
+    \item \textbf{Consistency}: Authorization logic is centralized rather than duplicated across multiple service implementations.
+    \item \textbf{Performance}: RLS policies are evaluated within the PostgreSQL query planner, often leveraging indexes for efficient filtering.
 \end{itemize}
 
+PostgREST also provides sophisticated query capabilities via URL parameters, enabling mobile clients to perform filtering, sorting, and pagination without custom backend code. For example, fetching the most recent 10 sensor readings for a specific plant requires only a single HTTP GET request with appropriate query parameters.
+
+\subsection{Internet of Things (IoT) Constraints and Hardware}
+At the heart of ``Plant Up!'' is the ESP32-S3 microcontroller, a powerful System-on-Chip (SoC) from Espressif Systems \cite{esp32s3Datasheet}. Despite its capabilities (dual-core Xtensa LX7 processor, integrated Wi-Fi and Bluetooth), the ESP32-S3 remains fundamentally constrained by battery capacity. Protocol and software design choices directly dictate active radio time, which in turn determines battery longevity.
+
+\subsubsection{Power Consumption and Sleep Modes}
+The ESP32-S3 offers multiple power states, each with vastly different current draws. Understanding these modes is essential for architecting energy-efficient firmware:
+\begin{itemize}
+    \item \textbf{Active Mode:} CPU and Wi-Fi radio fully operational. Current consumption ranges from \textbf{160 mA to 260 mA} depending on transmit power and CPU activity \cite{lastMinuteActive}. This represents the most expensive state and should be minimized.
+    \item \textbf{Modem Sleep:} CPU remains active for sensor processing, but the Wi-Fi radio is powered down between transmissions. Consumption drops to approximately 20-30 mA \cite{lastMinuteActive}.
+    \item \textbf{Light Sleep:} CPU clock is paused, but RAM and peripherals remain powered. Wakeup is nearly instantaneous (microseconds).
+    \item \textbf{Deep Sleep:} The most aggressive power-saving mode. The main CPU, Wi-Fi/Bluetooth radios, and the majority of RAM are completely powered down. Only the Real-Time Clock (RTC) memory and the Ultra-Low-Power (ULP) coprocessor remain active, consuming a mere \textbf{10 $\mu$A – 150 $\mu$A} \cite{esp32s3Datasheet}. However, waking from deep sleep incurs significant latency (typically 1-3 seconds) as the system must reinitialize Wi-Fi and renegotiate network connectivity.
+\end{itemize}
+
+\subsubsection{Energy Modeling of ESP32-S3 Deep Sleep and Wake Cycles}
+To estimate battery life, we model the energy consumption over a complete wake-sleep cycle. Let $T_{sleep}$ represent the sleep duration, $T_{wake}$ the active duration, $I_{sleep}$ the deep sleep current (~100 $\mu$A typical), and $I_{active}$ the active current (~200 mA typical). The average current $I_{avg}$ over one cycle is:
+
+\[
+I_{avg} = \frac{I_{sleep} \cdot T_{sleep} + I_{active} \cdot T_{wake}}{T_{sleep} + T_{wake}}
+\]
+
+For a device that wakes every 10 minutes ($T_{sleep} = 600$ s) and remains active for 5 seconds ($T_{wake} = 5$ s):
+
+\[
+I_{avg} = \frac{0.1 \text{ mA} \cdot 600 + 200 \text{ mA} \cdot 5}{605} \approx 1.75 \text{ mA}
+\]
+
+With a typical 2000 mAh lithium battery, the theoretical lifespan is approximately $2000 / 1.75 \approx 1143$ hours or roughly 47 days. This simple model illustrates why minimizing $T_{wake}$ (and therefore minimizing protocol overhead) is critical for practical deployments.
+
 \subsubsection{The Wake-Up Tax}
-Deep sleep saves a massive amount of energy, but it comes with a ``wake-up tax''. When the device wakes up, it has to re-initialize its Wi-Fi, find the access point, and ask for an IP address. This dance typically takes \textbf{1 to 3 seconds}, burning a lot of energy (~150mA average) before we even send a single byte of data \cite{adafruitWake}. The choice of protocol (MQTT vs. REST) determines how much heavier this tax becomes.
+Deep sleep provides substantial energy savings, but exiting this state incurs what we term the ``wake-up tax''. Upon waking, the ESP32-S3 must reinitialize the Wi-Fi subsystem, scan for available access points, authenticate with the router, and obtain an IP address via DHCP. This entire process typically consumes \textbf{1 to 3 seconds} at an average current draw of ~150 mA \cite{adafruitWake}. 
+
+Critically, this overhead occurs \textit{before} any application data can be transmitted. The choice of communication protocol determines how much additional time (and energy) is required beyond this baseline cost. A protocol with heavy handshake requirements (multiple round-trip messages) compounds the wake-up tax, while a lightweight protocol with persistent connections (or minimal connection overhead) minimizes it.
 
 \subsection{Communication Protocols: MQTT vs. REST}
-Choosing the right communication protocol is arguably the most critical decision for our data layer. It directly impacts energy efficiency, latency, and reliability.
+The selection of communication protocol is arguably the most consequential architectural decision for sensor-to-cloud communication. It fundamentally impacts energy efficiency, latency, and system reliability.
 
 \subsubsection{MQTT (Message Queuing Telemetry Transport)}
-MQTT is a lightweight, binary messaging protocol designed specifically for networks that are unreliable or have limited bandwidth. It works on a publish-subscribe model.
+MQTT is a lightweight, publish-subscribe messaging protocol originally designed by IBM for monitoring oil pipelines via satellite links, environments characterized by high latency and unreliable connectivity. These origins inform its design priorities: minimal packet overhead, tolerance for intermittent connectivity, and efficient use of constrained networks.
 
-\textbf{ Architecture and Decoupling: }
-Unlike REST, which connects two points directly, MQTT uses a \textbf{Broker} in the middle. The sensor (Publisher) sends data to a topic (like \texttt{plantup/sensor/01}) without caring who is listening. The Broker handles the job of routing that message to anyone who subscribed (like the Ingestion Service). This decouples the devices in \textbf{Space} (they don't need to know each other's IP) and \textbf{Time} (messages can be queued if a service is down).
+\textbf{Architecture and Decoupling:}
+Unlike REST's direct client-server coupling, MQTT interposes a \textbf{Broker} between publishers and subscribers. Sensor nodes (publishers) transmit messages to named topics (e.g., \texttt{plantup/sensor/01/telemetry}) without knowledge of which services are consuming that data. The broker handles message routing to all subscribed services. This architecture provides decoupling in three dimensions:
+\begin{itemize}
+    \item \textbf{Space Decoupling}: Publishers and subscribers do not need to know each other's network addresses.
+    \item \textbf{Time Decoupling}: Messages can be queued by the broker if subscribers are temporarily offline, enabling store-and-forward behavior.
+    \item \textbf{Synchronization Decoupling}: Publishers do not block waiting for subscriber processing; message delivery is asynchronous.
+\end{itemize}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/mqtt_converted.png}
-    \caption{MQTT Publish/Subscribe Model: The Broker acts as a central hub, efficiently distributing messages from sensors to various services \cite{psiborg2024mqtt}.}
+    \caption{MQTT Publish/Subscribe Model: The broker acts as a central hub, efficiently distributing messages from sensors to various backend services \cite{psiborg2024mqtt}.}
     \label{fig:mqtt_diagram}
 \end{figure}
 
-\textbf{Packet Structure:}
-MQTT is binary, which means it cuts out the fluff. The fixed header is only \textbf{2 bytes}. Compare that to text-based HTTP headers, which can easily bloat to hundreds of bytes.
+\textbf{Packet Structure and Efficiency:}
+MQTT employs a compact binary wire format. The fixed header is merely \textbf{2 bytes}, consisting of a message type identifier and flags. Variable headers and payloads are length-prefixed. In contrast, HTTP headers are verbose ASCII text, typically including multiple header fields (Host, User-Agent, Content-Type, etc.) that can easily exceed 200 bytes even for trivial payloads. For small telemetry messages (e.g., 50 bytes of JSON sensor data), this header overhead ratio becomes significant.
 
-\textbf{Quality of Service (QoS):}
-MQTT gives us three levels of delivery assurance:
+\textbf{Quality of Service (QoS) Levels:}
+MQTT defines three QoS levels that offer a spectrum of delivery guarantees versus overhead trade-offs:
 \begin{itemize}
-    \item \textbf{QoS 0 (At most once):} Fire-and-forget. It uses the least energy, but if the message is lost, it's gone for good.
-    \item \textbf{QoS 1 (At least once):} Guarantees delivery by waiting for an acknowledgment (PUBACK). Ideal for critical data.
-    \item \textbf{QoS 2 (Exactly once):} A heavy four-step handshake. Usually too much overhead for battery-powered devices.
+    \item \textbf{QoS 0 (At most once):} Fire-and-forget semantics. The publisher sends the message and assumes delivery without waiting for acknowledgment. This minimizes energy but provides no delivery guarantee.
+    \item \textbf{QoS 1 (At least once):} The broker acknowledges receipt (PUBACK). The publisher retransmits if no acknowledgment arrives within a timeout. This provides delivery assurance at the cost of potential duplicates and additional message exchanges.
+    \item \textbf{QoS 2 (Exactly once):} A four-step handshake (PUBLISH, PUBREC, PUBREL, PUBCOMP) guarantees precisely once delivery with no duplicates. The overhead is typically excessive for battery-constrained devices.
 \end{itemize}
 
+For the ``Plant Up!'' system, QoS 0 is employed for routine telemetry (where occasional message loss is acceptable) to minimize energy expenditure.
+
 \subsubsection{REST (Representational State Transfer)}
-REST is the standard architectural style of the web, using standard HTTP methods. It is synchronous and resource-oriented.
+REST is the dominant architectural style for web APIs, leveraging standard HTTP methods (GET, POST, PUT, DELETE) to operate on resources identified by URLs. It is synchronous, stateless, and resource-oriented.
 
 \textbf{Request-Response Model:}
-REST is strictly client-server. The client asks for something (GET) or sends something (POST), and waits until the server replies.
+REST follows a strict client-server interaction pattern. The client initiates a request and blocks (or polls) until the server responds. This synchronicity simplifies application logic but couples the client's execution to network round-trip time.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/rest_converted.png}
-    \caption{REST Request-Response Workflow: Stateless clients must open a new connection for every request, incurring significant overhead \cite{dreamfactory2024rest}.}
+    \caption{REST Request-Response Workflow: Stateless clients must establish a new connection for each request, incurring significant overhead \cite{dreamfactory2024rest}.}
     \label{fig:rest_diagram}
 \end{figure}
 
-\textbf{Statelessness and Overhead:}
-The server remembers nothing between requests. This means every single request has to carry all its baggage (authentication tokens, headers, etc). Worse, if the device sleeps between readings, it has to perform a full TCP three-way handshake and often a TLS handshake for \textit{every single data transmission}. This ``Connection Overhead'' makes REST a power hog for frequent, small data packets compared to a persistent MQTT session.
+\textbf{Statelessness and Connection Overhead:}
+HTTP is fundamentally stateless; the server retains no context between requests. This simplifies server design but forces clients to re-transmit authentication credentials and context with every request. When combined with TLS encryption (now standard practice), each HTTP request from a freshly awakened device requires:
+\begin{enumerate}
+    \item TCP three-way handshake (SYN, SYN-ACK, ACK): 1.5 round trips
+    \item TLS handshake (ClientHello, ServerHello, Certificate exchange, Key exchange, Finished messages): typically 2 round trips for TLS 1.2, reduced to 1 RTT for TLS 1.3
+    \item HTTP request and response: 1 round trip
+\end{enumerate}
+
+For a sensor node waking from deep sleep with no persistent connection, this totals approximately 4-5 network round trips before the application payload is acknowledged. At 50ms typical Wi-Fi round-trip time, this adds 200-250ms of latency \textit{independent} of payload processing time.
+
+\subsection{Related Work on Consumer-Grade IoT Constrain ts}
+Several studies have examined the challenges of deploying IoT systems in residential environments, where devices lack the infrastructure support available in industrial settings.
+
+Karaagac et al. \cite{kaaiotChallenges} identify power and connectivity constraints as the primary barriers to consumer IoT adoption. Their survey emphasizes that battery-powered devices in home environments face unpredictable Wi-Fi quality, interference from consumer electronics, and limited user tolerance for maintenance (e.g., frequent battery replacements).
+
+Hemus \cite{emnifyChallenges} categorizes IoT challenges into six domains, including security, connectivity, power, scalability, interoperability, and data management. Notably, the paper highlights that consumer devices must balance these concerns with stringent cost constraints, limiting the viability of expensive hardware solutions (e.g., dedicated cellular modems or supercapacitors).
+
+Prior comparisons of MQTT and REST for IoT \cite{nabtoMqttRest, psiborg2024mqtt} largely rely on theoretical analysis or simulation. Few studies provide empirical head-to-head measurements on identical hardware under realistic home Wi-Fi conditions, which this thesis addresses.
 
 \subsection{Data Consistency and the CAP Theorem}
-In distributed systems, the CAP theorem (Consistency, Availability, Partition Tolerance) tells us that we can't have it all. When a network failure happens, we have to choose two out of three \cite{brewerCap, jaiswalCAP}.
+In distributed systems like ``Plant Up!'', the CAP theorem (formulated by Eric Brewer) asserts that it is impossible to simultaneously guarantee Consistency, Availability, and Partition Tolerance in the presence of network failures \cite{brewerCap, jaiswalCAP}.
 
-For ``Plant Up!'', \textbf{Partition Tolerance (P)} is non-negotiable. Wireless sensor networks are inherently unreliable. So, we have to choose between CP and AP:
 \begin{itemize}
-    \item \textbf{CP (Consistency + Partition Tolerance):} We refuse requests if we can't guarantee the data is perfectly up-to-date. This risks losing data during network glitches.
-    \item \textbf{AP (Availability + Partition Tolerance):} We accept data and serve requests even if some nodes are slightly out of sync.
+    \item \textbf{Consistency (C):} All nodes observe the same data at the same logical time. Reads always return the most recent write.
+    \item \textbf{Availability (A):} Every request receives a (non-error) response, even if some nodes are unreachable.
+    \item \textbf{Partition Tolerance (P):} The system continues to operate despite arbitrary message loss or node failures.
 \end{itemize}
 
-``Plant Up!'' firmly chooses an \textbf{AP design}, embracing \textbf{Eventual Consistency}. It is acceptable if a user sees a soil moisture value that is a few seconds old, as long as the app stays responsive and doesn't crash. The MQTT broker acts as a shock absorber, buffering messages during network blips and ensuring they eventually reach the microservices layer.
+For ``Plant Up!'', \textbf{Partition Tolerance (P)} is non-negotiable. Residential Wi-Fi networks experience frequent transient partitions due to router reboots, signal interference, and mobile client disconnections. Given P as a requirement, the system must choose between CP (sacrificing availability during partitions to maintain consistency) and AP (accepting temporary inconsistency to maintain availability).
+
+``Plant Up!'' adopts an \textbf{AP} (Available, Partition-tolerant) design with \textbf{eventual consistency}. It is acceptable for a user to observe a soil moisture reading that is several seconds stale, provided the application remains responsive and does not block or fail. The MQTT broker buffers messages during connectivity lapses, ensuring they eventually propagate to the microservices layer once connectivity is restored. This design prioritizes user experience (low-latency feedback) over strict real-time consistency, a trade-off appropriate for non-critical monitoring applications.

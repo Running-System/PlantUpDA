@@ -1,0 +1,141 @@
+\section{Discussion and Limitations}
+
+\subsection{Interpretation of Results in the Context of Plant Up!}
+The experimental findings presented in Chapter 5 provide strong empirical support for MQTT as the optimal protocol for sensor-to-cloud telemetry in the Plant Up! architecture. The measured 70\% latency reduction and 68\% payload efficiency improvement translate directly into tangible system benefits when contextualized within the operational requirements of battery-powered urban gardening sensors.
+
+\subsection{Implications for Real-World Deployment and Battery Life}
+To translate the observed latency reductions into battery life projections, we employ the energy model introduced in Chapter 2.
+
+\textbf{Energy Consumption Per Wake Cycle:}
+Assume a device wakes every 10 minutes (600 seconds) to transmit a sensor reading. Using the measured latencies:
+\begin{itemize}
+    \item MQTT: Active time $T_{active}^{MQTT} \approx 185\text{ms} + 1500\text{ms (Wi-Fi connect)} = 1685\text{ms}$
+    \item REST: Active time $T_{active}^{REST} \approx 612\text{ms} + 1500\text{ms (Wi-Fi connect)} = 2112\text{ms}$
+\end{itemize}
+
+With deep sleep current $I_{sleep} \approx 100 \mu\text{A}$ and active current $I_{active} \approx 200\text{mA}$, average current per 10-minute cycle is:
+
+For MQTT:
+\[
+I_{avg}^{MQTT} = \frac{0.1\text{mA} \cdot (600 - 1.685)\text{s} + 200\text{mA} \cdot 1.685\text{s}}{600\text{s}} \approx 0.66\text{mA}
+\]
+
+For REST:
+\[
+I_{avg}^{REST} = \frac{0.1\text{mA} \cdot (600 - 2.112)\text{s} + 200\text{mA} \cdot 2.112\text{s}}{600\text{s}} \approx 0.80\text{mA}
+\]
+
+\textbf{Battery Life Projection:}
+With a 2500 mAh lithium-ion battery:
+\begin{itemize}
+    \item MQTT: $\frac{2500\text{mAh}}{0.66\text{mA}} \approx 3788$ hours $\approx$ \textbf{158 days}
+    \item REST: $\frac{2500\text{mAh}}{0.80\text{mA}} \approx 3125$ hours $\approx$ \textbf{130 days}
+\end{itemize}
+
+The MQTT protocol extends battery life by approximately \textbf{28 days} (21\% improvement) compared to REST. For a consumer product where battery replacement is a friction point that damages user retention, this difference is substantial. A sensor that lasts an additional month before requiring intervention significantly enhances user experience and reduces support burden.
+
+\subsection{User Experience and Real-Time Feedback}
+Beyond energy efficiency, the 70\% latency reduction has qualitative implications for gamification effectiveness. User engagement research demonstrates that feedback delays exceeding 500ms are perceptible and disrupt psychological flow states \cite{spinifyGamification}. Under MQTT, the end-to-end sensor-to-mobile latency (device wake → transmission → database insert → mobile push notification) typically falls below 400ms, maintaining the illusion of instantaneous feedback. With REST's 612ms transmission component alone, the total latency frequently exceeds 800ms, risking perceptible lag that degrades engagement.
+
+This latency sensitivity explains why we adopted the hybrid architecture: MQTT for sensor uplink (where sub-second responsiveness is critical for gamification), and REST for mobile query operations (where humans tolerate 100-200ms delays without complaint).
+
+\subsection{Architectural Reasoning Summary}
+The Plant Up! system architecture can be understood as the resolution of three competing constraints through protocol specialization:
+\begin{enumerate}
+    \item \textbf{Energy Efficiency (Edge Layer):} MQTT's minimal overhead and persistent connection model minimize radio-on time, extending battery life to practical durations (months, not days).
+    
+    \item \textbf{Developer Ergonomics (Application Layer):} REST's ubiquity, rich ecosystem (Supabase's auto-generated PostgREST API), and synchronous semantics accelerate mobile app development and enable sophisticated querying without custom backend code.
+    
+    \item \textbf{Scalability and Decoupling (Backend Layer):} The MQTT broker provides spatial and temporal decoupling between edge devices and backendservices, allowing independent scaling and fault isolation. The ingestion service translates MQTT messages into database inserts, bridging protocols while maintaining clean architectural boundaries.
+\end{enumerate}
+
+This hybrid approach is not a compromise but an optimization: each protocol operates in the domain where its strengths are most pronounced.
+
+\subsection{Experimental Limitations and Threats to Validity}
+Despite rigorous experimental design, several limitations constrain the generalizability and interpretation of results. Transparent disclosure of these limitations is essential for contextualizing findings.
+
+\subsubsection{Limitation 1: Asymmetric Security Configuration}
+\textbf{Description:} MQTT transmissions occurred over plaintext TCP, while REST employed HTTPS (TLS 1.2/1.3). This asymmetry inflates the measured performance gap.
+
+\textbf{Impact:} Enabling TLS for MQTT would introduce:
+\begin{itemize}
+    \item Initial handshake overhead: ~100-150ms per connection (amortized if the connection persists across multiple publishes).
+    \item Per-message encryption overhead: ~5-10\% latency increase for symmetric cipher operations.
+\end{itemize}
+
+Under a fair TLS-vs-TLS comparison, MQTT's latency advantage would decrease from 70\% to an estimated 55-60\%. However, the relative ordering (MQTT faster than REST) would persist due to MQTT's ability to amortize the TLS handshake across an entire wake-sleep session, whereas REST renegotiates TLS per request.
+
+\textbf{Mitigation in Future Work:} Deploy MQTT over TLS (using certificate-based authentication or PSK-based TLS-PSK) and re-measure latency under equivalent security postures.
+
+\subsubsection{Limitation 2: QoS Level Constraint}
+\textbf{Description:} Only MQTT QoS 0 (at-most-once, fire-and-forget) was tested. Higher QoS levels provide delivery guarantees at the cost of additional handshake rounds.
+
+\textbf{Impact:}
+\begin{itemize}
+    \item QoS 1 (at-least-once): Adds 1 RTT for PUBACK acknowledgment (~50-100ms increase).
+    \item QoS 2 (exactly-once): Adds 3 RTTs for full four-step handshake (~150-300ms increase).
+\end{itemize}
+
+For applications demanding guaranteed delivery (e.g., critical alerts or billing-relevant telemetry), the absolute latency gap narrows. However, REST inherently provides delivery confirmation via HTTP 200 OK, making QoS 0 an apples-to-oranges comparison. A fair comparison would pit MQTT QoS 1 against REST (both providing acknowledgment), likely yielding a 40-50\% latency advantage for MQTT.
+
+\textbf{Justification:} For non-critical periodic telemetry (soil moisture, light levels), occasional message loss is tolerable if detection occurs within the next wake cycle. The study's focus on QoS 0 reflects the actual deployment configuration prioritizing battery life over perfect reliability.
+
+\subsubsection{Limitation 3: Home Wi-Fi Variability and Non-Independence}
+\textbf{Description:} The test environment was a single residential Wi-Fi network. Results may not generalize to enterprise WLANs with managed access points, cellular networks (LTE/5G), or LoRaWAN deployments.
+
+\textbf{Impact:} Home Wi-Fi exhibits:
+\begin{itemize}
+    \item High interference from neighboring networks (2.4GHz spectrum congestion).
+    \item Consumer-grade router firmware with unpredictable buffering behavior.
+    \item Shared bandwidth with household devices (smart TVs, laptops, etc.).
+\end{itemize}
+
+Enterprise environments with enterprise-grade APs, 5GHz operation, and VLAN segmentation would likely exhibit lower absolute latencies (faster Wi-Fi association) and reduced variance, potentially narrowing the gap. Conversely, cellular deployments would introduce higher baseline latency (~50-150ms RTT), but the *relative* advantage of MQTT (minimal handshake overhead) would persist.
+
+\textbf{External Validity:} The residential environment represents the *target deployment scenario* for Plant Up!, enhancing ecological validity despite limiting generalizability to other contexts.
+
+\subsubsection{Limitation 4: Indirect Power Measurement}
+\textbf{Description:} Energy consumption was inferred from active-time duration and nominal ESP32-S3 specifications (~200mA active), not measured directly with precision instrumentation (e.g., INA219 current sensor, oscilloscope with current probe).
+
+\textbf{Impact:} Actual current draw varies with:
+\begin{itemize}
+    \item Wi-Fi transmit power (adjustable from +2dBm to +20dBm).
+    \item CPU load (encryption operations, JSON parsing).
+    \item Voltage sag under battery operation (not modeled; USB power supply used).
+\end{itemize}
+
+The inferred battery life projections (158 days vs. 130 days) carry ~±15\% uncertainty. Direct power measurement with µA-resolution instrumentation would provide higher confidence intervals.
+
+\textbf{Future Work:} Integrate INA219 or similar shunt-based current monitor into the power supply path, logging instantaneous current at 10 kHz sampling rate to capture transient spikes during Wi-Fi transmission.
+
+\subsubsection{Limitation 5: Backend Co-Location}
+\textbf{Description:} The MQTT broker and Supabase instance were both hosted in the AWS eu-central-1 region, minimizing network asymmetry. Real-world deployments may have geographically distributed components.
+
+\textbf{Impact:} If the MQTT broker were located in eu-central-1 but Supabase in us-west-2 (intercontinental latency ~150-200ms), the ingestion service would incur additional delay inserting records into the database. This backend processing latency is *independent* of protocol choice and would affect both MQTT and REST equally (since both ultimately write to the same database).
+
+\textbf{Architectural Implication:} For globally distributed deployments, deploying regional MQTT brokers with asynchronous replication to a central database would mitigate cross-region latency while preserving local (edge-to-broker) latency advantages.
+
+\subsection{Comparison with Related Literature}
+The empirical findings align with prior theoretical analyses of MQTT superiority for IoT \cite{psiborg2024mqtt, nabtoMqttRest}, but extend existing work in several ways:
+\begin{enumerate}
+    \item \textbf{Real Hardware, Real Network:} Unlike simulation-based studies, this experiment employed actual ESP32-S3 hardware on a residential Wi-Fi network, capturing real-world effects (Wi-Fi association delays, interference, packet loss).
+    
+    \item \textbf{Side-by-Side Baseline:} Prior work often evaluates MQTT in isolation or compares against theoretical REST performance. This study provides a direct within-subjects comparison under identical environmental conditions, eliminating confounds.
+    
+    \item \textbf{Hybrid Architecture Justification:} Most literature treats MQTT and REST as mutually exclusive choices. This work demonstrates their complementary deployment in a hybrid architecture, leveraging protocol-specific strengths at different system layers.
+    
+    \item \textbf{Transparent Limitations Disclosure:} Unlike vendor-sponsored benchmarks, this academic study explicitly documents asymmetries (TLS configuration, QoS level) that favor MQTT, enabling readers to assess result validity independently.
+\end{enumerate}
+
+The measured 3× latency improvement is consistent with the 2-5× range reported in industrial IoT deployments \cite{psiborg2024mqtt}, but at the lower end, likely due to:
+\begin{itemize}
+    \item Small payload size (152 bytes): Larger payloads amortize HTTP header overhead, reducing the proportional gap.
+    \item Modern ESP-IDF Wi-Fi stack: Recent firmware optimizations reduce TCP/TLS handshake latency compared to older stacks evaluated in prior work.
+\end{itemize}
+
+\subsection{Conclusion: Validated Protocol Selection for Consumer IoT}
+The experimental evaluation validates MQTT as the optimal choice for battery-constrained sensor uplink in the Plant Up! system, supporting the hybrid architecture decision. The measured performance advantages (70\% latency reduction, 68\% bandwidth reduction, 21\% battery life extension) provide quantitative justification for the added complexity of operating dual protocols.
+
+Critically, the study's limitations underscore that these benefits are conditional on the deployment context (QoS 0, asymmetric TLS, small payloads, residential Wi-Fi). Designers of similar systems must evaluate whether these conditions hold for their specific use case. For applications demanding guaranteed delivery, encrypted channels, or large payloads, the protocol trade-off space shifts, and REST may become competitive or even preferable (e.g., for bulk data uploads).
+
+The broader lesson is that protocol selection is not a one-size-fits-all decision but a context-dependent optimization problem. The hybrid architecture pattern (MQTT for edge uplink, REST for application layer) offers a robust template for consumer IoT systems navigating the energy-latency-complexity trade-off space.
