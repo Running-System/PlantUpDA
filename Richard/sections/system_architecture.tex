@@ -1,91 +1,124 @@
-\section{Plant sUp! System Architecture and Implementation}
+\section{Plant Up! System Architecture and Implementation}
 
 \subsection{System Overview and Requirements}
-The ``Plant Up!'' system is architected as a distributed Cyber-Physical Social System (CPSS), designed to bridge the gap between biological monitoring and social interaction. Unlike traditional agricultural data loggers which function as isolated silos, ``Plant Up!'' requires a continuous, bi-directional flow of data between the physical edge (the plant) and the social cloud (the community).
+The ``Plant Up!'' system integrates IoT hardware, microservices and a mobile application into a unified platform designed to support real-time plant monitoring and social interaction. The primary system objective is to collect environmental sensor data from consumer-grade hardware, synchronize it across distributed cloud services and present it to users in a gamified, socially engaging interface.
 
-The architecture is stratified into three logical tiers, adhering to the standard IoT Reference Architecture:
+To achieve this, the system must satisfy three key requirements:
 \begin{itemize}
-    \item \textbf{The Edge Tier (Perception Layer)}: Comprising ESP32-S3 microcontroller units responsible for sensing environmental variables (soil moisture, light, temperature) and executing actuations (water pumps).
-    \item \textbf{The Platform Tier (Network \& Support Layer)}: A cloud-native microservices cluster hosted on AWS EKS (Elastic Kubernetes Service), responsible for data ingestion, processing, and storage.
-    \item \textbf{The Application Tier (Social Layer)}: A mobile frontend that consumes processed data to drive gamification mechanics, such as ``Thirst Alerts'' and ``Garden Guild'' leaderboards.
+    \item \textbf{Low-latency sensor synchronization:} Environmental data must be transmitted and processed fast enough to provide timely feedback on plant health.
+    \item \textbf{Energy-efficient operation:} IoT devices must conserve battery life through deep sleep cycles, lightweight payloads and minimal active radio time.
+    \item \textbf{Distributed consistency:} Since data is stored across multiple domain-specific schemas, the system must tolerate intermittent connectivity while ensuring eventual consistency.
 \end{itemize}
 
-The primary non-functional requirements driving this architecture are energy autonomy (battery life $>$ 30 days) and real-time responsiveness (latency $<$ 2 seconds for social interactions).
+These requirements shape the architectural decisions in both hardware and microservices. The system therefore follows a multi-layered design consisting of an edge node, a cloud microservices layer and a client application layer.
 
 \subsection{Hardware Layer: The Edge Node}
-The physical interface of the ``Plant Up!'' ecosystem is the sensor node, built around the ESP32-S3 System-on-Chip (SoC). This specific microcontroller was selected for its dual-core architecture, enabling dedicated handling of Wi-Fi stacks on one core while sensor logic runs on the other, and its Ultra-Low Power (ULP) co-processor, which is critical for the deep sleep cycles required by the project.
+The hardware layer consists of an ESP32-S3 microcontroller equipped with sensors for temperature, humidity, light intensity, soil moisture and electrical conductivity. This configuration enables comprehensive monitoring of plant health. The device operates under strict energy constraints and therefore relies heavily on deep sleep modes. Upon waking, it performs three tasks:
 
+\begin{enumerate}
+    \item Reads environmental sensors.
+    \item Serializes the data into a compact JSON structure.
+    \item Sends the payload to the backend via MQTT or REST before returning to deep sleep.
+\end{enumerate}
 
-\subsubsection{Sensor Integration and Pinout}
-The hardware design integrates three primary environmental sensors. To minimize corrosion and ensure long-term stability, a capacitive soil moisture sensor (v1.2) is used instead of a resistive one.
+The JSON payload corresponds to the structure of the \texttt{Controllers} table in the \texttt{microcontroller\_schema}:
 
-\begin{center}
-    \includegraphics[width=0.8\textwidth]{images/Sensor Reading Logic (BH1750 + LM393).png}
-    \captionof{figure}{Sensor Reading Logic (BH1750 + LM393)}
-    \label{fig:temp_image_sensor_logic}
-\end{center}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/Sensor payload structure.png}
+    \caption{JSON payload sent by the edge node}
+    \label{fig:edge_json_payload}
+\end{figure}
 
-\subsubsection{Firmware Implementation: The Deep Sleep Cycle}
-To achieve the target battery life, the firmware implements a ``duty-cycled'' operation. The device spends approximately 99\% of its time in Deep Sleep mode, waking only to sample data and transmit. The following code snippet from the ``Plant Up!'' firmware demonstrates the deep sleep initialization logic, ensuring that on-board peripherals are powered down to reduce current leakage.
-\begin{center}
-    \includegraphics[width=0.8\textwidth]{images/Full ESP32 Deep-Sleep Firmware Cycle.png}
-    \captionof{figure}{Full ESP32 Deep-Sleep Firmware Cycle}
-    \label{fig:temp_image_fw_cycle}
-\end{center}
+The corresponding Supabase table is:
 
-Note: The use of \texttt{rtc\_gpio\_hold\_en} is critical; without it, the floating pins could trigger sensor inputs or drain power through the voltage divider.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/Controllers table in microcontroller__schema.png}
+    \caption{Controllers table receiving IoT data}
+    \label{fig:controllers_table_rx}
+\end{figure}
+
+By timestamping each measurement, the backend can reconstruct time series data even when devices experience connectivity delays, enabling eventual consistency.
 
 \subsection{Microservice Architecture Design}
-The backend is composed of decoupled microservices deployed as Docker containers within a Kubernetes cluster. This architecture allows the ``Ingestion Service'' to scale independently during high-traffic events (e.g., a localized heatwave triggering simultaneous updates from thousands of devices).
+The backend adopts a microservices-inspired architecture grounded in Supabase schemas. Each schema represents a bounded context aligned with a specific domain:
 
-\subsubsection{Service Boundaries}
-The system is decomposed into the following core services:
 \begin{itemize}
-    \item \textbf{Ingestion Service}: The entry point for all telemetry. It acts as a protocol adapter, accepting MQTT packets or HTTP POST requests and normalizing them into an internal event format.
-    \item \textbf{Plant Service}: Manages the botanical database, storing species-specific thresholds (e.g., ``Tomato'' needs 60-80\% moisture).
-    \item \textbf{Social Service}: The gamification engine. It subscribes to telemetry events to calculate XP (Experience Points) and update leaderboards.
-    \item \textbf{Notification Service}: Handles push notifications to the mobile app via Firebase Cloud Messaging (FCM).
+    \item \textbf{user\_schema}: Stores user profiles, streak data and virtual currency.
+    \item \textbf{social\_media\_schema}: Manages posts, comments, plants and plant metadata.
+    \item \textbf{microcontroller\_schema}: Stores IoT sensor measurements and device associations.
+    \item \textbf{gamification}: Contains quests, user quest progress and XP statistics.
 \end{itemize}
 
-\subsubsection{Infrastructure as Code (IaC)}
-To ensure reproducibility, the infrastructure is defined using Kubernetes manifests. The following snippet shows the deployment configuration for the Ingestion Service, highlighting the resource limits imposed to simulate a constrained cloud environment for the thesis evaluation.
+This separation allows backend services to evolve independently and prevents cross-domain interference. For example, the creation of a post does not impact sensor ingestion, and a device update does not affect quest completion logic.
 
-\begin{center}
-    \includegraphics[width=0.8\textwidth]{images/CSharp_Ingestion_Service_MQTT_Listener.png}
-    \captionof{figure}{C\# Ingestion Service MQTT Listener}
-    \label{fig:temp_image_ingestion}
-\end{center}
+An example of domain separation is evident in the \texttt{Plants} table:
 
-This configuration ensures that the ingestion layer can handle concurrent connections from the MQTT broker without consuming excessive cluster resources.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/Plants table.png}
+    \caption{Plants table in social\_media\_schema}
+    \label{fig:plants_table_arch}
+\end{figure}
+
+This table links user-owned plants to ideal environmental parameters in \texttt{Plant\_data}, enabling health comparisons by other services.
 
 \subsection{Real-Time Data Synchronization Mechanism}
-The core conflict of this thesis—MQTT vs. REST—is implemented within the communication layer between the Edge Node and the Ingestion Service. The system is designed to support both protocols via a configuration flag in the firmware, allowing for direct A/B testing.
+Real-time synchronization in ``Plant Up!'' requires balancing two competing goals: minimizing battery usage on the edge node while providing timely updates to the microservices layer. Two communication mechanisms are evaluated:
 
-\subsubsection{Strategy A: MQTT Implementation}
-In the MQTT mode, the device maintains a persistent TCP connection (when awake) and utilizes the Publish/Subscribe pattern. The topic structure is hierarchical, allowing the ``Social Service'' to subscribe to wildcards (e.g., \texttt{plantup/+/+/alert}) to detect issues across the entire user base efficiently.
-\begin{center}
-    \includegraphics[width=0.8\textwidth]{images/ESP32 MQTT JSON Payload Construction.png}
-    \captionof{figure}{ESP32 MQTT JSON Payload Construction}
-    \label{fig:temp_image_payload}
-\end{center}
+\begin{itemize}
+    \item \textbf{REST (HTTPS)} offers structured, authenticated, synchronous transmission suitable for user-driven interactions but incurs significant overhead.
+    \item \textbf{MQTT} provides lightweight, publish/subscribe semantics with lower transmission cost, making it more suitable for the ESP32-S3.
+\end{itemize}
 
-Using \texttt{PubSubClient} allows for lightweight binary header transmission, theoretically reducing the ``radio-on'' time compared to HTTP.
+Sensor data is synchronized using a hybrid approach. IoT controllers publish sensor payloads through MQTT for efficiency. The backend processes the incoming data and stores it in \texttt{microcontroller\_schema.Controllers}. User-facing services such as the mobile app retrieve the aggregated data via REST.
 
-\subsubsection{Strategy B: REST Implementation}
-In the REST mode, the device opens a new TCP/TLS connection for every data transmission event. This follows a stateless request-response model.
+A typical ingestion operation is represented by:
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/Insert example for sensor readings.png}
+    \caption{Insert operation for real-time sensor synchronization}
+    \label{fig:insert_op_sync}
+\end{figure}
 
-The \texttt{HTTPClient} library abstracts the complexity, yet the \texttt{http.begin()} and \texttt{http.end()} calls entail significant energy expenditure due to the SSL handshake each cycle.
+Since devices may reconnect sporadically, synchronization follows an eventually consistent model rather than strict ordering guarantees.
 
 \subsection{Social Gamification Logic Implementation}
-The ``Social Service'' is the differentiating factor of ``Plant Up!''. It processes the raw telemetry to generate ``Gamified Events.'' For instance, if a user maintains their plant's moisture within the ideal range for 7 consecutive days, the service triggers a ``Streak Badge.''
+Gamification is integrated into the Plant Up! experience to motivate sustained engagement. The gamification subsystem relies on three core tables:
 
-This logic requires Data Consistency. If the MQTT broker drops a message, the user's streak might reset unfairly. The implementation uses an Eventual Consistency model where the ``Social Service'' acts as an idempotent consumer of the telemetry stream.
+\begin{itemize}
+    \item \textbf{Quests}: Defines daily and weekly goals.
+    \item \textbf{User\_quests}: Tracks per-user quest progression.
+    \item \textbf{player\_stats}: Stores XP and level totals.
+\end{itemize}
 
-\begin{center}
-    \includegraphics[width=0.8\textwidth]{images/JS Missing-Value Protection Logic.png}
-    \captionof{figure}{JS Missing-Value Protection Logic}
-    \label{fig:temp_image_js_logic}
-\end{center}
+For example, the quests table is defined as:
 
-This JavaScript snippet illustrates how the backend handles potential data gaps (network partitions) by checking for null values before penalizing the user, a necessary adaptation for the ``Availability over Consistency'' approach defined by the CAP theorem.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/Quests table in gamification schema.png}
+    \caption{Quests table in gamification schema}
+    \label{fig:quests_table}
+\end{figure}
+
+When a user completes an action, such as watering a plant or posting an update, the backend increments their quest progress:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/User quest progression.png}
+    \caption{User quest progression}
+    \label{fig:user_quest_progression}
+\end{figure}
+
+Once the target count is met, XP is awarded:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/Awarding XP to player_stats.png}
+    \caption{Awarding XP to player\_stats}
+    \label{fig:xp_award}
+\end{figure}
+
+This modular design ensures that the gamification logic remains independent of the sensor ingestion pipeline, social media features and plant data system.

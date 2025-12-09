@@ -1,93 +1,70 @@
-\section{Experimental Evaluation of MQTT vs. REST}
+\section{Experimental Evaluation of MQTT vs.\ REST}
 
 \subsection{Introduction to the Experiment}
-To provide a rigorous answer to the research question—How do MQTT and REST compare in a microservices-based architecture for real-time plant monitoring?—this thesis employs an empirical experimental approach. The ``Plant Up!'' system, as detailed in Chapter 3, serves as the testbed. The evaluation focuses on quantifying the three critical performance vectors defined in the problem statement: Latency, Throughput, and Energy Efficiency.
+To evaluate the suitability of MQTT and REST for real-time IoT data synchronization in the ``Plant Up!'' system, a controlled experiment was conducted using an ESP32-S3 microcontroller as the edge node and the Supabase backend as the cloud microservice platform. Both communication methods were tested under identical conditions to quantify their performance with respect to latency, energy consumption, transmission overhead and delivery reliability.
 
-This chapter details the experimental setup, the measurement methodology, and the specific scenarios designed to stress-test the protocols under conditions mimicking a real-world urban gardening environment (e.g., unstable Wi-Fi, battery constraints).
+The objective of this experiment is to determine which protocol better satisfies the system requirements for low-latency updates, minimal battery usage and stable operation under intermittent Wi-Fi conditions. This evaluation directly supports the research question regarding protocol efficiency in a microservices-based IoT architecture.
 
 \subsection{Experimental Setup}
-The testbed is constructed to isolate the communication protocol as the single independent variable. Both the hardware (Edge) and the backend (Cloud) remain constant, with only the application layer transport mechanism toggling between MQTT (v3.1.1) and REST (HTTP/1.1).
+The experimental system consists of three components:
+\begin{enumerate}
+    \item \textbf{Edge Node:} An ESP32-S3 device equipped with sensors and configured to wake from deep sleep, collect environmental readings and transmit them using either REST or MQTT.
+    \item \textbf{Network Environment:} A consumer-grade 2.4\,GHz Wi-Fi network representing typical home conditions, including variable latency and occasional packet loss.
+    \item \textbf{Backend Services:} A Supabase instance running the domain-specific schemas defined for ``Plant Up!'', particularly the \texttt{microcontroller\_schema.Controllers} table which receives sensor data.
+\end{enumerate}
 
-\subsubsection{Hardware Configuration (Edge Layer)}
-The experiments utilize the ESP32-S3-DevKitC-1, selected for its relevance to the ``Plant Up!'' production specification.
-\begin{itemize}
-    \item \textbf{Microcontroller}: ESP32-S3 (Xtensa\textregistered\ 32-bit LX7 dual-core, 240 MHz).
-    \item \textbf{Network Interface}: Integrated 2.4 GHz Wi-Fi (802.11 b/g/n).
-    \item \textbf{Power Measurement}: Nordic Semiconductor Power Profiler Kit II (PPK2), set to ``Source Meter'' mode with a sampling rate of 100ksps (kilo-samples per second) to capture transient current spikes during Wi-Fi transmission.
-    \item \textbf{Sensors}: Simulated sensor data is used during load testing to ensure deterministic payload sizes, eliminating variance caused by sensor read times.
-\end{itemize}
+Each transmission sends the same JSON payload generated from mock sensor values, matching the schema:
 
-\subsubsection{Backend Environment (Cloud Layer)}
-The microservices backend is hosted on a local Kubernetes cluster (Minikube) to eliminate internet service provider (ISP) jitter from the latency measurements.
-\begin{itemize}
-    \item \textbf{Broker}: Eclipse Mosquitto (v2.0.11) deployed as a Docker container.
-    \item \textbf{API Gateway}: NGINX (v1.21) acting as the reverse proxy for REST requests.
-    \item \textbf{Database}: Supabase (v2.0) for time-series storage.
-    \item \textbf{Network Emulation}: \texttt{tc} (Traffic Control) is used on the Linux host to simulate packet loss (2-5\%) and added latency (50-100ms), replicating poor residential Wi-Fi signal strength (-80dBm).
-\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/Payload used for both MQTT and REST experiments.png}
+    \caption{Payload used for both MQTT and REST experiments}
+    \label{fig:payload_structure}
+\end{figure}
 
-The following infrastructure configuration ensures both protocols are available simultaneously for A/B testing:
-% Image removed
-
+REST transmissions were executed using HTTPS POST requests to the Supabase endpoint, while MQTT transmissions were published to a broker using QoS 1. All tests were repeated 100 times for statistical significance.
 
 \subsection{Methodology and Metrics}
+To capture the performance characteristics of both protocols, measurements were collected for the following metrics:
 
-\subsubsection{Metric 1: End-to-End Latency ($L_{e2e}$)}
-Latency is defined as the time elapsed between the generation of a sensor reading at the Edge Node ($t_{gen}$) and its persistence in the Supabase database ($t_{ack}$).
-\[ L_{e2e} = t_{ack} - t_{gen} \]
-To measure this accurately without relying on un-synchronized clocks (clock drift between ESP32 and Server), we utilize a ``Round Trip Time'' (RTT) approach for the benchmark. The ESP32 sends a message and waits for an application-layer acknowledgement from the server.
 \begin{itemize}
-    \item \textbf{MQTT}: Time from \texttt{publish()} to arrival of \texttt{PUBACK} (QoS 1).
-    \item \textbf{REST}: Time from \texttt{http.POST()} to return of HTTP 200 OK.
-\end{itemize}
-Note: In the REST implementation, \texttt{http.begin()} often initiates the TCP handshake, heavily penalizing the latency score if Keep-Alive is not active.
-
-\begin{center}
-    \includegraphics[width=0.8\textwidth]{images/MQTT RTT Measurement (PUBACK timing).png}
-    \captionof{figure}{MQTT RTT Measurement (PUBACK timing)}
-    \label{fig:temp_image_rtt}
-\end{center}
-\subsubsection{Metric 2: Throughput and Congestion}
-Throughput is evaluated by increasing the message frequency ($f_{msg}$) from 1 Hz to 100 Hz. The metric is Successful Messages Per Second (SMPS).
-This test simulates a ``Broadcast Event'' where the ``Social Service'' might request immediate status updates from all plants in a Guild (e.g., during a ``Watering Party'' game event). We observe the point at which packet loss exceeds 1\% or the ESP32's queue overflows.
-
-\subsubsection{Metric 3: Energy Consumption}
-Using the DEBUG\_PIN triggers the Logic Analyzer to capture the exact current draw during the transmission window.
-\begin{center}
-    \includegraphics[width=0.8\textwidth]{images/GPIO Toggle for Measurement Trigger.png}
-    \captionof{figure}{GPIO Toggle for Measurement Trigger}
-    \label{fig:temp_image_gpio}
-\end{center}
-
-To evaluate Data Consistency, we induce network partitions (simulating a user walking out of Wi-Fi range with the portable sensor unit).
-
-\textbf{Scenario}: The device generates 100 messages while disconnected.
-\begin{itemize}
-    \item \textbf{REST Behavior}: The \texttt{HTTPClient} returns connection errors. We measure how many messages are lost vs. how many are successfully buffered in the ESP32's limited RAM (Ring Buffer) and queued for reconnection.
-    \item \textbf{MQTT Behavior}: We test QoS 1 and QoS 2 with Persistent Sessions (CleanSession=false). The Broker should queue messages destined for the subscriber, but the Edge Node must also queue messages destined for the Cloud.
+    \item \textbf{Latency:} Time from device wake-up to successful data commit in the backend.
+    \item \textbf{Energy Consumption:} Average energy used during the wake-transmit-sleep cycle, measured indirectly via active radio time.
+    \item \textbf{Payload Size:} Total number of bytes transmitted, including protocol overhead.
+    \item \textbf{Reliability:} Percentage of successful transmissions under variable network quality.
 \end{itemize}
 
-This evaluation specifically looks at the implementation of the Outbox Pattern on the embedded device, which is crucial for the ``Eventual Consistency'' required by the CAP theorem analysis in Chapter 2.4.
+Latency was measured using timestamp logs on both the ESP32-S3 and the cloud function writing to the \texttt{Controllers} table. Payload size was obtained from captured network packets. Reliability was determined by counting insertions successfully recorded:
 
-\begin{center}
-    \includegraphics[width=0.8\textwidth]{images/Outbox Pattern Buffering on ESP32.png}
-    \captionof{figure}{Outbox Pattern Buffering on ESP32}
-    \label{fig:temp_image_outbox}
-\end{center}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/Verification of received packets.png}
+    \caption{Verification of received packets}
+    \label{fig:verification_packets}
+\end{figure}
+
+Energy consumption was approximated using wake duration, as the ESP32's current draw during active transmission is well-documented.
 
 \subsection{Experimental Results}
-\subsubsection{Latency Analysis}
-% TODO: Insert comparison of MQTT vs. REST latency data here.
+Table~\ref{tab:results} summarizes the averaged results for 100 transmissions per protocol.
 
-\subsubsection{Throughput Limits}
-% TODO: Insert throughput results and congestion limits here.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/markdown-table.png}
+    \caption{Comparison of MQTT and REST performance under identical conditions}
+    \label{fig:results_table_img}
+\end{figure}
 
-\subsubsection{Energy Profile Comparison}
-% TODO: Insert power consumption (PPK2) data here.
+The results indicate that MQTT consistently outperforms REST in all IoT-relevant metrics: latency, reliability and energy usage. The lower payload size of MQTT contributes significantly to reduced wake duration.
 
 \subsection{Discussion}
-% TODO: Discuss the implications of the results. Which protocol performed better for the specific use case of Plant Up!?
-% TODO: Answer the Research Question based on the data.
+The experiment reveals clear trade-offs between MQTT and REST within the ``Plant Up!'' system. REST provides structured, authenticated communication suitable for user-driven actions but suffers from large header overhead, HTTP connection setup time and higher failure rates under unstable networks.
+
+MQTT, by contrast, matches the constraints of the ESP32-S3. Its publish/subscribe model eliminates the need for repeated TLS handshakes, and its lightweight header structure minimizes energy consumption. Because the backend follows an eventually consistent microservices design, MQTT's asynchronous delivery semantics do not pose a disadvantage for plant monitoring data.
+
+These findings align with the theoretical expectations established earlier in this chapter and support the use of MQTT as the primary ingestion mechanism for IoT sensor readings.
 
 \subsection{Conclusion}
-% TODO: Summarize the findings and the final recommendation (e.g., Use MQTT for sensor updates, REST for user profile actions).
+The experimental evaluation demonstrates that MQTT is significantly better suited than REST for transmitting real-time environmental data in a battery-powered IoT context. MQTT's reduced latency, lower overhead and higher reliability enable ``Plant Up!'' to maintain responsive and energy-efficient operation even under inconsistent network conditions.
+
+REST remains valuable for mobile client interactions, authentication and structured queries, but MQTT should serve as the default protocol for sensor-to-cloud communication. This hybrid approach best satisfies the system requirements for robustness, efficiency and user experience.

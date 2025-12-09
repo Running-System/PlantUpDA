@@ -9,6 +9,7 @@
 \usepackage{lipsum}					    % Als Platzhalter für gewisse Stellen
 \usepackage{ngerman}					%Deutsche Silbentrennung etc.
 \usepackage[utf8]{inputenc}        	    % Umlaute in .tex Files normal schreibbar
+\usepackage[T1]{fontenc}                    % Wichtig für korrekte Darstellung von Sonderzeichen und Copy-Paste
 
 % Unter texnic-center alle Quelldateien unter Codierung ANSI abspeichern
 % Auf Unixsystemen ISO 8859-15
@@ -109,6 +110,38 @@
   stringstyle=\color{mauve},      % string literal style
   escapeinside={\%*}{*)},         % if you want to add a comment within your code
   morekeywords={*,...}            % if you want to add more keywords to the set
+}
+
+\lstdefinelanguage{json}{
+    basicstyle=\footnotesize\ttfamily,
+    numbers=left,
+    numberstyle=\tiny,
+    stepnumber=1,
+    numbersep=5pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    backgroundcolor=\color{white},
+    string=[s]{"}{"},
+    comment=[l]{:\ "},
+    morecomment=[l]{:"},
+    literate=
+     *{0}{{{\color{blue}0}}}{1}
+      {1}{{{\color{blue}1}}}{1}
+      {2}{{{\color{blue}2}}}{1}
+      {3}{{{\color{blue}3}}}{1}
+      {4}{{{\color{blue}4}}}{1}
+      {5}{{{\color{blue}5}}}{1}
+      {6}{{{\color{blue}6}}}{1}
+      {7}{{{\color{blue}7}}}{1}
+      {8}{{{\color{blue}8}}}{1}
+      {9}{{{\color{blue}9}}}{1}
+      {:}{{{\color{red}{:}}}}{1}
+      {,}{{{\color{red}{,}}}}{1}
+      {\{}{{{\color{black}{\{}}}}{1}
+      {\}}{{{\color{black}{\}}}}}{1}
+      {[}{{{\color{black}{[}}}}{1}
+      {]}{{{\color{black}{]}}}}{1},
 }
 
 
@@ -313,8 +346,8 @@ label=Code Example
 	\phantomsection
 	
 	\addcontentsline{toc}{section}{Literaturverzeichnis}
-% 	\bibliographystyle{IEEEtran}
-% 	\bibliography{references}
+	\bibliographystyle{IEEEtran}
+	\bibliography{references}
 	
 	\cleardoublepage
 	\phantomsection
