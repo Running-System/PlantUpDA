@@ -1,0 +1,57 @@
+\section{The PlantUp Architecture}
+
+\subsection{System Overview}
+
+\subsubsection{High-Level Diagram: From Soil Sensor to React Native App}
+\begin{itemize}
+    \item Full-stack architecture, system topology, soil moisture sensors, analog-to-digital conversion, capacitive sensing, React Native framework, mobile application, user interface, cloud synchronization, end-to-end data flow, interactive dashboard
+    \item \textbf{[INSERT FIGURE: High-Level System Architecture Diagram]}
+    \item Source:  \url{https://www.geeksforgeeks.org/postgresql/postgresql-schema/} \newline \url{https://www.geeksforgeeks.org/system-design/architecture-of-a-system/}
+\end{itemize}
+
+\subsection{The Microservices Layer (Cloud)}
+
+\subsubsection{User \& Social Media Services: Gamification and Content Sharing}
+\begin{itemize}
+    \item Social microservices, gamification engine, PostgreSQL schemas, user profiles, experience points (XP), leaderboards, achievement system, social graphs, user interactions, relational data modeling, reward logic, competition mechanics
+    \item \textbf{Social Media Features:} Video upload pipeline, automatic thumbnail generation, post creation, Supabase Storage buckets, media metadata, content delivery network (CDN) integration, secure signed URLs, social feed algorithms
+    \item \textbf{[INSERT DIAGRAM: Gamification Database Schema (ERD)]}
+    \item \textbf{[INSERT DIAGRAM: Video Upload and Thumbnail Generation Flow]}
+    \item Source: \url{https://www.cloudflare.com/learning/cdn/what-is-a-cdn/} \newline \url{https://supabase.com/docs/guides/storage/cdn/fundamentals}
+\end{itemize}
+
+\subsubsection{Webshop Service: Shopify Integration}
+\begin{itemize}
+    \item Shopify platform, SaaS e-commerce, API integration, inventory management, external service, seamless user experience, checkout process, webhook sync, product catalog, managed hosting, third-party plugin ecosystem
+    \item \textbf{[INSERT SCREENSHOT: PlantUp Shop Concept on Shopify]}
+    \item Source: \url{https://www.cloudflare.com/de-de/learning/cloud/what-is-saas/} \newline \url{https://www.techtarget.com/searchcloudcomputing/definition/Software-as-a-Service}
+\end{itemize}
+
+\subsubsection{Microcontroller Management Service: The C\# .NET Core Worker}
+\begin{itemize}
+    \item Background worker, .NET ecosystem, device management, command orchestration, state synchronization, keep-alive monitoring, message processing, centralized control, device registry, firmware updates (OTA), scalable architecture
+    \item \textbf{[CODE SNIPPET: C\# Device State Manager Class]}
+    \item Source: \url{https://learn.microsoft.com/en-us/aspnet/core/fundamentals/host/hosted-services?view=aspnetcore-10.0&tabs=visual-studio}
+\end{itemize}
+
+\subsection{The Data Persistence Layer (Supabase)}
+
+\subsubsection{Unified Database Strategy: Single Postgres instance with logical schema separation}
+\begin{itemize}
+    \item Database consolidation, single instance, logical isolation, schema-based multitenancy, operational simplicity, reduced overhead, unified backup, cross-schema querying, management efficiency, Postgres roles, access control
+ 
+\end{itemize}
+
+\subsubsection{The microcontroller\_data Schema: Utilizing the TimescaleDB Extension}
+\begin{itemize}
+    \item Dedicated schema, TimescaleDB integration, sensor data storage, time-series optimization, optimized querying, high-volume tables, data partitioning, specialized indexing, analytical queries, storage efficiency, historical data
+    \item \textbf{[CODE SNIPPET: SQL Creation Script for TimescaleDB Hypertable]}
+    \item Source: \url{https://www.influxdata.com/time-series-database/} \newline \url{https://github.com/timescale/timescaledb}
+\end{itemize}
+
+\subsubsection{Hypertable Design: Partitioning strategy for millions of sensor readings}
+\begin{itemize}
+    \item Hypertable architecture, data partitioning, time intervals, chunk management, scalable storage, query performance, massive datasets, millions of rows, retention management, automated maintenance, disk I/O optimization
+    \item \textbf{[INSERT DIAGRAM: Visualizing Hypertable Chunks based on Time]}
+    \item Source: \url{https://www.cloudthat.com/resources/blog/scaling-time-series-data-with-timescaledb-hypertables} 
+\end{itemize}

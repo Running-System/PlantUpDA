@@ -1,0 +1,59 @@
+\section{Theoretical Framework}
+
+\subsection{Modern IoT Backends}
+
+\subsubsection{Backend-as-a-Service (BaaS): The Role of Supabase in IoT}
+\begin{itemize}
+    \item Backend-as-a-Service, BaaS, Supabase architecture, real-time subscriptions, websockets, rapid development, managed infrastructure, scalability, postgres-native, authentication, database APIs, serverless paradigm, unified backend
+    \item \textbf{[INSERT DIAGRAM: Supabase Realtime Architecture Flow]}
+    \item Source: \url{https://metadesignsolutions.com/supabase-vs-firebase-when-to-choose-open-source-postgres-for-your-apps-scalability/#:~:text=Supabase%20is%20an%20open%2Dsource,power%20of%20a%20relational%20database.}
+\end{itemize}
+
+\subsubsection{Time-Series Databases: Why standard SQL fails for sensor streams}
+\begin{itemize}
+    \item Relational database limitations, high-velocity ingestion, storage bloat, index inefficiency, B-tree performance, standard SQL constraints, sensor data volume, continuous streams, data retention issues, query degradation
+    \item Source: \url{https://milvus.io/ai-quick-reference/what-are-the-limitations-of-relational-databases}
+\end{itemize}
+
+\subsubsection{The TimescaleDB Extension: Hypertables and Chunking explained}
+\begin{itemize}
+    \item PostgreSQL extension, TimescaleDB, hypertables, automatic partitioning, data chunking, temporal locality, high-performance inserts, time-series optimization, compression algorithms, continuous aggregates, SQL compatibility, retention policies
+    \item \textbf{[INSERT DIAGRAM: Hypertable vs. Normal Table Storage]}
+    \item Source: \url{https://www.tigerdata.com/learn/the-best-time-series-databases-compared}
+\end{itemize}
+
+\subsubsection{Object Storage and Media Handling in Microservices}
+\begin{itemize}
+    \item Unstructured data storage, Supabase Storage, S3 compatibility, scalable object storage, media asset management, separation of concerns (DB vs. Storage), CDN caching strategies, secure file access policies, handling large binary files (blobs)
+    \item Source: \url{https://github.com/supabase/storage}
+\end{itemize}
+
+\subsection{Microservices in IoT}
+
+\subsubsection{The "Gateway Pattern": Using a C\# Service to bridge MQTT and Database}
+\begin{itemize}
+    \item Gateway design pattern, architectural patterns, C\# middleware, .NET Core, MQTT broker, database bridge, decoupling services, protocol translation, message buffering, security boundary, data normalization, traffic throttling
+    \item \textbf{[CODE SNIPPET: C\# Worker Service Basic Structure]}
+    \item Source: \url{https://microservices.io/patterns/apigateway.html}
+\end{itemize}
+
+\subsubsection{Service Inter-communication: Synchronous vs. Asynchronous patterns}
+\begin{itemize}
+    \item Inter-service communication, synchronous REST, asynchronous messaging, message queues, event-driven architecture, request-response, immediate consistency, eventual consistency, system coupling, latency impact, blocking operations
+    \item Source: \url{https://www.geeksforgeeks.org/system-design/microservices-communication-patterns/}
+\end{itemize}
+
+\subsection{Edge Computing Patterns}
+
+\subsubsection{Cloud Computing, Fog Computing, and Edge Computing}
+\begin{itemize}
+    \item \textbf{Cloud Computing:} Centralized processing, high computational power, high latency, infinite storage, global access.
+    \item \textbf{Fog Computing:} Intermediate layer, gateway processing, local area network, bridging Edge and Cloud, reduced latency compared to Cloud.
+    \item \textbf{Edge Computing:} Source processing, on-device logic, microcontroller level, lowest latency, real-time response, limited resources.
+    \item \textbf{[INSERT FIGURE: Cloud vs. Fog vs. Edge Architecture Pyramid]}
+\end{itemize}
+
+\subsubsection{"Thick Edge" vs. "Thin Edge": How much logic should the microcontroller hold?}
+\begin{itemize}
+    \item Edge architecture, Thick Edge, Thin Edge, logic distribution, processing offload, local autonomy, bandwidth conservation, resource constraints, computational power, firmware complexity, distributed intelligence, architectural trade-offs, remote management
+\end{itemize}

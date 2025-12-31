@@ -1,0 +1,83 @@
+\section{Methodology}
+
+\subsection{Experimental Architectures}
+
+\subsubsection{Architecture A: Cloud-Centric (The "Connected" Plant)}
+\begin{itemize}
+    \item Cloud-centric design, connected model, centralized decision making, MQTT transmission, C\# service logic, historical querying, time-weighted averages, notification latency, server-side processing, dumb terminal, remote monitoring, bandwidth dependence
+    \item \textbf{[INSERT DIAGRAM: Architecture A Data Flow (Sensor $\to$ Cloud $\to$ Push Notification)]}
+    \item Source: \url{https://www.ibtimes.com/architecting-connected-retail-future-cloud-centric-data-fabric-omnichannel-agility-3793476}
+\end{itemize}
+
+\subsubsection{Architecture B: Edge-Centric (The "Smart" Plant)}
+\begin{itemize}
+    \item Edge-centric design, smart device, distributed intelligence, local processing, independent operation, C++ logic, asynchronous logging, eventual consistency, disconnect tolerance, local status indication, autonomous state monitoring, bandwidth efficiency
+    \item \textbf{[INSERT DIAGRAM: Architecture B Data Flow (Sensor $\to$ Edge $\to$ Local Indication/Async Log)]}
+    \item Source: \url{https://www.mdpi.com/1424-8220/20/3/892}
+\end{itemize}
+
+\subsection{Implementation Details}
+
+\subsubsection{Edge Firmware (C++): Sensor Calibration and Power Management}
+\begin{itemize}
+    \item Firmware development, C++ programming, embedded systems, capacitive moisture sensing, signal smoothing, debouncing, deep sleep modes, battery optimization, data packetization, interrupt handling, robust error recovery
+    \item \textbf{[CODE SNIPPET: C++ ESP32 Deep Sleep \& Sensor Reading]}
+\end{itemize}
+
+\subsubsection{Cloud Service (C\#): Implementation of the Supabase.Client and Supabase.Realtime listeners}
+\begin{itemize}
+    \item Cloud service implementation, C\# coding, Supabase SDK, real-time listeners, websocket subscription, event handling, state synchronization, database triggers, remote procedure calls, responsive backend, client library integration
+    \item \textbf{[CODE SNIPPET: C\# Supabase Realtime Listener Setup]}
+    \item Source: \url{https://github.com/supabase/realtime}
+\end{itemize}
+
+\subsubsection{Database Schema: Definition of sensor\_readings hypertable}
+\begin{itemize}
+    \item Schema definition, DDL statements, hypertable creation, column types, indexing strategy, partition keys, compression settings, data persistence, storage optimization, analytical capabilities, query planning
+    \item \textbf{[CODE SNIPPET: SQL for Hypertable Creation and Compression Policy]}
+    \item Source: \url{https://gunesramazan.medium.com/managing-iot-heartbeat-data-with-postgresql-timescaledb-c4984b17a341}
+\end{itemize}
+
+\subsubsection{Power Supply Design and Consumption Analysis}
+\begin{itemize}
+    \item \textbf{Worst Case Scenario:} Continuous operation, all sensors active, WiFi transmission 24/7, ~168 mA continuous draw, 4032 mAh daily consumption, theoretical maximum, stress testing benchmarks
+    \item \textbf{Realistic Strategy (Deep Sleep):} Cyclic operation, 10-minute reporting interval, ~2-5 mA average consumption, user-configurable frequency, deep sleep (~0.1 mA), active burst (~150 mA for 3s), efficient power management
+    \item \textbf{Power Architecture:} Rechargeable LiPo battery (3.7V), Dual charging path (USB-C + Solar), BQ24074 Power Management Module, automatic source switching, stable voltage regulation, outdoor autonomy
+    \item \textbf{Component Specifications:} LiPo Capacity (3000-5000 mAh), Solar Panel (5-6V, 1-2W, outdoor-proof), Voltage Regulator (Integrated)
+    \item \textbf{Battery Life Projections:} 
+        \begin{itemize}
+            \item 3000 mAh Battery: ~3 mA avg $\rightarrow$ ~1000 hours $\rightarrow$ approx. 41 days
+            \item 5000 mAh Battery: ~3 mA avg $\rightarrow$ ~1666 hours $\rightarrow$ approx. 69 days (>2 months)
+        \end{itemize}
+    \item \textbf{[INSERT GRAPH: Power Consumption Profile (Deep Sleep vs Active Burst)]}
+    \item Source: \url{https://running-system.atlassian.net/wiki/spaces/RS/pages/126550051/Power+Management+Research}
+\end{itemize}
+
+\subsection{Test Scenarios}
+\begin{itemize}
+    \item Source: \url{https://www.geeksforgeeks.org/software-testing/system-testing/}
+    \newline
+    \url{https://github.com/timescale/tsbs}
+    \newline
+    \url{https://www.bytebase.com/blog/postgres-row-level-security-limitations-and-alternatives/}
+    \newline
+    \url{https://supabase.com/docs/guides/realtime/benchmarks}
+\end{itemize}
+
+
+
+\subsubsection{Scenario 1: Ideal Conditions}
+\begin{itemize}
+    \item Baseline testing, ideal environment, low latency, zero packet loss, stable connectivity, theoretical maximums, benchmarking, optimal performance, clean signal, control group, reference measurements
+\end{itemize}
+
+\subsubsection{Scenario 2: Database Load (Simulating 1,000 concurrent writes to TimescaleDB)}
+\begin{itemize}
+    \item Load testing, stress test, concurrent users, high ingestion rate, database bottlenecks, resource contention, write blocking, 1000 connections, performance degradation, scalability limits, system stability, latency spike
+    \item \textbf{[INSERT PICTURE: Load Testing Setup / Console Logs]}
+\end{itemize}
+
+\subsubsection{Scenario 3: Service Outage (Simulating a crash of the C\# Microservice)}
+\begin{itemize}
+    \item Resilience testing, fault injection, service crash, chaos engineering, availability test, outage simulation, watchdog timers, system recovery, safety verification, data loss analysis, fail-safe behavior
+\end{itemize}

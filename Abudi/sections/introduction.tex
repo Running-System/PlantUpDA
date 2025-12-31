@@ -1,0 +1,42 @@
+\section{Introduction}
+
+\subsection{Background}
+
+\subsubsection{Microservices in Gardening}
+\begin{itemize}
+    \item Paradigm shift, individual plant care, community interaction, shared data, digital transformation, nature meets tech, social platforms, sensor integration, remote monitoring, enthusiast community, collaborative gardening, data-driven plant care, IoT connectivity
+    \item \textbf{[INSERT FIGURE: Concept Art of Social Gardening with IoT]}
+\end{itemize}
+
+\subsubsection{The Latency Challenge: Real-time Notification vs. Cloud Round-Trips}
+\begin{itemize}
+    \item Technical hurdles, delay management, sensor reading, user notification delay, round-trip time (RTT), network jitter, cloud infrastructure, internet dependency, timely intervention, timing criticality, processing lag, signal propagation, feedback loops
+    \item \textbf{[INSERT DIAGRAM: Round-Trip Time Visualization (Sensor $\to$ Cloud $\to$ Push Notification)]}
+\end{itemize}
+
+\subsubsection{Dependency Risks: What happens to the plant when the Microservice is down?}
+\begin{itemize}
+    \item Centralized architecture, single point of failure, microservice downtime, plant health risks, missed alerts, service outages, server crashes, connectivity loss, maintenance windows, failover mechanisms, contingency planning, disaster recovery
+\end{itemize}
+
+\subsection{Research Question}
+
+\subsubsection{Primary Question}
+\begin{itemize}
+    \item \textbf{"What are the trade-offs between edge and cloud processing for real-time plant monitoring in consumer gardening systems?"}
+    \item Edge computing benefits, Cloud computing benefits, latency vs. throughput, cost vs. complexity, data integrity, system reliability, user experience impact
+\end{itemize}
+
+\subsection{Scope and Limitations}
+
+\subsubsection{Focus on Consumer Hardware (ESP32/ESP8266)}
+\begin{itemize}
+    \item Consumer-grade electronics, ESP32 capabilities, ESP8266 limitations, cost-effectiveness, accessibility, hobbyist market, maker community, hardware constraints, memory limits, processing power, WiFi modules, microcontroller adoption
+    \item \textbf{[INSERT PICTURE: ESP32/ESP8266 Microcontroller Setup]}
+\end{itemize}
+
+\subsubsection{Comparison limited to Processing Location (Edge vs. Cloud), not Transport Protocols (MQTT assumed)}
+\begin{itemize}
+    \item Scope boundary, processing location focus, edge computing, cloud computing, transport layer abstraction, MQTT protocol, standard compliance, exclusion of CoAP/HTTP, architectural comparison, logic placement, fixed communication variables
+    \item \textbf{Protocol Discussion:} Detailed comparison and trade-offs between MQTT and REST communication protocols will be addressed in the following chapter Evaluating MQTT vs. REST.
+\end{itemize}
