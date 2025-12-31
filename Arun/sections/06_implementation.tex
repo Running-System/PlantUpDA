@@ -1,31 +1,110 @@
-\section{System Implementation and Validation}
+\section{System Implementation and Validation (approx. 5--6 Pages)}
 
-% Hardware-Realisierung und Aufbau
 \subsection{Hardware Realization and Setup}
+\begin{itemize}
+    \item \textbf{Power Supply Concept:}
+    \begin{itemize}
+        \item Battery-powered operation enables flexible placement near plants.
+        \item USB power used during development, testing, and debugging.
+        \item Trade-off between mobility and long-term stability.
+    \end{itemize}
 
-% TODO: Detailed description of the circuit diagram
-% TODO: Explain power supply (battery vs. power adapter) and housing (water protection, 3D printing or box)
-% TODO: Discuss assembly problems (e.g., solder joints, cable management)
+    \item \textbf{Sensor Placement:}
+    \begin{itemize}
+        \item Soil moisture sensor placed in the root zone, not at the surface.
+        \item Avoids misleading surface measurements.
+        \item Placement depth adapted to typical indoor plant pots.
+    \end{itemize}
 
+    \item \textbf{Enclosure Design:}
+    \begin{itemize}
+        \item Custom 3D-printed housing for Plant Up!.
+        \item Protection against water splashes during watering.
+        \item Ventilation openings for air sensors.
+        \item Compact form factor suitable for indoor environments.
+    \end{itemize}
+\end{itemize}
 
-% Software-Architektur und Firmware
 \subsection{Software Architecture and Firmware}
+\begin{itemize}
+    \item \textbf{Overall System Flow:}
+    \begin{itemize}
+        \item Wake from deep sleep.
+        \item Read sensor values.
+        \item Process and prepare data.
+        \item Transmit data to backend.
+        \item Return to deep sleep.
+    \end{itemize}
 
-% TODO: Explain code structure (Setup, Loop, Deep-Sleep mode)
-% TODO: Describe libraries used and how you solved sensor calibration in code (value mapping)
+    \item \textbf{Error Handling and Robustness:}
+    \begin{itemize}
+        \item Handling of missing or failed sensor readings.
+        \item Retry logic for network communication failures.
+        \item System stability prioritized over continuous availability.
+    \end{itemize}
 
+    \item \textbf{Energy Management:}
+    \begin{itemize}
+        \item Deep sleep mode used to minimize power consumption.
+        \item Wake-up intervals configurable based on plant needs.
+        \item Significant battery life improvement compared to continuous operation.
+    \end{itemize}
+\end{itemize}
 
-% Ergebnisdarstellung: Das "Plant Up!" Dashboard
-\subsection{Results Presentation: The "Plant Up!" Dashboard}
+\subsection{Sensor Calibration}
+\begin{itemize}
+    \item Raw sensor values provided as ADC readings (0--4095).
+    \item Raw values are not directly meaningful for users.
+    \item Calibration process:
+    \begin{itemize}
+        \item Reference measurement in dry soil.
+        \item Reference measurement in fully watered soil.
+        \item Linear mapping of raw values to percentage scale (0--100\%).
+    \end{itemize}
+    \item Calibration depends on soil type and substrate composition.
+    \item Plant Up! provides relative moisture values rather than laboratory-accurate measurements.
+\end{itemize}
 
-% TODO: Describe the user interface
-% TODO: How are alarms displayed? How is history presented?
-% TODO: (Screenshots will be inserted here and explained in the text)
+\subsection{Results Presentation: The ``Plant Up!'' Dashboard}
+\begin{itemize}
+    \item Responsive web-based dashboard.
+    \item Focus on clarity and ease of interpretation.
+    \item Current plant status displayed prominently.
+    \item Use of simple color indicators (green, yellow, red).
+    \item Historical data visualized using line charts.
+    \item Trend visualization supports long-term care decisions.
+\end{itemize}
 
-
-% Validierung und Messreihenanalyse
 \subsection{Validation and Measurement Series Analysis}
+\begin{itemize}
+    \item Test setup:
+    \begin{itemize}
+        \item Single indoor plant monitored over a 48-hour period.
+        \item Controlled watering event during test phase.
+    \end{itemize}
 
-% TODO: The proof: Describe a test run
-% TODO: Show a diagram of a 24h measurement and analyze what you see
-% TODO: (e.g., "After watering at 14:00, the value increased from 10% to 80%")
+    \item Observed behavior:
+    \begin{itemize}
+        \item Clear increase in soil moisture after watering.
+        \item Gradual decrease over time due to evaporation and uptake.
+    \end{itemize}
+
+    \item Comparison between expected and measured behavior.
+    \item Validation confirms correct sensor response and data processing.
+    \item Limitations:
+    \begin{itemize}
+        \item Short test duration.
+        \item Limited number of plants.
+    \end{itemize}
+    \item Results considered sufficient to validate basic system functionality.
+\end{itemize}
+
+\subsection*{Possible Sources for System Implementation and Validation}
+
+\begin{itemize}
+    \item ESP32 deep sleep modes and power consumption:  
+    \url{https://www.programmingelectronics.com/esp32-deep-sleep-mode/}
+
+    \item Importance of sensor calibration in embedded systems:  
+    \url{https://www.a3p.org/en/thecalibration-of-embedded-sensors/}
+\end{itemize}

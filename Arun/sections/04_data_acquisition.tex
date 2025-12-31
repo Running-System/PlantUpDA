@@ -1,25 +1,111 @@
-\section{Data Acquisition and Processing}
+\section{Data Acquisition and Processing (approx. 4 Pages)}
 
-% Messdatenerfassung mit Mikrocontrollern
 \subsection{Data Acquisition with Microcontrollers}
+\begin{itemize}
+    \item \textbf{Controller Selection:}
+    \begin{itemize}
+        \item ESP32 selected due to built-in Wi-Fi and Bluetooth.
+        \item Well suited for IoT projects and battery-powered systems.
+        \item Supports deep sleep modes to reduce power consumption.
+    \end{itemize}
 
-% TODO: Introduction to the controller (e.g., ESP32 or Arduino). Why this one? (e.g., ESP32 because of integrated Wi-Fi/Bluetooth)
-% TODO: Wiring: How do analog/digital signals enter the chip (ADC, I2C, GPIO)
+    \item \textbf{Sensor Inputs and Interfaces:}
+    \begin{itemize}
+        \item Soil moisture sensors connected via analog inputs (ADC).
+        \item Environmental sensors connected using the I\textsuperscript{2}C interface (e.g. BME280).
+        \item Using separate interfaces improves measurement reliability.
+    \end{itemize}
 
+<<<<<<< Updated upstream
 % Signalverarbeitung und Datenübertragung
+=======
+    \item \textbf{Sampling Strategy:}
+    \begin{itemize}
+        \item Sensors are read at regular time intervals.
+        \item Sampling rate chosen to balance detail and battery life.
+        \item Timer-based wake-up used between measurements.
+    \end{itemize}
+\end{itemize}
+
+>>>>>>> Stashed changes
 \subsection{Signal Processing and Data Transmission}
+\begin{itemize}
+    \item \textbf{Raw Sensor Data:}
+    \begin{itemize}
+        \item Sensor readings can vary due to noise and changing conditions.
+        \item Single values may not represent actual plant conditions.
+    \end{itemize}
 
-% TODO: Problem "Noise": Mention that raw data often fluctuates and how you smooth it (e.g., average of 10 measurements)
-% TODO: Transmission path: Does the controller send data via Wi-Fi (MQTT, HTTP request) or Bluetooth?
+    \item \textbf{Data Processing:}
+    \begin{itemize}
+        \item Multiple measurements taken during each cycle.
+        \item Average values calculated to smooth fluctuations.
+        \item Data processing performed directly on the microcontroller.
+    \end{itemize}
 
+    \item \textbf{Data Transmission:}
+    \begin{itemize}
+        \item Sensor data formatted as JSON.
+        \item Lightweight data structure suitable for small devices.
+        \item Data sent to the backend using MQTT or HTTP.
+    \end{itemize}
+\end{itemize}
 
-% Speaker in Datenbanken oder Cloud-Systemen
 \subsection{Storage in Databases or Cloud Systems}
+\begin{itemize}
+    \item \textbf{Backend Storage:}
+    \begin{itemize}
+        \item Sensor data stored in a backend system.
+        \item Time-series databases (e.g. InfluxDB) or SQL databases used.
+    \end{itemize}
 
-% TODO: Where does the data end up? (Local SD card, MySQL database, InfluxDB, or IoT platform like ThingSpeak)
+    \item \textbf{Use of Historical Data:}
+    \begin{itemize}
+        \item Allows observation of changes over time.
+        \item Helps identify trends in plant behavior.
+        \item Supports better long-term care decisions.
+    \end{itemize}
+\end{itemize}
 
-
-% Grundlagen der Datenbereinigung
 \subsection{Fundamentals of Data Cleaning}
+\begin{itemize}
+    \item Removal of invalid values (e.g. negative humidity).
+    \item Handling of missing or incomplete data.
+    \item Filtering of outliers caused by temporary sensor issues.
+    \item Ensuring data consistency before further processing.
+\end{itemize}
 
-% TODO: Handling faulty measurements (e.g., sensor unplugged = value 0, should not distort the average)
+\subsection*{Possible Sources for Data Acquisition and Processing}
+
+\begin{itemize}
+    \item ESP32 deep sleep modes and power consumption:  
+    \url{https://deepbluembedded.com/esp32-sleep-modes-power-consumption/}
+
+    \item Practical ESP32 deep sleep tutorial:  
+    \url{https://www.instructables.com/ESP32-Deep-Sleep-Tutorial/}
+
+    \item Introduction to reading and processing sensor data on microcontrollers:  
+    \url{https://www.freecodecamp.org/news/connect-read-process-sensor-data-on-microcontrollers-for-beginners/}
+    
+    \item JSON data formatting for IoT applications:  
+    \url{https://www.engineersgarage.com/arduino-json-http-requests-iot/}
+
+    \item Efficient JSON serialization for embedded systems:  
+    \url{https://arduinojson.org}
+
+    \item Comparison of MQTT and HTTP for IoT data transmission:  
+    \url{https://www.emqx.com/en/blog/mqtt-vs-http}
+
+    \item Time-series databases and InfluxDB fundamentals:  
+    \url{https://www.influxdata.com/time-series-database/}
+
+    \item Importance of data quality in time-series databases:  
+    \url{https://www.influxdata.com/blog/bad-data-costs-influxdb/}
+
+    \item Moving average filtering for sensor noise reduction:  
+    \url{https://codemonk.io/blog/moving-average-filter/}
+
+    \item Handling missing values in environmental sensor data:  
+    \url{https://pmc.ncbi.nlm.nih.gov/articles/PMC11053546/}
+\end{itemize}
+

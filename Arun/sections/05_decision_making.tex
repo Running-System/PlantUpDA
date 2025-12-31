@@ -1,27 +1,79 @@
-\section{Data-Driven Decision Making in Plant Care}
+\section{Data-Driven Decision Making in Plant Care (approx. 4 Pages)}
 
-% Nutzung gesammelter Daten zur Pflegeoptimierung
 \subsection{Using Collected Data for Care Optimization}
+\begin{itemize}
+    \item Definition of acceptable value ranges for each parameter.
+    \item Classification into condition zones:
+    \begin{itemize}
+        \item Green Zone: Optimal conditions, no action required.
+        \item Yellow Zone: Suboptimal conditions, attention recommended.
+        \item Red Zone: Critical conditions, immediate action required.
+    \end{itemize}
+    \item Threshold values depend on plant species and growth stage.
+    \item Example differences:
+    \begin{itemize}
+        \item Cactus: Low soil moisture tolerance, high light preference.
+        \item Fern: High humidity requirement, low direct light tolerance.
+    \end{itemize}
+    \item Thresholds stored as configurable parameters rather than fixed values.
+\end{itemize}
 
-% TODO: Definition of thresholds. Example: "If soil moisture < 30%, then alarm"
-
-
-% Ableitung von Pflegeempfehlungen
 \subsection{Deriving Care Recommendations}
+\begin{itemize}
+    \item Individual sensor values interpreted in context.
+    \item Combination of multiple parameters for decision making.
+    \item Example rule-based logic:
+    \begin{itemize}
+        \item High temperature + low soil moisture $\rightarrow$ urgent watering alert.
+        \item High humidity + low temperature $\rightarrow$ mold risk warning.
+        \item Low light levels over extended periods $\rightarrow$ relocation suggestion.
+    \end{itemize}
+    \item Recommendations translated into clear, user-friendly actions.
+    \item Focus on actionable feedback rather than raw data presentation.
+\end{itemize}
 
-% TODO: Logic matrix:
-% TODO: Low light + High moisture = "Caution: mold risk"
-% TODO: High temp + Low water = "Urgent watering needed"
-
-
-% Visualisierung und Interpretation
 \subsection{Visualization and Interpretation}
+\begin{itemize}
+    \item Visual representation simplifies complex sensor data.
+    \item Traffic light system (Green / Yellow / Red) for quick status recognition.
+    \item Graphical trend lines show changes over time.
+    \item Enables users to identify patterns rather than isolated values.
+    \item Historical comparison supports long-term care decisions.
+\end{itemize}
 
-% TODO: How do you show this to the user? (Traffic light system: Red/Yellow/Green, line charts for weekly trends)
-% TODO: Importance of historical data (recognize trends: "Soil dries out faster than before - plant needs repotting")
-
-
-% Automatisierte Systeme
 \subsection{Automated Systems}
+\begin{itemize}
+    \item Concept of closed-loop systems in plant care.
+    \item Sensor data used to trigger automated actions.
+    \item Example: automatic activation of a water pump when soil moisture drops below a defined threshold.
+    \item Automation considered as a future extension of the system.
+    \item Emphasis on maintaining user control and safety.
+\end{itemize}
 
-% TODO: Brief outlook: Could the system also water automatically? (Control pump based on data)
+\subsection*{Possible Sources for Data-Driven Decision Making in Plant Care}
+
+\begin{itemize}
+    \item Rule-based decision support systems in agriculture:  
+    \url{https://pmc.ncbi.nlm.nih.gov/articles/PMC9570642/}
+
+    \item Effectiveness of decision support systems in plant protection:  
+    \url{https://www.nature.com/articles/s43247-021-00291-8}
+
+    \item Optimal environmental ranges for indoor plants:  
+    \url{https://help.mygardyn.com/en/articles/1777089}
+
+    \item Light intensity requirements for plant growth:  
+    \url{https://consensus.app/questions/range-light-intensity-plant-need-grow-well/}
+
+    \item Closed-loop and automated irrigation concepts:  
+    \url{https://sensorex.com/how-does-an-irrigation-control-system-work/}
+
+    \item Feedback loop principles in irrigation control systems:  
+    \url{https://www.irrigation.org/IA/FileUploads/IA/Resources/TechnicalPapers/2009/IrrigationControlWithFeedbackLoops.pdf}
+
+    \item IoT data visualization principles for sensor-based systems:  
+    \url{https://www.viam.com/post/harnessing-the-power-of-tableau-to-visualize-sensor-data}
+
+    \item Real-time visualization of time-series sensor data:  
+    \url{https://www.influxdata.com/blog/real-time-visualization-iiot-data/}
+\end{itemize}

@@ -1,24 +1,53 @@
-\section{Sensor Technologies for Plant Monitoring}
+\section{Sensor Technologies for Plant Monitoring (approx. 4 Pages)}
 
-% Überblick über gängige Sensortypen
 \subsection{Overview of Common Sensor Types}
+\begin{itemize}
+    \item \textbf{Moisture:} Resistive (corrodes) vs. Capacitive (durable).
+    \item \textbf{Air:} Combined sensors (DHT22, BME280).
+    \item \textbf{Light:} Photoresistors (cheap) vs. Digital (Lux-calibrated).
+\end{itemize}
 
-% TODO: Soil moisture: Compare resistive (rust quickly) vs. capacitive sensors (better for long-term use)
-% TODO: Temperature/Humidity: Combo sensors (e.g., DHT11 vs. DHT22 vs. BME280)
-% TODO: Light: Photoresistor (LDR) vs. digital light sensors (BH1750)
-
-
-% Grenzen und typische Fehlerquellen
 \subsection{Limitations and Typical Error Sources}
+\begin{itemize}
+    \item Soil usually not uniform (wet spots vs dry spots).
+    \item Sensors drift over time.
+    \item Electrical noise in readings.
+\end{itemize}
 
-% TODO: Influence of different substrates and soil types on measurements
-% TODO: Wear, corrosion, and contamination of sensor surfaces
-% TODO: Measurement fluctuations due to temperature changes and electrical interference
-% TODO: Necessity to critically evaluate sensor data and compare with reality (plant condition)
-
-
-% Auswahlkriterien
 \subsection{Selection Criteria}
+\begin{itemize}
+    \item \textbf{Decision:} Capacitive sensors for longevity.
+    \item \textbf{Voltage:} 3.3V compatibility for ESP32.
+    \item \textbf{Cost:} Good balance between price and accuracy.
+\end{itemize}
 
-% TODO: Create decision matrix: Why did you choose exactly these sensors for "Plant Up!"?
-% TODO: Reasons: Price-performance ratio, corrosion resistance, availability for Arduino/ESP
+\subsection*{Possible Sources for Sensor Technologies for Plant Monitoring}
+
+\begin{itemize}
+    \item Comparison of resistive and capacitive soil moisture sensors:  
+    \url{https://www.niubol.com/Product-knowledge/capacitive-vs-resistive-soil-moisture-sensor.html}
+
+    \item Calibration and accuracy comparison of low-cost soil moisture sensors:  
+    \url{https://arxiv.org/pdf/2210.03019.pdf}
+
+    \item Overview and comparison of temperature and humidity sensors (DHT22, BME280):  
+    \url{https://randomnerdtutorials.com/dht11-vs-dht22-vs-lm35-vs-ds18b20-vs-bme280-vs-bmp180/}
+
+    \item Practical issues and limitations of DHT22 and BME280 sensors(ich weiß reddit ist nicht zu vertrauen, aber das klingt ziemlich gut):  
+    \url{https://www.reddit.com/r/raspberry_pi/comments/azdzyw/what_weather_sensor_to_use_dht22_and_bme280/}
+
+    \item Photoresistor (LDR) light sensor characteristics:  
+    \url{https://botland.store/sensors-of-light-and-color/16560-light-sensor-ldr-resistive-for-arduino-okystar-5904422378202.html}
+
+    \item Digital light sensor (BH1750) specifications and usage:  
+    \url{https://www.berrybase.at/en/bh1750-digital-light-sensor}
+
+    \item Influence of soil heterogeneity on moisture measurements:  
+    \url{https://pmc.ncbi.nlm.nih.gov/articles/PMC7580830/}
+
+    \item ESP32 analog-to-digital converter (ADC) documentation:  
+    \url{https://docs.espressif.com/projects/esp-idf/en/v4.4/esp32/api-reference/peripherals/adc.html}
+\end{itemize}
+
+
+\newpage % Start Page 3 (Full page for selection/comparison)

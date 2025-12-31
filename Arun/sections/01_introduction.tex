@@ -1,15 +1,30 @@
-\section{Introduction}
+\section{Introduction (approx. 1 Page)}
 
-% Motivation und Zielsetzung
 \subsection{Motivation and Objectives}
 
-% TODO: Problem: Plants die from improper care (overwatering, wrong location)
-% TODO: Trend: Smart Home and IoT are becoming increasingly important
-% TODO: Goal: Development of "Plant Up!" - a system that gives plants "a voice"
+Houseplants are a common feature in modern households, yet maintaining them over longer periods remains challenging for many people. Gardening reports and market surveys indicate that a large share of indoor plants does not survive its first year, despite regular care attempts \cite{terrariumTribeStats2024}. One of the most common reasons is improper care rather than neglect. In particular, horticultural experts identify overwatering as the leading cause of houseplant failure, frequently resulting in yellowing leaves, wilting, and root rot \cite{lsuWaterWisely}. This indicates a fundamental issue: plants often suffer because their actual needs are misunderstood.
 
+A key reason for this misunderstanding lies in the limitations of human human judgment. Soil moisture is commonly assessed by touching the surface of the soil, even though moisture levels can differ significantly between the upper layer and the root zone \cite{lsuWaterWisely}. As a result, soil may appear dry while deeper layers remain saturated, which increases the risk of root diseases and root rot \cite{rootRotsWisc}. These processes occur below the surface and are therefore difficult to detect without technical support.
 
-% Forschungsfrage und Relevanz
+Human perception of light conditions is similarly unreliable. The visual system adapts to changing brightness levels (light adaptation), which often leads to an overestimation of the usable light available in indoor environments \cite{frontiersLightAdaptation}. In plant science, usable light is described as photosynthetically active radiation (PAR), referring to the wavelength range between 400 and 700 nanometers that plants can use for photosynthesis \cite{nasaPAR}. A room may appear bright to humans while still providing insufficient light for healthy plant growth.
+
+At the same time, sensor technology and Internet of Things (IoT) applications are becoming increasingly widespread. The global smart home market is experiencing strong growth, driven mainly by automation in areas such as lighting, climate control, and energy management \cite{marketsandmarketsSmartHome2024,precedenceSmartHome2025}. Despite this development, plant care in private households remains largely intuition-based. This gap motivates the development of \textit{Plant Up!}, a low-cost IoT system that translates environmental sensor data into clear and actionable care recommendations.
+
+The motivation for this project is also connected to sustainability. Agriculture accounts for approximately 70\,\% of global freshwater withdrawals, highlighting the importance of efficient water use \cite{faoWaterSustainableFood,worldbankFreshwater70}. Although \textit{Plant Up!} targets home gardening rather than large-scale agriculture, the same principle applies: data-driven monitoring supports more precise watering decisions and reduces unnecessary resource consumption.
+
+The primary objective of this thesis is to show that effective plant monitoring does not require expensive or specialized equipment. Using affordable, consumer-grade hardware such as capacitive soil moisture sensors, digital environmental sensors, and a microcontroller-based data acquisition system, this work demonstrates how common care mistakes can be reduced. In doing so, it aims to improve plant survival and provide users with a clearer understanding of the environmental conditions that influence plant health.
 \subsection{Research Question and Relevance}
 
-% TODO: Question: How can sensor technology and data processing be used to make plant care more efficient and user-friendly?
-% TODO: Relevance: Save resources (water), extend plant life, learn through data
+Based on the challenges outlined above, this thesis addresses the following research question:
+
+\textit{How can a low-cost, sensor-based system be designed to make plant monitoring more objective and user-friendly?}
+
+This question focuses on practical application rather than theoretical considerations. The goal is not to replace horticultural expertise, but to support everyday plant owners by providing objective information that simplifies decision-making. By translating sensor measurements into clear feedback, the system helps users recognize when action is necessary and when intervention would be counterproductive.
+
+The relevance of this research can be viewed from several perspectives. From an environmental perspective, this project helps save water. Many people water their plants based on routine or guessing, which often leads to waste. By using sensors, water is only used when the plant actually needs it, supporting a more sustainable approach \cite{faoWaterSustainableFood,worldbankFreshwater70}.
+
+From a practical perspective, many plant owners are frustrated when their plants die despite regular care. By visualizing environmental conditions and offering clear care recommendations, successful plant care becomes easier, as users do not need detailed botanical knowledge.
+
+The topic is also relevant from a technological perspective. Advances in microcontrollers, sensor accuracy, and wireless communication make it possible to implement functional monitoring systems using affordable consumer-level hardware. This thesis demonstrates how such technologies can be combined into an accessible Internet of Things (IoT) solution for everyday plant care.
+
+To understand why these measurements are essential, the following chapter examines the environmental factors that directly influence plant growth and health.
