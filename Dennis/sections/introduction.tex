@@ -1,28 +1,14 @@
 \section{Introduction}
 
 \subsection{Background and Context}
-In recent years, the Internet of Things (IoT) has woven itself into the fabric of daily life at an extraordinary pace, fundamentally changing how we interact with our physical surroundings. This digital transformation is perhaps most visible in the agricultural sector, which is currently navigating a shift known as ``Agriculture 4.0''. We are seeing a move away from traditional, intuition-based farming toward precise, data-driven decision-making, all enabled by interconnected sensor networks \cite{leherAg40}. While industrial agriculture has already reaped significant efficiency gains from this revolution, a parallel and equally important trend is taking root in the consumer world: Smart Urban Gardening \cite{streetsolverSmartGarden}.
+To get user hooked onto ones application is one of the most important factors for software success. 
+Especially with the overflow of applications competing, keeping users motivated to perform regular tasks, particularly those that do not offer immediate rewards, is a challenge. 
+Getting users interested in a normal activity is where gamification can help.
 
-Driven by rapid global urbanization, shrinking living spaces, and a rising awareness of environmental sustainability, urban gardening has grown into a significant movement \cite{growdirectorUrbanAg}. This is more than just a hobbyist trend; it signals a shift toward the Social Internet of Things (SIoT) \cite{bpbSiot}. The SIoT paradigm expands our traditional understanding of IoT by suggesting that objects can establish social relationships, not just with other machines but with people, creating a truly collaborative ecosystem \cite{jungWeon2025}. In this new context, a plant is no longer just a passive biological entity. It becomes an active participant in a digital social network, capable of communicating its needs and status directly to its caretaker.
-
-However, bringing these advanced concepts into the home using consumer-grade hardware creates a unique set of engineering hurdles \cite{kaaiotChallenges}. Unlike industrial systems, which often rely on stable power grids and dedicated infrastructure, consumer IoT devices for plant care must survive in resource-constrained environments. These devices often need to run for months on small batteries while staying connected to congested and unstable home Wi-Fi networks. This reality demands a rigorous and creative approach to optimizing both hardware and software strategies \cite{emnifyChallenges}.
-
-\subsection{Case Study: The ``Plant Up!'' Project}
-This thesis uses the ``Plant Up!'' project as a primary testbed to investigate these architectural frictions. ``Plant Up!'' is a comprehensive IoT application designed to gamify the experience of plant care, turning routine maintenance into an engaging activity \cite{smarticoGamification}. By providing immediate digital feedback on biological processes, the system bridges the gap between human perception and the actual physiological needs of a plant.
-
-The system is built on a robust three-tier architecture that combines distributed sensor units, a scalable cloud microservices backend, and a user-facing mobile application \cite{cheThreeTier}. At the edge, ESP32-based sensor nodes continuously monitor environmental metrics like soil moisture, temperature, humidity, and light intensity. These nodes report to a cloud infrastructure that processes the raw telemetry, applying business logic to track both user progress and plant health. Finally, the application layer presents this data through an interface that transforms mundane tasks into social achievements and rewards.
-
-\subsection{Problem Statement}
-Designing a real-time, socially integrated plant monitoring system reveals a fundamental conflict between three competing technical requirements: latency, energy efficiency, and data consistency. The ``Social'' aspect of the platform relies heavily on gamification mechanics that demand low latency to keep users immersed \cite{spinifyGamification}. For example, when a user waters their plant, they expect to see that action reflected in the app almost immediately.
-
-However, to simply remain practical for home use, the hardware cannot drain its battery in a matter of days. It must utilize aggressive power-saving states, such as the ESP32's Deep Sleep mode \cite{progElecDeepSleep}. While deep sleep dramatically extends battery life by shutting down the CPU and Wi-Fi radio, waking up and reconnecting introduces unavoidable delays that directly clash with the need for real-time responsiveness \cite{redditEsp32Wake}.
-
-Furthermore, the choice of communication protocol dictates the ``wake-up tax'', which is the energy cost paid just to establish a connection before a single byte of data is sent \cite{redditEsp32Wake}. Traditional web protocols like HTTP are robust and universal, but they carry heavy header overhead and rely on verbose text formats. In contrast, lightweight protocols like MQTT are designed specifically to solve these inefficiencies using binary payloads and a publish/subscribe model \cite{psiborg2024mqtt}.
-
-Finally, maintaining a consistent view of the system state in such a distributed architecture is a non-trivial challenge. As the CAP theorem (Consistency, Availability, Partition Tolerance) warns us, a distributed system cannot guarantee all three properties simultaneously during a network failure \cite{designGurusCAP}. In a residential IoT setting where network partitions are a common occurrence, the system must make calculated trade-offs between keeping data consistent and keeping the service available.
+This thesis analyzes the concept of gamification and how it is applied within ``Plant Up!'', a smart gardening system designed to assist users in caring for their plants. 
 
 \subsection{Research Question}
-To systematically address these challenges and identify the optimal architectural approach, this thesis poses the following primary research question:
+To systematically address these challenges this thesis poses the following primary research question:
 
-\textit{How do MQTT and REST compare in a microservices-based architecture for real-time plant monitoring, specifically regarding latency, throughput, and data consistency, when constrained by the energy limitations of battery-powered IoT devices \cite{nabtoMqttRest}?}
-\nocite{diplomarbeitSelf}
+\textit{How can gamification be effectively applied to a gardening system to keep users more engaged in a normal activity?}
+\nocite{diplomarbeitSelfDennis}
