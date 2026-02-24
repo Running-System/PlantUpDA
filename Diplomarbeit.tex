@@ -289,11 +289,6 @@ label=Code Example
 	\cleardoublepage
 	\phantomsection
 	
-	%\addcontentsline{toc}{section}{Einleitung}
-	\input{Allgemein/einleitung}
-	\cleardoublepage
-	\phantomsection
-	
 	%\addcontentsline{toc}{section}{Abstract}
 	\input{Allgemein/abstract}
 	\cleardoublepage
@@ -328,6 +323,12 @@ label=Code Example
 %--------------------------------------------------------------------------
 % Kapitel einfügen / Sections einfügen
 %--------------------------------------------------------------------------
+\selectlanguage{english}
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\input{Allgemein/einleitung}
+
 \input{Arun/einfuehrung.tex}
 \input{Dennis/einfuehrung.tex}
 \input{Abudi/einfuehrung.tex}
