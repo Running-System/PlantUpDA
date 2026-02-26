@@ -1,6 +1,6 @@
-\section{Sensor Technologies for Plant Monitoring}
+\section{Sensor Technologies and the Measurement Pipeline}
 
-Every environmental variable, whether soil moisture, temperature, humidity, or light, must be converted into an electrical signal before a controller can process it. The choice of sensor determines not only what can be measured, but also how accurately and how long the system can operate without maintenance. Plant Up! does not target laboratory-grade precision. The engineering goal is stable, repeatable readings that can be compared against defined thresholds and tracked over time.
+Every environmental variable, whether soil moisture, temperature, humidity, or light, must be converted into an electrical signal before a controller can process it. The choice of sensor determines not only what can be measured, but also how accurately and how long the system can operate without maintenance. But selecting appropriate hardware is only the first step. The raw signals must also be read, filtered, and packaged into structured data before they can be evaluated. This chapter covers both: the sensor selection for Plant Up! and the firmware-level data pipeline that turns their output into usable information.
 
 \subsection{Overview of Common Sensor Types}
 
@@ -83,4 +83,34 @@ The BH1750 light sensor communicates via I\textsuperscript{2}C and directly outp
 
 The selected soil moisture probe is designed for 3.3\,V operation and provides an analog voltage proportional to relative substrate moisture. Together, these components form the minimal stable sensing architecture of the system. A detailed component list with supplier information is provided separately.
 
-With the sensor hardware selected and its constraints understood, the next step is to define how these raw electrical signals are collected, transmitted, and processed into usable data. This is where the system moves from simply measuring to actually interpreting.
+\subsection{The Measurement Cycle}
+
+With the hardware selected, the remaining question is purely procedural: how does the controller read, clean, and transmit sensor values in a repeatable cycle?
+
+\subsubsection*{Firmware read cycle}
+
+The firmware runs a repeating loop: wake, read sensors, process values, transmit, and sleep. Deep sleep, a power-saving mode where the CPU and most peripherals are shut down and only a small timer domain stays active for wake-up, is used after each transmission. \cite{espIdfDeepSleep}
+
+The read sequence matters. The soil moisture sensor is analog, meaning its raw voltage needs a brief moment to stabilize after the controller wakes up. That is why it is read first. The BME280 and BH1750, on the other hand, are digital and deliver ready-to-use values over I\textsuperscript{2}C as soon as they are asked. Reading analog first and digital second keeps the cycle fast and stable. The entire active phase stays below approximately 2 seconds, after which the controller goes back to sleep and waits for the timer to start the next round. \cite{espIdfDeepSleep}
+
+\subsubsection*{Sampling strategy and power management}
+
+In Plant Up!, the default measurement interval is 10 minutes, though it can be configured. This is long enough to keep battery consumption low but short enough to capture typical indoor changes such as watering events, sunlight shifts, or heating cycles.
+
+The design relies on the extreme difference between active and sleep current. During active operation with Wi-Fi enabled, the ESP32 draws around 240\,mA and can briefly peak above 300\,mA during wireless calibration. \cite{esp32Datasheet} In deep sleep, current consumption drops to approximately 10\,$\mu$A. \cite{esp32Datasheet} With timer-based automatic wake-up, this duty-cycling enables an estimated battery life of several weeks on a standard Li-Ion cell, depending on board design and signal quality. Shorter intervals, such as every 1--5 minutes, are supported for debugging and calibration but reduce runtime proportionally, because the Wi-Fi startup and transmission overhead becomes the dominant consumer. \cite{espIdfDeepSleep}
+
+\subsubsection*{Signal processing and data cleaning}
+
+Each cycle takes multiple readings per sensor, typically five, and reduces them to one stable value. Simple averaging smooths random noise, while a median filter is useful when single spikes occur, for example from one bad ADC sample. This is especially relevant for the analog soil moisture channel, where ADC fluctuations were already discussed in Section 2.3.2.
+
+The firmware also performs plausibility checks. Physically impossible values are discarded, such as negative humidity or moisture readings above 100\%. If a digital sensor does not respond within a timeout, the system logs a null value for that field and continues the cycle with the remaining sensors instead of blocking entirely. Null values are preserved in the payload so the backend can detect and handle data gaps.
+
+\subsubsection*{Data packaging and transmission}
+
+After cleaning, values are assembled into a single JSON payload. JSON (JavaScript Object Notation) is a lightweight text format for structured data, built from name-value pairs. \cite{rfcJSON} A typical payload contains the device ID, a timestamp, and the current readings: soil moisture (\%), temperature (\textdegree C), humidity (\%), and light intensity (lux).
+
+The payload is transmitted via MQTT, a lightweight publish/subscribe messaging protocol designed for constrained IoT devices. \cite{oasisMQTT} How MQTT compares to REST in terms of latency and reliability is covered separately by Richard Onuoha in his chapter on IoT data synchronization in microservice architectures.
+
+To keep the device robust in real apartments, where Wi-Fi can drop out or routers restart, the firmware includes retry logic. If the connection to the broker fails, the data point is buffered locally and retransmitted on the next cycle. No long-term storage is kept on the device. The intention is short buffering for connectivity gaps, not acting as a local database.
+
+With this, the measurement cycle ends with clean, timestamped, structured values arriving at the backend. This is exactly the input needed for the next chapter, where thresholds and interpretation logic turn the raw data stream into actionable care recommendations.

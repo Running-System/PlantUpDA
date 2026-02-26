@@ -40,7 +40,9 @@
 
 \usepackage{booktabs}                  
 \usepackage{caption}                   
-\usepackage{geometry}       
+\usepackage{geometry}
+\geometry{top=2.5cm, bottom=2.5cm, headheight=15pt, headsep=1cm, footskip=1cm}
+\usepackage{lastpage}                   %Für 'Seite X von Y' in der Fußzeile
 
 
 
@@ -312,13 +314,24 @@ label=Code Example
 %-----------------------------------------------------------------
 % Kopfzeilen definieren
 %-----------------------------------------------------------------
-	\pagestyle{fancyplain}
+	\pagestyle{fancy}
+	\fancyhf{}  % Alles zurücksetzen
+
+	\renewcommand{\headrulewidth}{0.4pt}   % Linie unter Kopfzeile
+	\renewcommand{\footrulewidth}{0.4pt}   % Linie über Fußzeile
 
 	\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
-	\renewcommand{\chaptermark}[1]{\markright{\thechapter\ #1}}
-	\lhead[\fancyplain{}{\sffamily\sl\thepage}]{\fancyplain{}{\sffamily\sl\rightmark}}
-	\rhead[\fancyplain{}{\sffamily\sl\rightmark}]{\fancyplain{}{\sffamily\sl\thepage}}
-	\cfoot{}
+	\renewcommand{\chaptermark}[1]{\markboth{\thechapter\ #1}{}}
+
+	% Kopfzeile: Seitenzahl links, Autor rechts (wechselt pro Kapitel)
+	\newcommand{\currentauthor}{}
+	\lhead{\sffamily\sl\thepage}
+	\rhead{\sffamily\sl\footnotesize \currentauthor}
+
+	% Fußzeile: Klasse links, Seite X von Y Mitte, Datum rechts
+	\lfoot{\sffamily\footnotesize 22IF2609}
+	\cfoot{\sffamily\footnotesize Seite \thepage\ von \pageref{LastPage}}
+	\rfoot{\sffamily\footnotesize \today}
 
 %--------------------------------------------------------------------------
 % Kapitel einfügen / Sections einfügen
@@ -327,12 +340,17 @@ label=Code Example
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
+\renewcommand{\currentauthor}{A. Sherzai, D. Jin, R. Onuoha, A. Behari}
 \input{Allgemein/einleitung}
 
+\renewcommand{\currentauthor}{Arun Sherzai}
 \input{Arun/einfuehrung.tex}
-\input{Dennis/einfuehrung.tex}
+\renewcommand{\currentauthor}{Abd-Ulrahman Behari}
 \input{Abudi/einfuehrung.tex}
+\renewcommand{\currentauthor}{Richard Onuoha}
 \input{Richard/einfuehrung.tex}
+\renewcommand{\currentauthor}{Dennis Jin}
+\input{Dennis/einfuehrung.tex}
 
 %--------------------------------------------------------------------------
 % Anhang
