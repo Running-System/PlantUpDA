@@ -255,6 +255,7 @@ label=Code Example
 
 \begin{document}
 	\sffamily						                        %Schriftart setzen
+	\let\cleardoublepage\clearpage                          %Keine leeren Seiten bei twoside/openright
 
 
 
@@ -270,46 +271,42 @@ label=Code Example
 % Vorwort
 %-----------------------------------------------------------------
 
-    \cleardoublepage
+    \clearpage
  
 	\pagestyle{plain}					    %Nur Fußzeile mit Seitennummer anzeigen lassen
 	\pagenumbering{roman}					%Römische Nummerierung vor der eigentlichen Diplomarbeit
 	\setcounter{page}{1}					%Bei 1 mit Nummerierung beginnen
 
-    \cleardoublepage
+    \clearpage
     %\addcontentsline{toc}{chapter}{Vorwort}
-    \cleardoublepage
+    \clearpage
     
 	\input{Allgemein/erklaerung}
-    \cleardoublepage
+    \clearpage
     \addcontentsline{toc1}{section}{Erklärung}	%Erklärung händisch ins Inhaltsverzeichnis einfügen
-	\cleardoublepage									%Neue Seite beginnen
+	\clearpage									%Neue Seite beginnen
 
 	\phantomsection
 	%\addcontentsline{toc}{section}{Danksagungen}
 	\input{Allgemein/danksagungen}
-	\cleardoublepage
+	\clearpage
 	\phantomsection
 	
 	%\addcontentsline{toc}{section}{Abstract}
 	\input{Allgemein/abstract}
-	\cleardoublepage
-	\phantomsection
+	\clearpage
 
     %gendererklärung
     %\addcontentsline{toc}{section}{Gendererklärung}
 	%\input{Allgemein/gendererklaerung}
-	%\cleardoublepage
-	%\phantomsection
+	%\clearpage
 	
 	\normalsize
 
 	\markright{INHALTSVERZEICHNIS}
 	%\addcontentsline{toc}{chapter}{Inhaltsverzeichnis}
 	\tableofcontents
-	\cleardoublepage
-	\phantomsection
- \thispagestyle{empty}
+	\clearpage
 	
 %-----------------------------------------------------------------
 % Kopfzeilen definieren
@@ -345,10 +342,13 @@ label=Code Example
 
 \renewcommand{\currentauthor}{Arun Sherzai}
 \input{Arun/einfuehrung.tex}
+\clearpage
 \renewcommand{\currentauthor}{Abd-Ulrahman Behari}
 \input{Abudi/einfuehrung.tex}
+\clearpage
 \renewcommand{\currentauthor}{Richard Onuoha}
 \input{Richard/einfuehrung.tex}
+\clearpage
 \renewcommand{\currentauthor}{Dennis Jin}
 \input{Dennis/einfuehrung.tex}
 
@@ -361,8 +361,20 @@ label=Code Example
     \phantomsection
 	\addcontentsline{toc}{section}{Abbildungsverzeichnis}
 	\listoffigures
-	\cleardoublepage
-	\phantomsection
+
+	\vspace{1cm}
+	\subsection*{AI-Generated Figures}
+	The following figures were generated using an AI image generation tool. The prompts used are listed below for transparency.
+
+	\begin{small}
+	\begin{description}
+		\item[Figure~\ref{fig:moisture_distortion}] \textit{Cross-section of a plant pot showing non-uniform soil moisture distribution. One side is visibly wetter (darker soil) near the surface where water was poured, while the opposite side remains dry (lighter soil). A soil moisture sensor probe is inserted on the dry side, illustrating how a single-point measurement can be misleading. Clean diagram style, white background, labeled arrows indicating wet zone, dry zone, and sensor position.}
+
+		\item[Figure~\ref{fig:decision_flowchart}] \textit{Professional flowchart for an academic thesis on white background with minimal style. Starting node: Sensor Data Received. Process box: Read Values (Soil Moisture, Temperature, Humidity, Light). Diamond decision: Compare against Thresholds. Three output paths: Green Zone (optimal, no action required), Yellow Zone (suboptimal, attention recommended), Red Zone (critical, immediate action required). All paths merge into: Generate Care Recommendation, then Display to User via App. Standard flowchart shapes, sans-serif font, colored zone boxes (green, yellow, red).}
+	\end{description}
+	\end{small}
+
+	\clearpage
 	
 	\addcontentsline{toc}{section}{Literaturverzeichnis}
 	\bibliographystyle{IEEEtran}

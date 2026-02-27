@@ -1,26 +1,13 @@
 \section{Conclusion}
 
-This final chapter synthesizes the outcomes of the project, evaluates the overall success of the ``Plant Up!'' system against its initial objectives, and suggests potential areas for future enhancement and larger-scale integration.
+This thesis set out to answer a practical question: how can a low-cost, sensor-based system provide objective environmental data and actionable care recommendations for indoor plants? The chapters above have addressed this question step by step, from the biological foundations through sensor selection and firmware design to the interpretation logic that turns raw measurements into user-facing feedback.
 
-\subsection{Summary of Results}
-\begin{itemize}
-    \item System works reliably.
-    \item Plants have a "voice" now.
-\end{itemize}
+The core argument of this work is that plant care does not need to rely on intuition. Soil moisture, temperature, humidity, and light are physical quantities with measurable ranges, and when those ranges are violated, the consequences are predictable. Chapter 2.2 established that both deficiency and excess cause specific, well-documented stress responses, and that human perception alone is too slow and too biased to detect these conditions reliably. Chapter 2.3 then showed that affordable consumer-grade hardware, specifically a capacitive soil moisture sensor, a BME280 climate sensor, and a BH1750 light sensor connected to an ESP32 microcontroller, can capture these variables with sufficient accuracy for threshold-based monitoring. The firmware pipeline described in Section 2.3.4 ensures that sensor data is read, filtered, and transmitted in a repeatable cycle with minimal power consumption.
 
-\subsection{Evaluation of Technological Potential}
-\begin{itemize}
-    \item Very cheap (< 15 Euro).
-    \item Open Data (Privacy friendly).
-    \item Scalable for many plants.
-\end{itemize}
+Chapter 2.4 translated these raw measurements into decisions. By classifying each parameter into green, yellow, and red zones and combining them into a single health score, Plant Up! compresses complexity into feedback that requires no botanical knowledge to understand. The traffic-light system, the animated mascot, and the trend visualizations all serve the same purpose: making the plant's actual state visible at a glance.
 
-\subsection{Outlook on Future Developments}
-\begin{itemize}
-    \item AI Camera for pest detection.
-    \item Solar panel for infinite power.
-    \item Smart Home integration (Alexa).
-\end{itemize}
+The system is not perfect. The sensor station measures a single point in the pot, not the entire root zone. Calibration is substrate-dependent and produces relative values rather than absolute ones. The health score is a weighted approximation, not a scientific diagnosis. These are deliberate trade-offs. The goal was never laboratory-grade precision but a practical tool that prevents the most common care mistakes, especially overwatering, which remains the leading cause of houseplant failure.
 
-\subsection{Connection to the Next Chapter}
-With the hardware and local sensor network established (My Part), we hand over the baton. The data must now travel securely and efficiently to the backend services, a challenge tackled in the next chapter.
+By relying entirely on widely available consumer-grade components and open protocols, the system confirms the premise from the introduction: effective plant monitoring does not require specialized equipment or expert knowledge. All data remains under user control, and the architecture supports scaling to multiple plants through individual sensor stations reporting to a shared backend.
+
+With the sensor station producing clean, timestamped measurements and the interpretation logic translating them into actionable feedback, the next question becomes: where should this data be processed, and how does it reach the backend? The following chapter by Abd-Ulrahman Behari addresses exactly this, comparing edge and cloud processing strategies for environmental sensor data in the context of smart gardening.

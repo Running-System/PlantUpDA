@@ -1,112 +1,72 @@
 \section{System Implementation and Validation}
 
-Building upon the theoretical and conceptual foundations established in the previous chapters, this section describes the practical realization of the ``Plant Up!'' prototype. It covers both the hardware assembly and the software architecture before concluding with a practical validation of the system's performance.
+This chapter describes the practical realization of the Plant Up! sensor station. With the sensor selection (Section 2.3.3), firmware pipeline (Section 2.3.4), and decision logic (Chapter 2.4) already established, the focus here is on three things that have not yet been covered: how the components were physically wired and housed, how raw ADC readings were calibrated into meaningful moisture values, and how the assembled system was validated against real plant data.
 
-\subsection{Hardware Realization and Setup}
+\subsection{Hardware Assembly}
 \begin{itemize}
-    \item \textbf{Power Supply Concept:}
+    \item \textbf{Wiring and pin assignment:}
     \begin{itemize}
-        \item Battery-powered operation enables flexible placement near plants.
-        \item USB power used during development, testing, and debugging.
-        \item Trade-off between mobility and long-term stability.
+        \item GPIO pin mapping table: which ESP32 pin connects to which sensor
+        \item Wiring diagram or schematic as figure
     \end{itemize}
 
-    \item \textbf{Sensor Placement:}
+    \item \textbf{Enclosure:}
     \begin{itemize}
-        \item Soil moisture sensor placed in the root zone, not at the surface.
-        \item Avoids misleading surface measurements.
-        \item Placement depth adapted to typical indoor plant pots.
-    \end{itemize}
-
-    \item \textbf{Enclosure Design:}
-    \begin{itemize}
-        \item Custom 3D-printed housing for Plant Up!.
-        \item Protection against water splashes during watering.
-        \item Ventilation openings for air sensors.
-        \item Compact form factor suitable for indoor environments.
-    \end{itemize}
-\end{itemize}
-
-\subsection{Software Architecture and Firmware}
-\begin{itemize}
-    \item \textbf{Overall System Flow:}
-    \begin{itemize}
-        \item Wake from deep sleep.
-        \item Read sensor values.
-        \item Process and prepare data.
-        \item Transmit data to backend.
-        \item Return to deep sleep.
-    \end{itemize}
-
-    \item \textbf{Error Handling and Robustness:}
-    \begin{itemize}
-        \item Handling of missing or failed sensor readings.
-        \item Retry logic for network communication failures.
-        \item System stability prioritized over continuous availability.
-    \end{itemize}
-
-    \item \textbf{Energy Management:}
-    \begin{itemize}
-        \item Deep sleep mode used to minimize power consumption.
-        \item Wake-up intervals configurable based on plant needs.
-        \item Significant battery life improvement compared to continuous operation.
+        \item Custom 3D-printed housing for indoor use
+        \item Protection against water splashes, ventilation openings for climate sensor
+        \item Photo of the finished sensor station as figure
     \end{itemize}
 \end{itemize}
 
 \subsection{Sensor Calibration}
 \begin{itemize}
-    \item Raw sensor values provided as ADC readings (0--4095).
-    \item Raw values are not directly meaningful for users.
-    \item Calibration process:
+    \item \textbf{Problem:}
     \begin{itemize}
-        \item Reference measurement in dry soil.
-        \item Reference measurement in fully watered soil.
-        \item Linear mapping of raw values to percentage scale (0--100\%).
+        \item ESP32 ADC produces raw values (0--4095) with no inherent unit
+        \item A user cannot interpret ``ADC reads 2340'' without context
     \end{itemize}
-    \item Calibration depends on soil type and substrate composition.
-    \item Plant Up! provides relative moisture values rather than laboratory-accurate measurements.
+
+    \item \textbf{Two-point calibration:}
+    \begin{itemize}
+        \item Step 1: Record raw value in air-dry substrate (dry reference)
+        \item Step 2: Record raw value in fully saturated substrate (wet reference)
+        \item Linear mapping between these two endpoints to a 0--100\% moisture scale
+        \item Concrete calibration values from the Plant Up! test setup
+    \end{itemize}
+
+    \item \textbf{Limitations:}
+    \begin{itemize}
+        \item Calibration is substrate-specific (different soil types produce different baselines)
+        \item Plant Up! provides relative moisture indication, not laboratory-grade VWC
+        \item Recalibration recommended when substrate or pot changes
+    \end{itemize}
 \end{itemize}
 
-\subsection{Results Presentation: The ``Plant Up!'' Dashboard}
+\subsection{Practical Validation}
 \begin{itemize}
-    \item Responsive web-based dashboard.
-    \item Focus on clarity and ease of interpretation.
-    \item Current plant status displayed prominently.
-    \item Use of simple color indicators (green, yellow, red).
-    \item Historical data visualized using line charts.
-    \item Trend visualization supports long-term care decisions.
-\end{itemize}
-
-\subsection{Validation and Measurement Series Analysis}
-\begin{itemize}
-    \item Test setup:
+    \item \textbf{Test setup:}
     \begin{itemize}
-        \item Single indoor plant monitored over a 48-hour period.
-        \item Controlled watering event during test phase.
+        \item Specific plant type, location, and monitoring duration
+        \item Controlled watering event during test phase
     \end{itemize}
 
-    \item Observed behavior:
+    \item \textbf{Expected vs. measured behavior:}
     \begin{itemize}
-        \item Clear increase in soil moisture after watering.
-        \item Gradual decrease over time due to evaporation and uptake.
+        \item Soil moisture: spike after watering, gradual decline from evaporation and uptake (consistent with theory from Section 2.2)
+        \item Light: daily cycle visible (bright daytime, low at night)
+        \item Temperature and humidity: stable baseline with minor shifts from heating or ventilation
     \end{itemize}
 
-    \item Comparison between expected and measured behavior.
-    \item Validation confirms correct sensor response and data processing.
-    \item Limitations:
+    \item \textbf{Evidence:}
     \begin{itemize}
-        \item Short test duration.
-        \item Limited number of plants.
+        \item At least one figure showing real sensor data from the Plant Up! app
+        \item Visual comparison between measured curve and expected physical behavior
     \end{itemize}
-    \item Results considered sufficient to validate basic system functionality.
-\end{itemize}
 
-\subsection*{Possible Sources for System Implementation and Validation}
-
-\begin{itemize}
-    \item ESP32 deep sleep modes and power consumption:  
-    \url{https://www.programmingelectronics.com/esp32-deep-sleep-mode/}
-
-    \item Importance of sensor calibration in embedded systems:  
-    \url{https://www.a3p.org/en/thecalibration-of-embedded-sensors/}
+    \item \textbf{Limitations:}
+    \begin{itemize}
+        \item Limited number of test plants and short test duration
+        \item No laboratory reference sensor for absolute accuracy verification
+        \item Results validate functional correctness, not scientific precision
+    \end{itemize}
 \end{itemize}
