@@ -1,48 +1,48 @@
 \section{Plant Up! System Architecture and Implementation}
 
 \subsection{System Overview and Vision}
-The ``Plant Up!'' platform is where the physical world of botany meets the digital world of social networking. It integrates distributed IoT hardware, a scalable cloud microservices backend, and a vibrant mobile application into a single, unified ecosystem. This is the practical realization of the Social Internet of Things (SIoT) concept: giving plants a digital ``voice'' to tell us how they feel. The primary goal is straightforward but technically demanding: collect high-precision environmental data from our custom edge devices, synchronize it through the cloud, and present it to users in a way that feels like a game, not a chore.
+The ``Plant Up!'' platform integrates distributed IoT hardware, a scalable cloud microservices backend, and a mobile application into a single, unified ecosystem. This represents the practical realization of the Social Internet of Things (SIoT) concept discussed in the theoretical background: enabling plants to communicate their environmental status digitally to their caretakers. The primary objective is to collect high-precision environmental data from custom edge devices, synchronize it through the cloud, and present it to users through gamified interactions.
 
-To bring this vision to life, our architecture must solve three critical puzzles:
+To realize this vision, the architecture must address three critical requirements:
 \begin{itemize}
-    \item \textbf{Low-latency sensor synchronization:} When a plant is thirsty, the user needs to know \textit{now}. We must close the loop between the biological need and the human action as fast as possible.
-    \item \textbf{Energy-efficient operation:} No one wants to charge their plant pot every day. Our IoT devices need to be ``install-and-forget'', sipping battery power through intelligent deep sleep cycles and minimal radio usage.
-    \item \textbf{Distributed consistency:} With data scattered across User, Social, and Hardware domains, the system has to keep everything in sync, even when the Wi-Fi acts up.
+    \item Low-latency sensor synchronization: When a plant requires attention, the user must be notified promptly. The loop between biological need and human action must be closed as rapidly as possible.
+    \item Energy-efficient operation: IoT devices intended for home use must be designed for long-term deployment, conserving battery power through intelligent deep sleep cycles and minimal radio usage.
+    \item Distributed consistency: With data distributed across User, Social, and Hardware domains, the system must maintain a coherent state even during periods of network instability.
 \end{itemize}
 
-These requirements drive every choice we made, from the specific sensors we soldered to the board to the way we structured our microservices. The result is a multi-layered design: the Edge Node, the Cloud Layer, and the Application Layer.
+These requirements informed every architectural decision, from the specific sensors integrated into the hardware to the structure of the microservices. The resulting design follows a multi-layered approach: the Edge Node, the Cloud Layer, and the Application Layer.
 
 \subsection{Hardware Layer: The Edge Node}
-The hardware layer is the physical ``nervous system'' of our project. It builds a bridge between the digital cloud and the soil in the pot. We built it around the ESP32-S3 microcontroller and equipped it with a comprehensive suite of sensors for temperature, humidity, light, soil moisture, and electrical conductivity. This gives us a complete picture of the plant's health. But because it runs on a battery, it spends most of its life asleep. Its routine is simple but strict:
+The hardware layer constitutes the physical sensing infrastructure of the project. It serves as the bridge between the digital cloud and the physical plant environment. The design centers on the ESP32-S3 microcontroller, equipped with a comprehensive suite of sensors for temperature, humidity, light, soil moisture, and electrical conductivity. This configuration provides a complete picture of the plant's health. Due to battery constraints, the device spends the majority of its operational time in a deep sleep state. Its operational cycle follows a strict sequence:
 \begin{enumerate}
-    \item \textbf{Acquisition:} Wake up, power on the sensors, and take a quick snapshot of the environment.
-    \item \textbf{Serialization:} Pack those numbers into a compact JSON format.
-    \item \textbf{Transmission:} Fire that packet off to the cloud (using MQTT or REST) and go back to sleep immediately.
+    \item Acquisition: The device wakes, powers the sensors, and captures an environmental snapshot.
+    \item Serialization: The sensor readings are packed into a compact JSON format.
+    \item Transmission: The data packet is transmitted to the cloud (via MQTT or REST), after which the device returns to deep sleep immediately.
 \end{enumerate}
 
 \subsubsection{Component Selection and Sensor Interface}
-Hardware selection isn't just about features; it's about the trade-off between capability and longevity.
+Hardware selection involves a careful trade-off between capability and energy longevity. The following components were selected for the ``Plant Up!'' edge node.
 
-\textbf{Microcontroller: Espressif ESP32-S3}
-The brain of our operation is the ESP32-S3. We chose it for its perfect balance of power and efficiency. It has a dual-core processor and built-in Wi-Fi and Bluetooth, but the real star is its Ultra-Low Power (ULP) co-processor. This little chip allows the main power-hungry CPU to sleep while basic monitoring continues in the background. At around 20 Euro, it gives us incredible bang for our buck.
+Microcontroller: Espressif ESP32-S3 ---
+The ESP32-S3 serves as the central processing unit. It was selected for its balance of computational power and energy efficiency. It features a dual-core processor and built-in Wi-Fi and Bluetooth connectivity. Of particular relevance is its Ultra-Low Power (ULP) co-processor, which allows the main CPU to remain in a sleep state while basic monitoring continues in the background. At approximately 20 Euro, it offers a favorable cost-to-performance ratio.
 
-\textbf{Soil Moisture Sensor: HiLetgo LM393}
-Water is life, and the HiLetgo LM393 (approx. 7.89 Euro) allows us to measure it. Unlike cheaper sensors that corrode in weeks, this resistive sensor measures the dielectric permittivity of the soil. It gives us that critical ``I'm thirsty'' signal.
+Soil Moisture Sensor: HiLetgo LM393 ---
+The HiLetgo LM393 (approximately 7.89 Euro) measures the dielectric permittivity of the soil. Unlike lower-cost sensors that are prone to corrosion, this resistive sensor provides reliable moisture readings essential for triggering watering notifications.
 
-\textbf{Light Sensor: HiLetgo BH1750}
-Plants eat light, so we need to measure it accurately. We use the BH1750 (approx. 11.39 Euro). It's a digital I2C sensor, not a cheap photo-resistor. It gives us precise lux readings, so the system can tell you, ``Hey, I need more sun,'' or ``I'm getting sunburned!''
+Light Sensor: HiLetgo BH1750 ---
+The BH1750 (approximately 11.39 Euro) is a digital I2C sensor that provides precise lux readings. This enables the system to assess whether a plant is receiving adequate light exposure and to generate corresponding notifications.
 
-\textbf{Electrical Conductivity (EC) Sensor: DFRobot Gravity V2}
-This is where we go beyond the basics. The DFRobot Gravity Analog EC Sensor (approx. 12.10 Euro) measures Electrical Conductivity, which is essentially the salt content of the soil.
+Electrical Conductivity (EC) Sensor: DFRobot Gravity V2 ---
+The DFRobot Gravity Analog EC Sensor (approximately 12.10 Euro) measures the electrical conductivity of the soil, which correlates directly with nutrient concentration.
 \begin{itemize}
-    \item \textit{Why EC?} EC correlates directly with nutrients. A droopy plant might be watered perfectly but starving for nitrogen. This sensor allows ``Plant Up!'' to predict when you need to fertilize, turning it from a simple watering alarm into a true health monitor.
+    \item \textit{Relevance of EC:} Electrical conductivity correlates directly with nutrient levels. A plant may be adequately watered yet deficient in nitrogen. This sensor enables ``Plant Up!'' to predict fertilization needs, elevating the system from a simple watering alarm to a comprehensive health monitor.
 \end{itemize}
 
-\textbf{Power Supply and Sustainability}
-To keep this running remotely, we pair a lithium-ion battery with a 0.5W Photo-voltaic Solar Panel (approx. 3.48 Euro). It's designed to be self-sustaining, but we included a USB-C port just in case.
+Power Supply and Sustainability ---
+To enable remote, long-term operation, the device pairs a lithium-ion battery with a 0.5\,W photovoltaic solar panel (approximately 3.48 Euro). This combination is designed to be self-sustaining, with a USB-C port included as a fallback charging option.
 
 \subsubsection{Data Structure}
-All this sensor data gets wrapped up into a tidy JSON payload. This maps directly to the \texttt{Controllers} table in our backend `microcontroller\_schema`:
+All sensor data is serialized into a structured JSON payload. This payload maps directly to the \texttt{Controllers} table in the backend \texttt{microcontroller\_schema}:
 
 \begin{figure}[H]
     \centering
@@ -51,7 +51,7 @@ All this sensor data gets wrapped up into a tidy JSON payload. This maps directl
     \label{fig:edge_json_payload}
 \end{figure}
 
-And here is where it lands in Supabase:
+The corresponding database table in Supabase is shown below:
 
 \begin{figure}[H]
     \centering
@@ -60,20 +60,20 @@ And here is where it lands in Supabase:
     \label{fig:controllers_table_rx}
 \end{figure}
 
-Crucially, we timestamp every measurement right at the source (the edge node). This means that even if the Wi-Fi is down for an hour, when the data finally arrives, the backend knows exactly when it was recorded. This allows us to reconstruct accurate historical charts despite network hiccups.
+A critical design decision is the timestamping of every measurement at the source (the edge node). This ensures that even during periods of network unavailability, the backend can reconstruct accurate historical data based on the original recording time rather than the arrival time.
 
 \subsection{Microservice Architecture Design}
-Our backend isn't a tangled mess of code; it's a family of microservices organized around Supabase schemas. Each schema acts as a ``Bounded Context'', which is a fancy way of saying it minds its own business:
+The backend is structured as a collection of microservices organized around Supabase schemas. Each schema functions as a Bounded Context \cite{fowlerMicroservices}, encapsulating a specific domain:
 \begin{itemize}
-    \item \textbf{user\_schema}: Handles the players: profiles, streaks, and virtual wallets.
-    \item \textbf{social\_media\_schema}: Handles the community: posts, comments, and plant profiles.
-    \item \textbf{microcontroller\_schema}: The data warehouse for all those sensor readings.
-    \item \textbf{gamification}: The game engine: quests, progress, and XP.
+    \item \texttt{user\_schema}: Manages user profiles, streaks, and virtual wallets.
+    \item \texttt{social\_media\_schema}: Manages community content: posts, comments, and plant profiles.
+    \item \texttt{microcontroller\_schema}: Serves as the data warehouse for all sensor readings.
+    \item \texttt{gamification}: Contains the game engine: quests, progress tracking, and XP.
 \end{itemize}
 
-This separation is a lifesaver for development. We can tweak the way quests work without worrying about breaking the sensor ingestion pipeline. A problem in one area doesn't cascade into a total system failure.
+This separation provides significant development and operational benefits. Modifications to the quest system, for example, can be made without risking disruptions to the sensor ingestion pipeline. Failures in one domain do not cascade to other domains.
 
-For instance, the \texttt{Plants} table in the social schema links a user's plant to its ideal growing conditions in \texttt{Plant\_data}. This allows other services to look up ``What does a Monstera need?'' without cluttering the social database with botanical encyclopedias.
+For instance, the \texttt{Plants} table in the social schema links a user's plant to its ideal growing conditions stored in \texttt{Plant\_data}. This allows other services to retrieve botanical reference data without introducing dependencies into the social database.
 
 \begin{figure}[H]
     \centering
@@ -83,15 +83,19 @@ For instance, the \texttt{Plants} table in the social schema links a user's plan
 \end{figure}
 
 \subsection{Real-Time Data Synchronization Mechanism}
-Synchronization is a balancing act. We want the user to see fresh data instantly, but we don't want to kill the sensor's battery. We evaluated two main contenders:
+A central challenge in the ``Plant Up!'' architecture is balancing real-time data delivery with energy conservation on the sensor devices. Users expect to see fresh data promptly, yet the sensor nodes cannot afford the energy cost of maintaining persistent connections. This subsection explains the reasoning behind the adopted synchronization strategy.
+
+Two primary contenders were evaluated for the sensor-to-cloud communication:
 \begin{itemize}
-    \item \textbf{REST (HTTPS)}: The standard web way. It's structured and familiar, great for when a user loads their profile. But for sending tiny sensor packets every few minutes? The overhead is heavy.
-    \item \textbf{MQTT}: The IoT specialist. It's lightweight and uses a publish/subscribe model. Theoretically, this is the perfect match for our battery-constrained ESP32.
+    \item REST (HTTPS): The standard web approach. It is structured and widely supported, making it well-suited for user-facing API interactions. However, for transmitting small sensor packets at regular intervals, the connection overhead is substantial.
+    \item MQTT: A protocol designed specifically for IoT scenarios. It is lightweight and uses a publish/subscribe model, which is theoretically well-matched to the constraints of battery-powered devices such as the ESP32.
 \end{itemize}
 
-We ended up using a hybrid approach. The IoT devices talk MQTT because it's efficient. A backend service listens to that chatter and commits it to the database. The user's phone app then talks to the database using standard REST APIs. It's the best of both worlds.
+A hybrid approach was adopted to leverage the strengths of both protocols. The rationale for this decision is as follows: MQTT is used exclusively for the sensor-to-cloud communication path because its lightweight binary protocol and persistent broker connection minimize the energy expenditure per transmission cycle. However, the user-facing mobile application communicates with the backend through standard REST APIs, as this path does not face the same energy constraints and benefits from the request-response semantics of HTTP for loading user profiles and social content.
 
-A typical data ingestion looks like this:
+In this architecture, the IoT devices publish sensor data via MQTT to a broker. A dedicated backend service subscribes to the relevant topics and persists the incoming data to the database. The mobile application then retrieves this data through RESTful endpoints.
+
+A typical data ingestion flow is illustrated below:
 
 \begin{figure}[H]
     \centering
@@ -101,16 +105,16 @@ A typical data ingestion looks like this:
 \end{figure}
 
 \subsection{User Engagement and Data Processing}
-The ``Social'' and ``Gamification'' parts of Plant Up! aren't just cosmetic; they are the engine that drives user behavior. This logic lives in the \texttt{gamification} schema, and it watches the data streaming in from the other layers.
+The social and gamification components of ``Plant Up!'' are not merely cosmetic additions; they serve as the primary mechanism for driving user engagement. This logic resides in the \texttt{gamification} schema and monitors the data streaming in from the other layers.
 
 It relies on three core tables:
 \begin{itemize}
-    \item \textbf{Quests}: The menu of challenges, like "Water your Monstera" or "Check the light level".
-    \item \textbf{User\_quests}: The user's personal to-do list.
-    \item \textbf{player\_stats}: The scorecard: XP and levels.
+    \item Quests: The catalog of challenges, such as ``Water your Monstera'' or ``Check the light level''.
+    \item User\_quests: The individual user's progress on assigned quests.
+    \item player\_stats: The user's cumulative statistics: XP and levels.
 \end{itemize}
 
-The \texttt{quests} table sets the stage:
+The \texttt{quests} table defines the available challenges:
 
 \begin{figure}[H]
     \centering
@@ -119,7 +123,7 @@ The \texttt{quests} table sets the stage:
     \label{fig:quests_table}
 \end{figure}
 
-Here is the magic: When the sensor layer detects that the soil moisture just shot up, the system implies, ``Aha! The user watered the plant.'' The processing service triggers an update to the user's quest progress. Physical action -> Digital Notification.
+The integration between the sensor layer and the gamification layer functions as follows: when the sensor layer detects a significant increase in soil moisture, the system infers that the user has watered the plant. The processing service then triggers an update to the user's quest progress. This establishes a direct link between physical action and digital feedback.
 
 \begin{figure}[H]
     \centering
@@ -128,7 +132,7 @@ Here is the magic: When the sensor layer detects that the soil moisture just sho
     \label{fig:user_quest_progression}
 \end{figure}
 
-And when the goal is met (say, watering 3 times in a week), the system showers the user with XP.
+When a quest goal is met (for example, watering three times in a week), the system awards the user with experience points.
 
 \begin{figure}[H]
     \centering
@@ -137,4 +141,6 @@ And when the goal is met (say, watering 3 times in a week), the system showers t
     \label{fig:xp_award}
 \end{figure}
 
-This modular design keeps the fun stuff separate from the serious plumbing. We can tune the game mechanics, such as making quests harder or adding holiday events, without ever having to touch the firmware on the edge devices.
+This modular design maintains a clear separation between the engagement logic and the underlying infrastructure. The game mechanics---such as quest difficulty or seasonal events---can be adjusted independently without modifying the firmware on the edge devices.
+
+While the architectural decisions presented in this section are grounded in established theoretical principles, their real-world effectiveness must be validated empirically. The following section presents a controlled experimental evaluation that quantifies the performance differences between MQTT and REST under realistic operating conditions, directly addressing the research question posed in the introduction.
