@@ -1,0 +1,24 @@
+This is BibTeX, Version 0.99d (MiKTeX 24.1)
+The top-level auxiliary file: Diplomarbeit.aux
+The style file: IEEEtran.bst
+Database file #1: references.bib
+Repeated entry---line 2439 of file references.bib
+ : @misc{plantUpProject
+ :                     ,
+I'm skipping whatever remains of this entry
+-- IEEEtran.bst version 1.14 (2015/08/26) by Michael Shell.
+-- http://www.michaelshell.org/tex/ieeetran/bibtex/
+-- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
+Warning--missing institution in mqttv5_oasis_2019
+Warning--missing institution in mqttv311_oasis_2014
+Warning--missing institution in esp32s3_datasheet_2025
+Warning--missing institution in rfc7230_http11_2014
+Warning--missing institution in rfc7231_http11_2014
+Warning--missing institution in rfc9293_tcp_2022
+Warning--missing institution in rfc8446_tls13_2018
+Warning--missing institution in cisco_wlan_sitesurvey_2023
+Warning--missing institution in rfc8446Tls
+Warning--missing institution in rfc7230Http
+
+Done.
+(There was 1 error message)
