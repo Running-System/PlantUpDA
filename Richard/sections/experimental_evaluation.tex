@@ -1,18 +1,18 @@
 \section{Experimental Evaluation of MQTT vs.\ REST}
 
 \subsection{Introduction to the Experiment}
-The theoretical analysis presented in Section~2 established that MQTT offers significant advantages over REST in terms of protocol overhead and energy efficiency. However, theoretical analysis alone is insufficient to guide architectural decisions for production systems. Quantitative, empirical data is required to determine the actual magnitude of the performance difference under realistic operating conditions. This experiment was designed to provide precisely such evidence, directly addressing the research question posed in the introduction by measuring the performance gap between MQTT and REST on the actual ``Plant Up!'' hardware and backend infrastructure.
+While the theoretical analysis presented in Section~2 suggested that MQTT offers distinct advantages over REST regarding protocol overhead and energy efficiency, theoretical insights alone are rarely sufficient to finalize architectural decisions for production environments. At this point, it is necessary to consider how these theoretical benefits translate into practice. Empirical, quantitative data is required to gauge the actual magnitude of the performance difference under realistic operating conditions. A closer examination of the system's behavior was therefore conducted through a targeted experiment. This evaluation attempts to directly address the research question posed initially, measuring the performance gap between MQTT and REST using the actual ``Plant Up!'' hardware and backend infrastructure.
 
 \subsection{Experimental Setup}
-To ensure the reliability and reproducibility of the results, the experimental environment was rigorously standardized. The setup consisted of three main components:
+To derive meaningful conclusions, the experimental environment needed to be reasonably standardized to ensure reproducibility. From a practical perspective, the setup was structured around three primary components:
 
 \begin{enumerate}
-    \item The Device (Edge Node): A standard ESP32-S3 unit, identical to the production hardware deployed in plant pots, was used. The firmware was modified to isolate the protocol-specific transmission time from the remainder of the boot process, using high-precision microsecond timers.
-    \item The Network: Rather than using an idealized laboratory network, the device was connected to a standard residential 2.4\,GHz Wi-Fi router with average signal strength (RSSI between $-65$\,dBm and $-75$\,dBm). This decision was made to capture protocol behavior under the realistic network conditions that end users would experience.
-    \item The Backend: All data was transmitted to the live Supabase production database. This ensures that the latency measurements include the complete end-to-end path: network travel time, database insertion, and trigger execution.
+    \item The Device (Edge Node): The tests utilized a standard ESP32-S3 unit, essentially identical to the production hardware deployed in actual plant pots. For measurement purposes, the firmware was modified to isolate the protocol-specific transmission time from the rest of the boot process, employing high-precision microsecond timers.
+    \item The Network: Instead of relying on an idealized laboratory connection, the device was linked to a standard residential 2.4\,GHz Wi-Fi router with an average signal strength (RSSI largely between $-65$\,dBm and $-75$\,dBm). This choice was mostly driven by the need to observe protocol behavior under the potentially flawed network conditions typically encountered by end users.
+    \item The Backend: All test data was routed to the live Supabase production database. This setup ensures that the latency measurements remain representative of the complete end-to-end path, encompassing network travel time, database insertion, and subsequent trigger execution.
 \end{enumerate}
 
-To eliminate the variable of sensor reading time, a static, pre-defined JSON payload was transmitted in every trial. This guarantees that the payload size remained constant across all 200 test runs.
+In an effort to avoid confounding variables, such as fluctuations in sensor reading time, a static, pre-defined JSON payload was transmitted during every trial. This approach guaranteed that the payload size stayed consistent across the 200 individual test runs.
 
 \begin{figure}[H]
     \centering
@@ -22,23 +22,24 @@ To eliminate the variable of sensor reading time, a static, pre-defined JSON pay
 \end{figure}
 
 \subsection{Methodology and Metric Acquisition}
-Data collection was fully automated to eliminate human error. The firmware executed a rigid measurement loop for each trial:
+To limit the influence of human handling variations, the data collection process was largely automated. The firmware was programmed to execute a repetitive measurement loop for each trial:
+
 \begin{enumerate}
-    \item Wake Up: The device boots from deep sleep.
-    \item Connect: The device negotiates with the Wi-Fi router.
-    \item Send: The JSON payload is serialized and transmitted using either HTTP POST or MQTT PUBLISH.
-    \item Verify: The device waits for server confirmation (HTTP 200 or MQTT PUBACK).
-    \item Sleep: The elapsed time is logged, and the device immediately returns to deep sleep.
+    \item Wake Up: The microcontroller initiates its boot sequence from deep sleep.
+    \item Connect: A connection is negotiated with the local Wi-Fi router.
+    \item Send: The predefined JSON payload is serialized and transmitted, varying only in the underlying method (HTTP POST or MQTT PUBLISH).
+    \item Verify: The device then waits for a confirmation from the server, expecting either an HTTP 200 status or an MQTT PUBACK.
+    \item Sleep: Finally, the elapsed time is recorded locally, and the device is instructed to return to deep sleep without delay.
 \end{enumerate}
 
-Three metrics were captured:
+During this cycle, three primary metrics were monitored:
 \begin{itemize}
-    \item End-to-End Latency: The total elapsed time from boot to server confirmation. This metric encompasses all phases: handshakes, serialization, and network propagation.
-    \item Effective Payload Size: Captured using Wireshark packet analysis, this metric reveals the true protocol overhead. While the application payload may be 50 bytes, the total bytes transmitted including protocol headers can be significantly larger.
-    \item Reliability: The ratio of successfully persisted packets to total transmission attempts, measured over 100 trials per protocol.
+    \item End-to-End Latency: This captures the total time elapsed from the initial boot sequence to the receipt of server confirmation. It is a comprehensive metric, encompassing handshakes, serialization delays, and overall network propagation.
+    \item Effective Payload Size: To understand the true protocol overhead, Wireshark packet analysis was employed. While a standard application payload might only be around 50 bytes, the total volume of transmitted data, once headers and protocol formatting are appended, often turns out to be noticeably larger.
+    \item Reliability: This was quantified as the ratio of successfully persisted packets against total transmission attempts, evaluated over 100 distinct trials for each protocol.
 \end{itemize}
 
-Packet arrival was verified using a SQL query on the backend:
+Consistent packet reception and persistence were later verified by executing a targeted SQL query directly on the backend infrastructure.
 
 \begin{figure}[H]
     \centering
@@ -48,7 +49,7 @@ Packet arrival was verified using a SQL query on the backend:
 \end{figure}
 
 \subsection{Experimental Results}
-The results reveal a substantial performance gap between the two protocols. Figure~\ref{fig:results_table_img} presents the aggregated results from the 100 test runs per protocol.
+An analysis of the collected data reveals a noticeable divergence in performance between the two implementations. Figure~\ref{fig:results_table_img} summarizes the aggregated metrics gathered from the 100 test runs conducted per protocol.
 
 \begin{figure}[H]
     \centering
@@ -57,14 +58,14 @@ The results reveal a substantial performance gap between the two protocols. Figu
     \label{fig:results_table_img}
 \end{figure}
 
-MQTT demonstrated significantly superior performance across all measured metrics. The average end-to-end latency for MQTT was 185\,ms, compared to 612\,ms for REST---a reduction of approximately 70\%. The difference in data usage was equally pronounced: MQTT consumed approximately 312 bytes per transmission cycle, while REST required approximately 982 bytes.
+The outcomes suggest that MQTT generally outperformed REST across the measured categories. The average end-to-end latency for MQTT was observed at 185\,ms, whereas REST required 612\,ms on average, amounting to a reduction of roughly 70\%. A similar trend was visible regarding data usage: MQTT transmissions involved approximately 312 bytes per cycle, compared to around 982 bytes for REST.
 
 \subsection{Discussion}
-These results confirm the theoretical predictions regarding the overhead of HTTP in battery-constrained IoT scenarios. The substantial difference in latency is primarily attributable to the connection establishment process. With REST, every transmission requires a full TCP three-way handshake and a TLS secure socket negotiation. The device expends more time and energy on connection setup than on the actual data transfer.
+Viewed in context, these results tend to confirm the theoretical expectations regarding HTTP overhead in battery-constrained IoT applications. The recorded latency gap seems primarily driven by the connection establishment phase. For REST, each transmission mandates a full TCP three-way handshake followed by a TLS secure socket negotiation. Under these circumstances, the device ultimately spends more time and energy simply setting up the connection rather than transmitting the actual physiological data.
 
-MQTT, while also requiring an initial connection, eliminates the verbose text-based headers characteristic of HTTP (such as \texttt{User-Agent} and \texttt{Content-Type}). Its binary protocol structure and more efficient handshake mechanism result in significantly lower per-transmission overhead.
+By contrast, MQTT, although still requiring initial negotiation, manages to omit much of the verbose text-based header information typical of HTTP, such as \texttt{User-Agent} and \texttt{Content-Type}. Its binary structure and arguably more streamlined handshake process contribute to a noticeably lower per-transmission overhead.
 
-An additional observation was that REST exhibited lower reliability under adverse network conditions. During periods of network instability, time-constrained HTTP requests occasionally timed out and failed entirely, whereas MQTT's asynchronous nature and built-in retry mechanisms allowed it to deliver packets through smaller windows of connectivity.
+An additional, somewhat unintended observation emerged regarding reliability during fluctuating network integrity. When the Wi-Fi environment became temporarily unstable, the time-constrained HTTP requests were occasionally seen to time out and fail. MQTT's asynchronous architecture, paired with its built-in retry mechanisms, appeared better equipped to maneuver partial connectivity, managing to deliver packets through narrower windows of network availability.
 
 \subsection{Conclusion}
-This experiment provides empirical evidence that MQTT is the superior protocol choice for the ``Plant Up!'' sensor layer. It achieves approximately three times lower latency and significantly reduced data usage compared to REST. While REST remains appropriate for the mobile application layer---where its request-response semantics are well-suited for loading user profiles and social content---the ESP32-S3 hardware cannot sustain the overhead of HTTP for regular sensor reporting. Based on these results, MQTT was adopted as the standard protocol for all telemetry ingestion, as it is the only viable option for achieving sufficient battery longevity in a consumer-facing product.
+From the data gathered, it becomes evident that MQTT represents a more fitting protocol choice for the deeper sensor layer of the ``Plant Up!'' ecosystem. The reduction in both latency and data usage positions it favorably compared to the REST alternative. That said, REST maintains its relevance within the mobile application layer, where its familiar request-response mechanics are entirely adequate for fetching user profiles and related social content. Nevertheless, the ESP32-S3 hardware used at the edge simply cannot comfortably sustain the persistent overhead of HTTP for its high-frequency sensor reporting. Bearing these factors in mind, MQTT was ultimately selected as the standard protocol for telemetry ingestion, offering a more viable trajectory toward achieving acceptable battery longevity in a consumer-facing product.
