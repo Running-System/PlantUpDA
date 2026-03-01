@@ -73,10 +73,10 @@ Unlike the standard REST approach, which attempts to connect two endpoints direc
 \end{figure}
 
 Packet Structure:
-Further reinforcing its efficiency, MQTT relies entirely upon a binary transmission format, which gracefully eliminates all bulky, unnecessary textual overhead. The fixed transmission header requires merely 2 bytes of space. This stands in stark contrast to traditional text-heavy HTTP headers, which can very easily accumulate to exceed several hundred bytes per single message.
+Further reinforcing its efficiency, MQTT relies entirely upon a binary transmission format, which gracefully eliminates all bulky, unnecessary textual overhead. The fixed transmission header requires merely 2 bytes of space~\cite{oasisMqtt31}. This stands in stark contrast to traditional text-heavy HTTP headers, which can very easily accumulate to exceed several hundred bytes per single message~\cite{rfc7230Http}.
 
 Quality of Service (QoS):
-MQTT further differentiates itself by providing three sliding levels of distinct delivery assurance:
+MQTT further differentiates itself by providing three sliding levels of distinct delivery assurance~\cite{oasisMqtt31}:
 \begin{itemize}
     \item QoS 0 (At most once): Effectively a blind fire-and-forget approach. It understandably consumes the least amount of energy, but assumes the risk that if a message is dropped mid-air, it is simply lost forever.
     \item QoS 1 (At least once): Prioritizes guaranteed delivery by enforcing a strict requirement for a return acknowledgment (PUBACK). This specific level generally proves most suitable for transmitting critical, actionable sensor data.
@@ -84,7 +84,7 @@ MQTT further differentiates itself by providing three sliding levels of distinct
 \end{itemize}
 
 \subsubsection{REST (Representational State Transfer)}
-REST remains the ubiquitous standard architectural style of the modern web, comfortably utilizing highly standardized HTTP methods. It mostly follows a somewhat rigid, synchronous, and resource-oriented conceptual model.
+REST remains the ubiquitous standard architectural style of the modern web, comfortably utilizing highly standardized HTTP methods~\cite{rfc7230Http}. It mostly follows a somewhat rigid, synchronous, and resource-oriented conceptual model.
 
 Request-Response Model:
 REST strictly adheres to a traditional client-server behavioral paradigm. The roaming client explicitly issues a formatted request (like GET or POST) and then sits idle, forced to wait patiently for the distant server to respond before it is permitted to proceed with further tasks.
