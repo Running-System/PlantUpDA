@@ -1,83 +1,67 @@
 \section{Methodology}
 
+This section describes the experimental design used to evaluate two architectural approaches for PlantUp: a Cloud-Centric variant with a Thin Edge, and an Edge-Centric variant with a Thick Edge. Both variants run on the same ESP32 hardware and use the same Supabase-based backend stack so that the only relevant difference is where the decision-making logic is executed. By keeping hardware, transport, and storage technologies constant, the experiments isolate the impact of logic distribution on latency, resilience, and database behavior.
+
 \subsection{Experimental Architectures}
 
-\subsubsection{Architecture A: Cloud-Centric (The "Connected" Plant)}
-\begin{itemize}
-    \item Cloud-centric design, connected model, centralized decision making, MQTT transmission, C\# service logic, historical querying, time-weighted averages, notification latency, server-side processing, dumb terminal, remote monitoring, bandwidth dependence
-    \item \textbf{[INSERT DIAGRAM: Architecture A Data Flow (Sensor $\to$ Cloud $\to$ Push Notification)]}
-    \item Source: \url{https://www.ibtimes.com/architecting-connected-retail-future-cloud-centric-data-fabric-omnichannel-agility-3793476}
-\end{itemize}
+Two architectural variants were implemented to directly compare how system behavior changes when core logic is placed in the cloud versus on the edge device. The variants follow the conceptual models defined in Section 3.2.4, with Architecture A representing a Cloud-Centric, Thin Edge approach and Architecture B representing an Edge-Centric, Thick Edge approach. The primary variable is the location of threshold evaluation and condition logic; everything else is deliberately kept as similar as possible.
 
-\subsubsection{Architecture B: Edge-Centric (The "Smart" Plant)}
-\begin{itemize}
-    \item Edge-centric design, smart device, distributed intelligence, local processing, independent operation, C++ logic, asynchronous logging, eventual consistency, disconnect tolerance, local status indication, autonomous state monitoring, bandwidth efficiency
-    \item \textbf{[INSERT DIAGRAM: Architecture B Data Flow (Sensor $\to$ Edge $\to$ Local Indication/Async Log)]}
-    \item Source: \url{https://www.mdpi.com/1424-8220/20/3/892}
-\end{itemize}
+\subsubsection{Architecture A: Cloud-Centric (The ``Connected'' Plant)}
+
+Architecture A reflects the Cloud-Centric (Thin Edge) model from Section 3.2.4.1. In this setup, decision-making is centralized in the backend, while the ESP32 focuses on collecting and forwarding measurements. The edge device periodically reads environmental sensors (soil moisture, temperature, humidity, light) and forwards them to the cloud as JSON-structured payloads. Each payload includes a measurement type, a numeric value, and a timestamp, optionally enriched with a device identifier.
+
+On the server side, the backend performs threshold evaluation and condition logic. Incoming measurements are written into TimescaleDB-backed hypertables for historical storage, and server-side rules determine whether the current state requires action (for example, ``soil moisture too low''). Notification latency is measured by recording the time between a sensor reading crossing a threshold and the corresponding push notification being delivered to the React Native app. Because all logic is in the cloud, this architecture depends strongly on network bandwidth and connectivity but simplifies device firmware and centralizes control and analytics.
+
+\textbf{[INSERT DIAGRAM: Architecture A Data Flow (Sensor $\to$ Cloud $\to$ Push Notification)]}
+
+The diagram for Architecture A shows raw sensor data flowing from the ESP32 to the cloud backend, where logic is executed and push notifications are then delivered to the user.
+
+\textbf{[INSERT CODE SNIPPET: Cloud-Centric Logic Implementation]}
+
+This code placeholder marks where the concrete cloud-side logic (for example, threshold evaluation and notification triggers) will be documented later.
+
+\subsubsection{Architecture B: Edge-Centric (The ``Smart'' Plant)}
+
+Architecture B reflects the Edge-Centric (Thick Edge) model from Section 3.2.4.2. Here, intelligence is distributed, and the ESP32 performs local threshold comparison and autonomous decision-making. The device reads sensor values, calculates derived metrics such as moisture percentage, and compares them against locally stored thresholds. Immediate local status indication, such as an LED or other indicator, is triggered directly on the device without waiting for a cloud response.
+
+Instead of sending every raw measurement, the ESP32 logs the results of its decisions to the backend as JSON payloads. These logs might contain aggregated values, decision outcomes, or compact summaries rather than full raw streams, which introduces an eventual consistency model: the backend may temporarily lag behind the device state but catches up as logs arrive. Server-side processing is reduced because much of the evaluation has already happened on the device. This architecture is more tolerant to disconnects---local behavior continues even if the backend is unavailable---while still maintaining a historical record in the database once connectivity returns.
+
+\textbf{[INSERT DIAGRAM: Architecture B Data Flow (Sensor $\to$ Edge $\to$ Local Decision / Async Log)]}
+
+The diagram for Architecture B highlights that primary decisions are made on the edge path, with asynchronous logging to the cloud for persistence and analytics.
+
+\textbf{[INSERT CODE SNIPPET: Edge-Centric Logic Implementation]}
+
+This code placeholder marks where the device-side decision logic will be described in detail later.
 
 \subsection{Implementation Details}
 
-\subsubsection{Edge Firmware (C++): Sensor Calibration and Power Management}
-\begin{itemize}
-    \item Firmware development, C++ programming, embedded systems, capacitive moisture sensing, signal smoothing, debouncing, deep sleep modes, battery optimization, data packetization, interrupt handling, robust error recovery
-    \item \textbf{[CODE SNIPPET: C++ ESP32 Deep Sleep \& Sensor Reading]}
-\end{itemize}
+Both architectures share the same data structure and backend interface. The ESP32 in each variant sends JSON documents to the same Supabase endpoints, and the backend stores data in the same schemas and tables. The only intentional difference lies in where evaluation happens: Architecture A executes most logic in the cloud, while Architecture B executes it on the device and treats the backend primarily as a logger and analytics platform.
 
-\subsubsection{Cloud Service (C\#): Implementation of the Supabase.Client and Supabase.Realtime listeners}
-\begin{itemize}
-    \item Cloud service implementation, C\# coding, Supabase SDK, real-time listeners, websocket subscription, event handling, state synchronization, database triggers, remote procedure calls, responsive backend, client library integration
-    \item \textbf{[CODE SNIPPET: C\# Supabase Realtime Listener Setup]}
-    \item Source: \url{https://github.com/supabase/realtime}
-\end{itemize}
+\subsubsection{JSON Data Structure}
 
-\subsubsection{Database Schema: Definition of sensor\_readings hypertable}
-\begin{itemize}
-    \item Schema definition, DDL statements, hypertable creation, column types, indexing strategy, partition keys, compression settings, data persistence, storage optimization, analytical capabilities, query planning
-    \item \textbf{[CODE SNIPPET: SQL for Hypertable Creation and Compression Policy]}
-    \item Source: \url{https://gunesramazan.medium.com/managing-iot-heartbeat-data-with-postgresql-timescaledb-c4984b17a341}
-\end{itemize}
+Sensor readings are serialized as JSON objects to ensure a simple and language-agnostic interface. Each object contains at least the following fields: a measurement type (for example, ``soil\_moisture'' or ``temperature''), a numeric value, a timestamp representing when the measurement was taken, and a device identifier that links the reading to a specific controller. This uniform structure enables consistent backend processing, because database ingestion and validation logic can treat Architecture A and Architecture B payloads in the same way. The same schema is used in both variants, which keeps database design and querying identical across experiments.
 
-\subsubsection{Power Supply Design and Consumption Analysis}
-\begin{itemize}
-    \item \textbf{Worst Case Scenario:} Continuous operation, all sensors active, WiFi transmission 24/7, ~168 mA continuous draw, 4032 mAh daily consumption, theoretical maximum, stress testing benchmarks
-    \item \textbf{Realistic Strategy (Deep Sleep):} Cyclic operation, 10-minute reporting interval, ~2-5 mA average consumption, user-configurable frequency, deep sleep (~0.1 mA), active burst (~150 mA for 3s), efficient power management
-    \item \textbf{Power Architecture:} Rechargeable LiPo battery (3.7V), Dual charging path (USB-C + Solar), BQ24074 Power Management Module, automatic source switching, stable voltage regulation, outdoor autonomy
-    \item \textbf{Component Specifications:} LiPo Capacity (3000-5000 mAh), Solar Panel (5-6V, 1-2W, outdoor-proof), Voltage Regulator (Integrated)
-    \item \textbf{Battery Life Projections:} 
-        \begin{itemize}
-            \item 3000 mAh Battery: ~3 mA avg $\rightarrow$ ~1000 hours $\rightarrow$ approx. 41 days
-            \item 5000 mAh Battery: ~3 mA avg $\rightarrow$ ~1666 hours $\rightarrow$ approx. 69 days (>2 months)
-        \end{itemize}
-    \item \textbf{[INSERT GRAPH: Power Consumption Profile (Deep Sleep vs Active Burst)]}
-    \item Source: \url{https://running-system.atlassian.net/wiki/spaces/RS/pages/126550051/Power+Management+Research}
-\end{itemize}
+\subsubsection{Backend Integration}
+
+On the backend, both architectures integrate with Supabase using a shared access pattern. The system uses client libraries to write JSON data into Postgres tables, with realtime subscriptions for live updates and database triggers for secondary processing such as notifications or aggregation. State synchronization between device logs and user-facing views is handled through these triggers and subscriptions, allowing the React Native app to present near-real-time status changes. Historical querying is performed via TimescaleDB features on the same unified schema, ensuring that architectural differences do not require different query strategies.
 
 \subsection{Test Scenarios}
-\begin{itemize}
-    \item Source: \url{https://www.geeksforgeeks.org/software-testing/system-testing/}
-    \newline
-    \url{https://github.com/timescale/tsbs}
-    \newline
-    \url{https://www.bytebase.com/blog/postgres-row-level-security-limitations-and-alternatives/}
-    \newline
-    \url{https://supabase.com/docs/guides/realtime/benchmarks}
-\end{itemize}
 
-
+To compare the two architectures fairly, controlled experiments were designed around key system qualities: latency, scalability, resilience, and database performance. Each scenario focuses on one dominant factor while keeping other conditions stable, similar to common system and performance testing practices. The same measurement scripts and dashboards are used for both Architecture A and Architecture B to ensure comparability.\cite{blog_elest_supabase_self_host}
 
 \subsubsection{Scenario 1: Ideal Conditions}
-\begin{itemize}
-    \item Baseline testing, ideal environment, low latency, zero packet loss, stable connectivity, theoretical maximums, benchmarking, optimal performance, clean signal, control group, reference measurements
-\end{itemize}
 
-\subsubsection{Scenario 2: Database Load (Simulating 1,000 concurrent writes to TimescaleDB)}
-\begin{itemize}
-    \item Load testing, stress test, concurrent users, high ingestion rate, database bottlenecks, resource contention, write blocking, 1000 connections, performance degradation, scalability limits, system stability, latency spike
-    \item \textbf{[INSERT PICTURE: Load Testing Setup / Console Logs]}
-\end{itemize}
+Scenario 1 serves as the baseline. The system is tested under stable connectivity with low network latency and no artificial load or failure injection. The goal is to measure reference values for notification latency, end-to-end response time, and database write performance when everything is ``healthy.'' These baseline results provide a comparison point for the more stressful scenarios that follow.
 
-\subsubsection{Scenario 3: Service Outage (Simulating a crash of the C\# Microservice)}
-\begin{itemize}
-    \item Resilience testing, fault injection, service crash, chaos engineering, availability test, outage simulation, watchdog timers, system recovery, safety verification, data loss analysis, fail-safe behavior
-\end{itemize}
+\subsubsection{Scenario 2: Database Load (1,000 Concurrent Writes)}
+
+Scenario 2 focuses on scalability and database behavior under stress. Here, the backend is subjected to a high ingestion rate of approximately 1,000 concurrent write operations, simulating many devices or bursts of data. The experiment observes latency spikes, resource contention, and how quickly the system returns to normal levels once the peak subsides. The results reveal how each architecture behaves when the database becomes a bottleneck and whether one approach tolerates temporary slowdowns better than the other.
+
+\textbf{[INSERT PICTURE: Load Testing Setup / Console Logs]}
+
+The picture will later illustrate the load-testing environment, including representative console logs and monitoring dashboards.
+
+\subsubsection{Scenario 3: Service Outage Simulation}
+
+Scenario 3 evaluates resilience by deliberately introducing failures. A simulated backend outage (for example, by temporarily disabling database access or core backend services) is used to study how each architecture responds. Measurements include recovery behavior once services return, the extent of data loss or delayed writes, and how well fail-safe mechanisms protect the plant during the outage. Availability testing in this scenario highlights the advantages of local autonomy in the Edge-Centric design and the trade-offs of depending on remote services in the Cloud-Centric design.
