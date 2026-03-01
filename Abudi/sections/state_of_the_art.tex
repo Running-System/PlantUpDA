@@ -1,5 +1,25 @@
 \section{Theoretical Framework}
 
+\subsection{Foundations of the Internet of Things (IoT)}
+
+\subsubsection{The Concept of the Social Internet of Things (SIoT)}
+\begin{itemize}
+    \item Integrating social concepts into connected devices, autonomous relationships between objects, shifting from passive sensors to active agents, collaborative data sharing, enhancing user engagement through personalized device interaction. 
+\end{itemize}
+
+\subsubsection{The IoT World Forum Reference Model (7-Layer Model)}
+\begin{itemize}
+    \item \textbf{Layer 1: Physical Devices \& Controllers (The "Edge"):} The ESP32 and sensors (moisture, light, temperature) acting as the physical endpoints.
+    \item \textbf{Layer 2: Connectivity:} The communication protocols (Wi-Fi, MQTT, HTTPS) connecting devices to the broader network.
+    \item \textbf{Layer 3: Edge (Fog) Computing:} Data element analysis and transformation performed near the source. This is the crux of the Edge vs. Cloud debate for PlantUp.
+    \item \textbf{Layer 4: Data Accumulation:} Storing data in transit, often handled by message brokers or initial database ingestion (Supabase).
+    \item \textbf{Layer 5: Data Abstraction:} Aggregating and structuring data for application use (TimescaleDB hypertables).
+    \item \textbf{Layer 6: Application:} The specific business logic and user interface (PlantUp React Native App, Gamification Engine).
+    \item \textbf{Layer 7: Collaboration \& Processes:} How the data drives human action and social interaction (Social Media feeds, sharing plant status).
+    \item \textbf{The Architectural Question:} The IoT World Forum Model explicitly defines "Edge Computing" at Layer 3. The primary trade-off analyzed in this thesis is how much logic should remain at Layer 3 (Edge) versus being pushed up to Layer 5/6 (Cloud) for a consumer product.
+    \item \textbf{[INSERT DIAGRAM: The 7-Layer IoT World Forum Reference Model]}
+\end{itemize}
+
 \subsection{Modern IoT Backends}
 
 \subsubsection{Backend-as-a-Service (BaaS): The Role of Supabase in IoT}
@@ -30,7 +50,7 @@
 
 \subsection{Microservices in IoT}
 
-\subsubsection{The "Gateway Pattern": Using a C\# Service to bridge MQTT and Database}
+\subsubsection{The ``Gateway Pattern'': Using a C\# Service to bridge MQTT and Database}
 \begin{itemize}
     \item Gateway design pattern, architectural patterns, C\# middleware, .NET Core, MQTT broker, database bridge, decoupling services, protocol translation, message buffering, security boundary, data normalization, traffic throttling
     \item \textbf{[CODE SNIPPET: C\# Worker Service Basic Structure]}
@@ -43,17 +63,26 @@
     \item Source: \url{https://www.geeksforgeeks.org/system-design/microservices-communication-patterns/}
 \end{itemize}
 
-\subsection{Edge Computing Patterns}
+\subsection{Architectural Paradigms: Edge vs. Cloud}
 
-\subsubsection{Cloud Computing, Fog Computing, and Edge Computing}
+\subsubsection{Defining the Cloud-Centric Model}
 \begin{itemize}
-    \item \textbf{Cloud Computing:} Centralized processing, high computational power, high latency, infinite storage, global access.
-    \item \textbf{Fog Computing:} Intermediate layer, gateway processing, local area network, bridging Edge and Cloud, reduced latency compared to Cloud.
-    \item \textbf{Edge Computing:} Source processing, on-device logic, microcontroller level, lowest latency, real-time response, limited resources.
-    \item \textbf{[INSERT FIGURE: Cloud vs. Fog vs. Edge Architecture Pyramid]}
+    \item \textbf{Definition:} Centralized processing where all computational heavy lifting, data storage, and decision-making occur in remote data centers.
+    \item \textbf{Strengths:} Near-infinite computational power, seamless horizontal scalability, massive storage capacity (e.g., Supabase, TimescaleDB), global accessibility, and simplified device management since edge nodes act merely as "dumb sensors."
+    \item \textbf{Weaknesses:} Complete reliance on a continuous internet connection, unavoidable network latency (round-trip time), potential privacy concerns with raw data transmission, and ongoing bandwidth costs.
 \end{itemize}
 
-\subsubsection{"Thick Edge" vs. "Thin Edge": How much logic should the microcontroller hold?}
+\subsubsection{Defining the Edge-Centric Model}
 \begin{itemize}
-    \item Edge architecture, Thick Edge, Thin Edge, logic distribution, processing offload, local autonomy, bandwidth conservation, resource constraints, computational power, firmware complexity, distributed intelligence, architectural trade-offs, remote management
+    \item \textbf{Definition:} Decentralized processing where computation, data aggregation, and autonomous decision-making occur locally on or near the physical device generating the data (e.g., the ESP32 in the plant pot).
+    \item \textbf{Strengths:} Ultra-low latency for immediate actuation, high fault tolerance (continues operating offline), drastic reduction in network bandwidth usage, and improved privacy as only aggregated insights leave the local network.
+    \item \textbf{Weaknesses:} Severe hardware constraints (CPU, RAM, battery life), complex firmware updates, difficult long-term remote debugging, and vulnerability to physical device damage or theft.
+    \item \textbf{[INSERT FIGURE: Visual Comparison of Cloud vs. Edge Architectures]}
+\end{itemize}
+
+\subsubsection{The Spectrum of Logic Distribution: ``Thick Edge'' vs. ``Thin Edge''}
+\begin{itemize}
+    \item \textbf{Thin Edge (Cloud-Heavy):} The microcontroller only reads the sensor and transmits the raw voltage. The Cloud calculates the moisture percentage and decides if the plant needs water.
+    \item \textbf{Thick Edge (Edge-Heavy):} The microcontroller reads the sensor, calculates the percentage, compares it against an onboard threshold, triggers a local LED alert, and only sends a daily summary to the Cloud.
+    \item \textbf{The Architectural Trade-off:} The thesis explores exactly where on this spectrum a consumer IoT device like PlantUp should securely sit to balance battery longevity against user engagement.
 \end{itemize}

@@ -11,35 +11,26 @@
 
 \subsection{The Microservices Layer (Cloud)}
 
-\subsubsection{User \& Social Media Services: Gamification and Content Sharing}
+\subsubsection{Application Layer Services: Gamification, Social, and Shop Integration}
 \begin{itemize}
-    \item Social microservices, gamification engine, PostgreSQL schemas, user profiles, experience points (XP), leaderboards, achievement system, social graphs, user interactions, relational data modeling, reward logic, competition mechanics
-    \item \textbf{Social Media Features:} Video upload pipeline, automatic thumbnail generation, post creation, Supabase Storage buckets, media metadata, content delivery network (CDN) integration, secure signed URLs, social feed algorithms
-    \item \textbf{[INSERT DIAGRAM: Gamification Database Schema (ERD)]}
-    \item \textbf{[INSERT DIAGRAM: Video Upload and Thumbnail Generation Flow]}
-    \item Source: \url{https://www.cloudflare.com/learning/cdn/what-is-a-cdn/} \newline \url{https://supabase.com/docs/guides/storage/cdn/fundamentals}
+    \item \textit{Note: While PlantUp includes extensive Application Layer features (e.g., a Shopify integration for plant care products, a Social Feed using Supabase Storage for images/video, and a Gamification Engine for quests), these exist at Layer 6/7 of the IoT Reference Model.}
+    \item \textbf{Architectural Relevance:} These services mandate a Cloud presence. The thesis briefly acknowledges their existence to demonstrate \textit{why} a pure Edge-only model is impossible for a Social IoT product, but does not provide a deep technical analysis of CDN caching or e-commerce webhooks, focusing instead on the data processing pipeline.
 \end{itemize}
 
-\subsubsection{Webshop Service: Shopify Integration}
+\subsubsection{Microcontroller Management Service: The C\# .NET Core Data Orchestrator}
 \begin{itemize}
-    \item Shopify platform, SaaS e-commerce, API integration, inventory management, external service, seamless user experience, checkout process, webhook sync, product catalog, managed hosting, third-party plugin ecosystem
-    \item \textbf{[INSERT SCREENSHOT: PlantUp Shop Concept on Shopify]}
-    \item Source: \url{https://www.cloudflare.com/de-de/learning/cloud/what-is-saas/} \newline \url{https://www.techtarget.com/searchcloudcomputing/definition/Software-as-a-Service}
-\end{itemize}
-
-\subsubsection{Microcontroller Management Service: The C\# .NET Core Worker}
-\begin{itemize}
-    \item Background worker, .NET ecosystem, device management, command orchestration, state synchronization, keep-alive monitoring, message processing, centralized control, device registry, firmware updates (OTA), scalable architecture
-    \item \textbf{[CODE SNIPPET: C\# Device State Manager Class]}
+    \item C\# .NET Core worker, background processing, telemetry ingestion logic, state synchronization, keep-alive monitoring, message buffering, error handling, batch processing sensor streams before database insertion, remote procedure call coordination.
+    \item \textit{Note: The usage of MQTT as the transport mechanism for this telemetry data is detailed in Onuha's section (Chapter X). The focus here is strictly on the C\# service's processing logic upon receiving that data.}
+    \item \textbf{[CODE SNIPPET: C\# Device State Manager Buffer/Batching Class]}
     \item Source: \url{https://learn.microsoft.com/en-us/aspnet/core/fundamentals/host/hosted-services?view=aspnetcore-10.0&tabs=visual-studio}
 \end{itemize}
 
 \subsection{The Data Persistence Layer (Supabase)}
 
-\subsubsection{Unified Database Strategy: Single Postgres instance with logical schema separation}
+\subsubsection{Unified Database Strategy: Consolidating Object Storage and Time-Series Data}
 \begin{itemize}
-    \item Database consolidation, single instance, logical isolation, schema-based multitenancy, operational simplicity, reduced overhead, unified backup, cross-schema querying, management efficiency, Postgres roles, access control
- 
+    \item Database consolidation, unified access model, mixing relational (User/Social) with time-series (Sensor) data within a single Postgres instance, operational simplicity, cross-schema querying, logical isolation.
+    \item \textit{Note: The conceptual decoupling of these schemas for Microservice independence is covered in Onuha's section (Chapter X). The focus here is on the technical integration of TimescaleDB and Supabase Storage within that unified structure.}
 \end{itemize}
 
 \subsubsection{The microcontroller\_data Schema: Utilizing the TimescaleDB Extension}

@@ -1,6 +1,5 @@
 \section{Introduction}
 
-\subsection{Background}
 
 \subsubsection{Microservices in Gardening}
 \begin{itemize}
@@ -23,16 +22,16 @@
 
 \subsubsection{Primary Question}
 \begin{itemize}
-    \item \textbf{"What are the trade-offs between edge and cloud processing for real-time plant monitoring in consumer gardening systems?"}
-    \item Edge computing benefits, Cloud computing benefits, latency vs. throughput, cost vs. complexity, data integrity, system reliability, user experience impact
+    \item \textbf{"What are the fundamental differences between Edge and Cloud processing within a microservices architecture, and what trade-offs do they present when implementing real-time monitoring, as demonstrated by the 'Plant Up!' ecosystem?"}
+    \item Defining Edge vs. Cloud computing, utilizing PlantUp as the comparative case study, latency vs. throughput, cost vs. complexity, data integrity, system reliability, analyzing the impact of logic placement on the final product.
 \end{itemize}
 
 \subsection{Scope and Limitations}
 
-\subsubsection{Focus on Consumer Hardware (ESP32/ESP8266)}
+\subsubsection{Computational Constraints of the Edge Device (ESP32)}
 \begin{itemize}
-    \item Consumer-grade electronics, ESP32 capabilities, ESP8266 limitations, cost-effectiveness, accessibility, hobbyist market, maker community, hardware constraints, memory limits, processing power, WiFi modules, microcontroller adoption
-    \item \textbf{[INSERT PICTURE: ESP32/ESP8266 Microcontroller Setup]}
+    \item Architectural driver, processing limitations, ESP32 CPU capabilities, memory footprint for logic execution, balancing data collection vs. local decision-making, Edge-side data aggregation strategies.
+    \item \textit{Note: The specific network constraints, awake-time mechanics, and energy consumption profile of the ESP32 hardware are extensively detailed in Onuha's section (Chapter X). This section focuses strictly on how those physical limitations dictate the distribution of processing logic.}
 \end{itemize}
 
 \subsubsection{Comparison limited to Processing Location (Edge vs. Cloud), not Transport Protocols (MQTT assumed)}
