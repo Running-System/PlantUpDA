@@ -3,6 +3,7 @@
 PlantUp translates the theoretical concepts from Section 3.2 into a concrete architecture for a social smart-gardening system. The design follows the IoT layered model, decomposes backend logic into microservices, and uses a gateway-based approach to abstract device communication. At the same time, it deliberately distributes logic between Edge and Cloud to balance responsiveness, robustness, and long-term analytics.
 
 \subsection{System Overview}
+The PlantUp architecture connects a physical edge device with a scalable cloud backend, serving data to a mobile frontend. This overview outlines the high-level data flow from soil measurement to user interaction before detailing the specific microservices that enable this pipeline.
 
 \subsubsection{High-Level Diagram: From Sensor to React Native App}
 
@@ -37,6 +38,7 @@ This service maintains a logical representation of each controller (for example,
 PlantUp uses a unified Postgres-based backend to integrate relational data, time-series telemetry, and media objects within a single managed environment. This aligns with the theoretical view from Section 3.2.2, where a BaaS platform like Supabase provides both relational modeling capabilities and time-series extensions, plus integrated storage for binary data.
 
 \subsubsection{Unified Database Strategy}
+To maintain a single source of truth while supporting diverse access patterns, PlantUp structures its data within a unified environment. This strategy consolidates everything from user profiles to raw sensor logs without requiring multiple disparate database systems.
 
 At the core, PlantUp relies on a single managed Postgres instance provided by Supabase. Within this instance, the database is structured into logical schemas to keep concerns separated while still allowing cross-schema operations. The social schema contains entities such as users, plants, posts, comments, and gamification-related tables, capturing the ``social graph'' and application state. The micro schema focuses on controller-related entities and sensor measurements, representing the raw and derived environmental data from devices.
 
