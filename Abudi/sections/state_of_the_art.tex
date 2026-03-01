@@ -1,9 +1,7 @@
 \section{Theoretical Framework}
+This section establishes the conceptual foundations necessary to understand scalable smart gardening systems. It introduces standardized reference models for IoT architectures, explores modern cloud backend solutions like Backend-as-a-Service (BaaS), and details database strategies for handling high-frequency sensor data. These theoretical building blocks provide the context for the concrete PlantUp architecture discussed in Chapter 4.
 
-\subsection{Foundations of the Internet of Things (IoT)}
-
-
-\subsubsection{The IoT World Forum Reference Model (7-Layer Model)}
+\subsection{The IoT World Forum Reference Model (7-Layer Model)}
 To reason systematically about IoT architectures, this thesis uses the IoT World Forum 7-Layer Reference Model as a conceptual map. A layered architecture breaks a complex system into ordered levels, where each layer has a defined role and clear interfaces to the layers above and below it. In the IoT World Forum model, Layer 1 (Physical Devices \& Controllers) represents the ``edge'' hardware such as ESP32 boards and their moisture, light, and temperature sensors, which directly interact with the physical environment. Layer 2 (Connectivity) covers the communication technologies like Wi-Fi, MQTT, and HTTPS that transport data between devices and backend systems.
 
 Layer 3 (Edge or Fog Computing) contains processing that happens close to the data source, such as filtering, threshold checks, or basic aggregation on a local gateway or directly on the microcontroller. Edge computing is the practice of performing computation near where data is generated, instead of sending everything to a distant cloud, primarily to reduce latency and bandwidth usage. Layer 4 (Data Accumulation) focuses on storing data in transit and buffering it for further processing, for example via message brokers or initial ingestion into a managed database or BaaS platform. Data accumulation in this sense means persisting raw streams in a form that later layers can query reliably.
