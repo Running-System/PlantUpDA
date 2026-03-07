@@ -1,65 +1,47 @@
 \section{Methodology}
 
-This section describes the experimental design used to evaluate two architectural approaches for PlantUp: a Cloud-Centric variant with a Thin Edge, and an Edge-Centric variant with a Thick Edge. Both variants run on the same ESP32 hardware and use the same Supabase-based backend stack so that the only relevant difference is where the decision-making logic is executed. By keeping hardware, transport, and storage technologies constant, the experiments isolate the impact of logic distribution on latency, resilience, and database behavior.
+This section describes the experimental design used to objectively evaluate the architectural decisions made for the PlantUp ecosystem. A core conclusion of Chapter 3 was the theoretical superiority of a Cloud-Centric, ``Thin Edge'' model for this specific botanical domain. To empirically validate this decision, controlled experiments were designed to measure the impact of logic distribution on system latency, scalability, and backend resilience.
 
-\subsection{Experimental Architectures}
+\subsection{Experimental Control Framework}
 
-Two architectural variants were implemented to directly compare how system behavior changes when core logic is placed in the cloud versus on the edge device. The variants follow the conceptual models defined in Section 3.2.4, with Architecture A representing a Cloud-Centric, Thin Edge approach and Architecture B representing an Edge-Centric, Thick Edge approach. The primary variable is the location of threshold evaluation and condition logic; everything else is deliberately kept as similar as possible.
+Rather than testing the deployed architecture in isolation, an experimental control group was constructed to facilitate direct comparative analysis. 
 
-\subsubsection{Architecture A: Cloud-Centric (The ``Connected'' Plant)}
+\subsubsection{Architecture A: Cloud-Centric (Deployed Variant)}
+Architecture A serves as the primary system under test, representing the \textit{Thin Edge} paradigm fully deployed and detailed in Chapter 4. In this variant, the ESP32 hardware functions exclusively as a data ingress vector, generating raw JSON payloads containing sensor telemetry. All threshold evaluation, condition logic, and historical aggregation are executed centrally within the Supabase cloud infrastructure.
 
-Architecture A reflects the Cloud-Centric (Thin Edge) model from Section 3.2.4.1. In this setup, decision-making is centralized in the backend, while the ESP32 focuses on collecting and forwarding measurements. The edge device periodically reads environmental sensors (soil moisture, temperature, humidity, light) and forwards them to the cloud as JSON-structured payloads. Each payload includes a measurement type, a numeric value, and a timestamp, optionally enriched with a device identifier.
+\subsubsection{Architecture B: Edge-Centric (Control Variant)}
+Architecture B represents a \textit{Thick Edge} mock-up, built strictly as a comparative control group. In this variant, threshold comparison and autonomous decision-making are shifted back directly onto the ESP32 firmware. The device still transmits data to the cloud, but the payloads consist of asynchronous decision logs and state summaries rather than high-frequency raw telemetry. By comparing Architecture B against the deployed Architecture A, the experiment aims to quantify the exact latency penalty and structural trade-offs exacted by the Thin Edge approach.
 
-On the server side, the backend performs threshold evaluation and condition logic. Incoming measurements are written into TimescaleDB-backed hypertables for historical storage, and server-side rules determine whether the current state requires action (for example, ``soil moisture too low''). Notification latency is measured by recording the time between a sensor reading crossing a threshold and the corresponding push notification being delivered to the React Native app. Because all logic is in the cloud, this architecture depends strongly on network bandwidth and connectivity but simplifies device firmware and centralizes control and analytics.
+\subsection{Implementation Constraints}
 
-\textbf{[INSERT DIAGRAM: Architecture A Data Flow (Sensor $\to$ Cloud $\to$ Push Notification)]}
+To ensure that the only independent variable in the experiment is the \textit{location} of the operational logic, both architectures are constrained by identical structural bounds:
+\begin{itemize}
+    \item \textbf{Hardware:} Both variants execute on the exact same physical ESP32 microcontrollers.
+    \item \textbf{Transport:} Both variants utilize identical MQTT message brokers and Wi-Fi environments.
+    \item \textbf{Payload Anatomy:} Both variants serialize data into standardized JSON objects, differing only in frequency and semantic content (raw measurements vs. decision logs).
+    \item \textbf{Persistence:} Both instances write to identical Supabase endpoints, targeting the same PostgreSQL schemata and TimescaleDB hypertables.
+\end{itemize}
 
-The diagram for Architecture A shows raw sensor data flowing from the ESP32 to the cloud backend, where logic is executed and push notifications are then delivered to the user.
+\subsection{Measurement Methodology and Environment}
 
-\textbf{[INSERT CODE SNIPPET: Cloud-Centric Logic Implementation]}
+To guarantee the reproducibility of these performance benchmarks, the testing environment and diagnostic methodologies have been standardized.
 
-This code placeholder marks where the concrete cloud-side logic (for example, threshold evaluation and notification triggers) will be documented later.
+\subsubsection{Testing Environment}
+The backend infrastructure evaluating the payloads was hosted on a \textbf{[INSERT SERVER / NETWORK SPECS HERE]} environment, ensuring a stable baseline devoid of transient local computing bottlenecks. The load generation defining the stress tests was orchestrated using \textbf{[INSERT TESTING TOOL HERE]}, simulating diverse traffic patterns originating outside the local networking subnet to accurately represent real-world cellular and remote Wi-Fi latency.
 
-\subsubsection{Architecture B: Edge-Centric (The ``Smart'' Plant)}
-
-Architecture B reflects the Edge-Centric (Thick Edge) model from Section 3.2.4.2. Here, intelligence is distributed, and the ESP32 performs local threshold comparison and autonomous decision-making. The device reads sensor values, calculates derived metrics such as moisture percentage, and compares them against locally stored thresholds. Immediate local status indication, such as an LED or other indicator, is triggered directly on the device without waiting for a cloud response.
-
-Instead of sending every raw measurement, the ESP32 logs the results of its decisions to the backend as JSON payloads. These logs might contain aggregated values, decision outcomes, or compact summaries rather than full raw streams, which introduces an eventual consistency model: the backend may temporarily lag behind the device state but catches up as logs arrive. Server-side processing is reduced because much of the evaluation has already happened on the device. This architecture is more tolerant to disconnects---local behavior continues even if the backend is unavailable---while still maintaining a historical record in the database once connectivity returns.
-
-\textbf{[INSERT DIAGRAM: Architecture B Data Flow (Sensor $\to$ Edge $\to$ Local Decision / Async Log)]}
-
-The diagram for Architecture B highlights that primary decisions are made on the edge path, with asynchronous logging to the cloud for persistence and analytics.
-
-\textbf{[INSERT CODE SNIPPET: Edge-Centric Logic Implementation]}
-
-This code placeholder marks where the device-side decision logic will be described in detail later.
-
-\subsection{Implementation Details}
-
-Both architectures share the same data structure and backend interface. The ESP32 in each variant sends JSON documents to the same Supabase endpoints, and the backend stores data in the same schemas and tables. The only intentional difference lies in where evaluation happens: Architecture A executes most logic in the cloud, while Architecture B executes it on the device and treats the backend primarily as a logger and analytics platform.
-
-\subsubsection{JSON Data Structure}
-
-Sensor readings are serialized as JSON objects to ensure a simple and language-agnostic interface. Each object contains at least the following fields: a measurement type (for example, ``soil\_moisture'' or ``temperature''), a numeric value, a timestamp representing when the measurement was taken, and a device identifier that links the reading to a specific controller. This uniform structure enables consistent backend processing, because database ingestion and validation logic can treat Architecture A and Architecture B payloads in the same way. The same schema is used in both variants, which keeps database design and querying identical across experiments.
-
-\subsubsection{Backend Integration}
-
-On the backend, both architectures integrate with Supabase using a shared access pattern. The system uses client libraries to write JSON data into Postgres tables, with realtime subscriptions for live updates and database triggers for secondary processing such as notifications or aggregation. State synchronization between device logs and user-facing views is handled through these triggers and subscriptions, allowing the React Native app to present near-real-time status changes. Historical querying is performed via TimescaleDB features on the same unified schema, ensuring that architectural differences do not require different query strategies.
+\subsubsection{Latency Calculation}
+Crucially, end-to-end ingestion latency is not calculated via standard HTTP round-trip bounds, as the MQTT ingress pathway is inherently asynchronous. Instead, latency is empirically derived via differential timestamping. When the ESP32 generates a reading, it injects a highly precise local generation timestamp into the JSON payload. Upon successful ingestion and insertion into the TimescaleDB hypertable, Supabase automatically affixes a \texttt{created\_at} server-side timestamp. The absolute latency per transaction is subsequently calculated by subtracting the ESP32 generation timestamp from the PostgreSQL finalization timestamp, accurately representing the total time required for data transmission, MQTT broker handling, gateway normalization, and final database write.
 
 \subsection{Test Scenarios}
 
-To compare the two architectural paradigms fairly, controlled experiments were designed around crucial system metrics: latency, scalability, and database resilience. The foundational hypothesis underpinning this project favored the Cloud-Centric (Thin Edge) architecture due to its stark reduction in device-side firmware complexity and superior maintainability. However, it was necessary to empirically quantify the inevitable performance degradation introduced by cloud round-trip latency and determine if it remained within acceptable operational bounds. Given the domain context—botanical physiology—environmental metrics such as soil moisture do not necessitate sub-second, real-time reactivity. Intermittent state snapshots captured every 5 to 10 minutes provide entirely sufficient granularity for effective plant monitoring. Therefore, the goal of these test scenarios is strictly to ensure that the Thin Edge penalty does not violate these broader conceptual tolerances. The same measurement scripts and dashboards are used for both Architecture A and Architecture B to ensure rigorous comparability~\cite{blog_elest_supabase_self_host}.
+The controlled experiments were structured into two distinct scenarios, designed to evaluate the system under both normal operational cadence and extreme edge-case volatility.
 
-\subsubsection{Scenario 1: Baseline Operational Conditions}
+\subsubsection{Scenario 1: Baseline Operational Thresholds}
+Scenario 1 serves as the benchmark reference, simulating healthy, standard network conditions. The objective is to record native latency variations and end-to-end response times under standard snapshot intervals (e.g., payloads transmitted every 5 to 10 minutes). The goal is to verify that the fundamental network latency introduced by offloading logic to the cloud (Architecture A) remains comfortably within the loose real-time requirements of botanical monitoring.
 
-Scenario 1 serves as the benchmark reference. The system is evaluated under stable Wi-Fi connectivity with standard network latency, absent of any artificial load injection. The objective is to record the native baseline measurements for notification latency, end-to-end response time, and database write throughput under optimal, "healthy" operational conditions. These baseline results establish the comparative foundation for the subsequent stress testing.
+\subsubsection{Scenario 2: Infrastructure Stress Test (Disaster Recovery Spike)}
+Scenario 2 shifts focus from latency to backend resilience, evaluating how the unified monolithic database degrades under intense transactional stress.
 
-\subsubsection{Scenario 2: Infrastructure Stress Test (1,000 Concurrent Writes)}
+To push the infrastructure to its structural limits, the test suite injects an immediate, simultaneous burst of 1,000 concurrent write operations into the backend API. It is critical to note that this specific volume does not represent a standard "Daily Active User" (DAU) load. In normal operation, 1,000 daily users generating 5-minute snapshots produce an exceptionally low continuous ingestion rate of less than one write per second. 
 
-Scenario 2 evaluates system scalability and database resilience under intense transactional stress. Unlike the steady, 5-to-10-minute snapshot intervals expected during normal operation, this scenario subjects the backend API to a sustained ingestion burst of exactly 1,000 concurrent write operations. This specific volume was deliberately selected based on project projections: the PlantUp ecosystem is architecturally designed to support an expected minimum baseline of 1,000 daily active users. Simulating 1,000 concurrent writes therefore represents a realistic, peak-traffic stress test for the provisioned infrastructure.
-
-By simulating massive, synchronized burst traffic (resembling thousands of devices simultaneously reconnecting and finalizing queued payloads after a widespread network outage), the experiment observes resulting latency spikes, backend resource contention, and how swiftly the ingestion queues normalize once the peak subsides. The resulting data dictates how each architectural variant degrades under extreme pressure, and whether the unified database strategy requires structural scaling adjustments to accommodate real-world deployment growth.
-
-\textbf{[INSERT PICTURE: Load Testing Setup / Console Logs]}
-
-The accompanying figure illustrates the load-testing environment, specifically displaying representative console logs and the Supabase monitoring dashboards during the ingestion spike.
+Instead, this concurrency spike mathematically models a massive \textit{Disaster Recovery} event—simulating a widespread ISP or Wi-Fi outage ending, causing an entire fleet of 1,000 disconnected ESP32 devices to regain connectivity and flush their locally queued payloads at the exact same millisecond. By stressing the system with this theoretical worst-case synchronization event, the experiment observes database lock contention, processor queuing, and how rapidly the architecture normalizes once the peak subsides.
