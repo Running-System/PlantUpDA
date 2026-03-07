@@ -48,20 +48,18 @@ On the backend, both architectures integrate with Supabase using a shared access
 
 \subsection{Test Scenarios}
 
-To compare the two architectures fairly, controlled experiments were designed around key system qualities: latency, scalability, resilience, and database performance. Each scenario focuses on one dominant factor while keeping other conditions stable, similar to common system and performance testing practices. The same measurement scripts and dashboards are used for both Architecture A and Architecture B to ensure comparability.\cite{blog_elest_supabase_self_host}
+To compare the two architectural paradigms fairly, controlled experiments were designed around crucial system metrics: latency, scalability, and database resilience. The foundational hypothesis underpinning this project favored the Cloud-Centric (Thin Edge) architecture due to its stark reduction in device-side firmware complexity and superior maintainability. However, it was necessary to empirically quantify the inevitable performance degradation introduced by cloud round-trip latency and determine if it remained within acceptable operational bounds. Given the domain context—botanical physiology—environmental metrics such as soil moisture do not necessitate sub-second, real-time reactivity. Intermittent state snapshots captured every 5 to 10 minutes provide entirely sufficient granularity for effective plant monitoring. Therefore, the goal of these test scenarios is strictly to ensure that the Thin Edge penalty does not violate these broader conceptual tolerances. The same measurement scripts and dashboards are used for both Architecture A and Architecture B to ensure rigorous comparability~\cite{blog_elest_supabase_self_host}.
 
-\subsubsection{Scenario 1: Ideal Conditions}
+\subsubsection{Scenario 1: Baseline Operational Conditions}
 
-Scenario 1 serves as the baseline. The system is tested under stable connectivity with low network latency and no artificial load or failure injection. The goal is to measure reference values for notification latency, end-to-end response time, and database write performance when everything is ``healthy.'' These baseline results provide a comparison point for the more stressful scenarios that follow.
+Scenario 1 serves as the benchmark reference. The system is evaluated under stable Wi-Fi connectivity with standard network latency, absent of any artificial load injection. The objective is to record the native baseline measurements for notification latency, end-to-end response time, and database write throughput under optimal, "healthy" operational conditions. These baseline results establish the comparative foundation for the subsequent stress testing.
 
-\subsubsection{Scenario 2: Database Load (1,000 Concurrent Writes)}
+\subsubsection{Scenario 2: Infrastructure Stress Test (1,000 Concurrent Writes)}
 
-Scenario 2 focuses on scalability and database behavior under stress. Here, the backend is subjected to a high ingestion rate of approximately 1,000 concurrent write operations, simulating many devices or bursts of data. The experiment observes latency spikes, resource contention, and how quickly the system returns to normal levels once the peak subsides. The results reveal how each architecture behaves when the database becomes a bottleneck and whether one approach tolerates temporary slowdowns better than the other.
+Scenario 2 evaluates system scalability and database resilience under intense transactional stress. Unlike the steady, 5-to-10-minute snapshot intervals expected during normal operation, this scenario subjects the backend API to a sustained ingestion burst of exactly 1,000 concurrent write operations. This specific volume was deliberately selected based on project projections: the PlantUp ecosystem is architecturally designed to support an expected minimum baseline of 1,000 daily active users. Simulating 1,000 concurrent writes therefore represents a realistic, peak-traffic stress test for the provisioned infrastructure.
+
+By simulating massive, synchronized burst traffic (resembling thousands of devices simultaneously reconnecting and finalizing queued payloads after a widespread network outage), the experiment observes resulting latency spikes, backend resource contention, and how swiftly the ingestion queues normalize once the peak subsides. The resulting data dictates how each architectural variant degrades under extreme pressure, and whether the unified database strategy requires structural scaling adjustments to accommodate real-world deployment growth.
 
 \textbf{[INSERT PICTURE: Load Testing Setup / Console Logs]}
 
-The picture will later illustrate the load-testing environment, including representative console logs and monitoring dashboards.
-
-\subsubsection{Scenario 3: Service Outage Simulation}
-
-Scenario 3 evaluates resilience by deliberately introducing failures. A simulated backend outage (for example, by temporarily disabling database access or core backend services) is used to study how each architecture responds. Measurements include recovery behavior once services return, the extent of data loss or delayed writes, and how well fail-safe mechanisms protect the plant during the outage. Availability testing in this scenario highlights the advantages of local autonomy in the Edge-Centric design and the trade-offs of depending on remote services in the Cloud-Centric design.
+The accompanying figure illustrates the load-testing environment, specifically displaying representative console logs and the Supabase monitoring dashboards during the ingestion spike.

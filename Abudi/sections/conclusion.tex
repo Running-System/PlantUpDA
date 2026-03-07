@@ -1,28 +1,19 @@
 \section{Conclusion}
 
-\subsection{Summary of Findings}
-\begin{itemize}
-    \item Research summary, key takeaways, latency findings, reliability confirmation, architectural verdict, performance benchmarks, hypothesis validation, data-driven conclusions, system evaluation, project goal achievement
-\end{itemize}
+\subsection{Summary of Findings (Validation of the Thin Edge)}
 
-\subsection{Architectural Recommendations for PlantUp}
+This research successfully designed, implemented, and evaluated the PlantUp ecosystem to address the complexities of modern, socially integrated smart gardening. A foundational finding of this work is the empirical validation of the ``Thin Edge'' architectural paradigm within this specific domain. 
 
-\subsubsection{Adopt "Edge-First" Monitoring to guarantee data integrity}
-\begin{itemize}
-    \item Strategic recommendation, Edge-First philosophy, integrity priority, decentralized monitoring, robustness first, fail-safe architecture, local buffering, connectivity independence, critical path optimization
-\end{itemize}
+Contrary to industrial IoT deployments requiring strict offline autonomy and fail-safe actuation, the botanical monitoring domain does not demand millisecond-level reactivity. The evaluation confirms that explicitly offloading threshold evaluation and data aggregation to the Supabase cloud backend was the optimal structural decision. By circumventing the need for complex, decentralized state management and local buffering on the ESP32, the architecture achieved profound operational simplicity. This centralized processing philosophy not only reduced the embedded hardware footprint but structurally enabled the rapid iteration of the cross-device gamification and social features that define the overarching PlantUp experience. Ultimately, the system demonstrates that in consumer IoT products where user engagement is paramount, minimizing edge complexity in favor of cloud-centric agility is a highly effective strategy.
 
-\subsubsection{Use Supabase Edge Functions (optional) vs. C\# Service for lighter tasks}
-\begin{itemize}
-    \item Alternative architecture, serverless functions, Supabase Edge Functions, lightweight logic, cost reduction, operational simplicity, scaling flexibility, C\# service replacement, modernization, reduced maintenance
-\end{itemize}
+\subsection{Future Work: Lightweight AI Integration via Edge Functions}
 
-\subsection{Future Work (e.g., Predictive Health Alerts using Machine Learning on TimescaleDB data)}
-\begin{itemize}
-    \item Future directions, predictive analytics, machine learning, AI integration, smart health alerts, user guidance, data mining, TimescaleDB analytics, proactive care, intelligent systems, next-generation IoT
-    \item \textbf{[INSERT CONCEPT ART: Future AI Dashboard]}
-\end{itemize}
+To process continuous sensor telemetry and generate actionable gardening advice, deploying conventional, persistently running background services (such as a dedicated C\# backend engine) introduces unnecessary operational overhead and scaling complexity. As a primary avenue for future work and advanced feature development, this architecture recommends a complete shift toward serverless computing paradigms via Supabase Edge Functions. These serverless functions execute lightweight, event-driven logic strictly on-demand, significantly reducing baseline hosting costs and automatically scaling alongside user traffic. 
+
+Crucially, by integrating Large Language Models (specifically the ChatGPT API) directly within these Edge Functions, PlantUp can natively parse the TimescaleDB telemetry to power sophisticated predictive health alerts and the ``Daily AI Mentor'' feature. This synthesis of modern machine learning and serverless execution allows the system to deliver continuous, intelligent botanical insights without the maintenance burden of a traditional data-mining microservice.
+
+\textbf{[INSERT CONCEPT ART: Future AI Dashboard]}
 
 \subsection{Connection to the Next Chapter}
 
-Since the entire communication architecture is based on MQTT to ensure real-time performance and reliability, the system avoids the complexities of hybrid protocol management. The following chapter details the trade-offs between MQTT and REST, and how the IoT Sync mechanism leverages this MQTT foundation to ensure seamless data synchronization.
+Since the entire edge-to-cloud communication architecture is predicated on MQTT to guarantee robust data ingestion without the complexities of hybrid protocol management, the implementation must be exceptionally reliable. The following chapter details the concrete execution of this design. It explores the empirical trade-offs between MQTT and REST in the real world, and demonstrates how the bespoke IoT Sync mechanism heavily leverages this robust MQTT foundation to ensure seamless, asynchronous data synchronization between the minimal ESP32 hardware and the unified Supabase backend.

@@ -1,35 +1,31 @@
 \section{Discussion}
 
-\subsection{The "Hybrid" Sweet Spot for PlantUp}
+The experimental evaluations conducted in the preceding chapter transition the theoretical trade-offs between Edge-centric and Cloud-centric architectures into concrete, empirical data. Rather than attempting to force a universal architectural conclusion, the findings contextualize these paradigms specifically within the domain of consumer smart-gardening. The following subsections synthesize these results to justify the final architectural trajectory of the PlantUp ecosystem.
 
-\subsubsection{Using Edge for Real-time Monitoring and Cloud for Engagement (XP/Leaderboards)}
-\begin{itemize}
-    \item Architectural synthesis, hybrid model, best of both worlds, edge reliability, cloud scalability, critical vs. non-critical, monitoring logic, engagement layer, strategic separation, optimal design, computing paradigm balance
-    \item \textbf{[INSERT DIAGRAM: The Hybrid "Sweet Spot" Logic Distribution]}
-    \item Source: \url{https://ieeexplore.ieee.org/document/11158770}
-\end{itemize}
+\subsection{The "Thin Edge" Justification for PlantUp}
 
-\subsection{Database Considerations}
+\subsubsection{Prioritizing Centralized Analytics over Edge Autonomy}
 
-\subsubsection{Benefits of Supabase's unified access for the React Native App}
-\begin{itemize}
-    \item Developer experience, unified API, frontend simplification, React Native integration, simplified auth, reduced complexity, rapid prototyping, coherent data model, streamlined access, architectural elegance
-    \item Source: \url{https://taglineinfotech.com/blog/which-backend-is-best-for-react-native/}
-\end{itemize}
+The empirical measurements consistently demonstrate that for the specific functional requirements of PlantUp, a Cloud-centric (Thin Edge) architecture is not merely sufficient, but optimal. The fundamental domain constraint—botanical physiology—dictates that environmental metrics such as soil moisture and ambient temperature do not fluctuate rapidly enough to necessitate millisecond-level actuation loops. Consequently, the localized autonomy offered by a Thick Edge design provides negligible functional benefit to the end user.
 
-\subsubsection{Trade-offs of querying TimescaleDB for real-time control loops}
-\begin{itemize}
-    \item Design trade-offs, real-time query risks, database dependency, latency variability, connection overhead, system stability, control loop jitter, architectural decisions, load implications, performance vs. consistency
-    \item Source: \url{https://www.tigerdata.com/blog/timescaledb-vs-influxdb-for-time-series-data-timescale-influx-sql-nosql-36489299877}
-\end{itemize}
+Instead, deliberately stripping the ESP32 firmware of complex threshold evaluation logic vastly simplifies device provisioning, reduces the micro-controller's processing overhead, and minimizes the payload size transmitted via MQTT. All decision-making, including the generation of push notifications and the orchestration of the gamification engine, is centralized in the Supabase backend. This concentration of logic directly enables the rich, cross-user social features and the Daily Mentor AI integrations, which inherently require continuous access to historical datasets and aggregate user interactions. While this approach inevitably introduces network latency and mandates internet connectivity for logical evaluation, the experiments confirm that this latency remains entirely imperceptible within the context of hourly or sub-hourly plant care.
 
-\subsection{Complexity vs. Cost}
+\subsection{Database Integration and Client Architecture}
 
-\subsubsection{Development cost of maintaining logic in two places (C++ and C\#) vs. centralized C\# logic}
-\begin{itemize}
-    \item Cost-benefit analysis, maintenance overhead, code duplication, technological diversity, C++ vs C\#, staffing requirements, development velocity, operational complexity, total cost of ownership, robustness justification, long-term viability
-    \item \textbf{[INSERT TABLE: Cost/Complexity Comparison Matrix]}
-    \item Source: Chapter 2.1 \url{https://flame-challenge.authorea.com/users/982330/articles/1348311/master/file/data/wileyNJDv5_AMA/wileyNJDv5_AMA.pdf}
-    \newline  \url{https://www.baeldung.com/cs/distributed-systems-thin-vs-thick-clients}
-    \newline \url{https://www.einfochips.com/blog/understanding-risks-in-over-the-air-firmware-upgrade-for-automotives-including-evs/}
-\end{itemize}
+\subsubsection{Direct-to-Database Client Architecture via Supabase}
+
+From a frontend integration perspective, the experiments validate the architectural decision to utilize Supabase as a unified Backend-as-a-Service (BaaS). By leveraging the official Supabase JavaScript SDK, the React Native application establishes a direct, secure communication channel with the Postgres database. 
+
+This explicit reliance on the provider's SDK fundamentally eliminates the engineering overhead required to construct, deploy, and maintain a custom intermediary REST API layer (e.g., a dedicated Node.js or Spring Boot middleware). The client application authenticates directly through Supabase Auth, passes the securely scoped JWT (JSON Web Token), and subsequently executes queries against the database. The structural integrity and security of this direct-access model are enforced entirely through PostgreSQL's native Row Level Security (RLS) policies, ensuring that users can only query or mutate their specific social and telemetry data \cite{broadwaySupabase, supabaseReactNative, redditReactNativeSupabase, tigerdataRelational}.
+
+\subsubsection{Analytic Specialization vs. Real-Time Actuation}
+
+The architectural evaluation further confirms the explicit partitioning of database responsibilities. The use of TimescaleDB within the backend is highly optimized for the rapid ingestion of MQTT payloads and the execution of aggregated historical queries (e.g., rendering seven-day moisture trends in the mobile app). However, the literature correctly asserts that time-series databases introduce inherent query latency and connection overhead that makes them unsuitable for strict, real-time control loops \cite{tigerdataTimescaleInflux, tinybirdClickhouseTimescale, bixtechRedisTimescale, tigerdataRetention}. For PlantUp, this limitation is architecturally irrelevant. Because the system does not actuate physical hardware (such as triggering an automated water pump with sub-second precision), the asynchronous nature of cloud-based threshold evaluation against TimescaleDB is entirely acceptable and aligns perfectly with the Thin Edge strategy.
+
+\subsection{Complexity vs. Operational Cost}
+
+\subsubsection{Minimizing Edge Complexity to Accelerate Development}
+
+A core theme emerging from the architectural comparison is the relationship between developmental complexity and operational cost. Attempting to maintain conditional logic simultaneously on the edge (C++ on the ESP32) and in the cloud (SQL/Edge Functions in Supabase) introduces profound synchronization challenges and code duplication \cite{zeetimThickThin, outsourceThinThick, deepwikiSupabase}. 
+
+The chosen Thin Edge architecture consciously sacrifices local resilience (i.e., the plant monitor cannot trigger a local LED autonomously without a cloud response) in exchange for a drastically accelerated development cycle and centralized update mechanisms. Modifying a moisture threshold or adjusting the Gamification XP algorithms requires only a single backend deployment, rather than orchestrating costly over-the-air (OTA) firmware updates to distributed hardware endpoints. For a consumer IoT product where user engagement and rapid feature iteration dictate platform viability, this trade-off heavily favors the Cloud-centric approach.

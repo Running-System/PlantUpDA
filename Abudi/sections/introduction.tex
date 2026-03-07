@@ -1,37 +1,39 @@
 \section{Introduction}
 
-The digitalization of houseplant care represents a growing intersection between IoT (Internet of Things) and daily life. As urbanization increases and people spend more time indoors, the desire to maintain healthy plants has led to an emerging market of smart gardening devices. However, many current solutions are isolated systems that only alert the user when a plant is already in critical condition. PlantUp aims to evolve this concept by integrating continuous sensor monitoring with a gamified social platform, turning isolated plant care into a collaborative and engaging experience.
+Plant care? That is just watering and waiting!
+
+This is how many people view gardening. However, the digitalization of houseplant care represents a growing intersection between the Internet of Things (IoT) and our daily lives. As urbanization increases and people spend more time indoors, the desire to maintain healthy plants has led to an emerging market of smart gardening devices. But many current solutions are isolated systems that only alert the user when a plant is already in critical condition. Does it really have to be this isolated? 
+
+The core idea for PlantUp originated during a team brainstorming session. We were discussing "StepUp," an application concept designed to let friends track each other's steps and provide mutual motivation. Simultaneously, we knew we wanted to build a physical system using ESP32 microcontrollers and environmental sensors. By combining the social, gamified motivation of tracking progress with IoT hardware, PlantUp was born. We aim to evolve the concept of gardening by integrating continuous sensor monitoring with a social platform, turning an isolated chore into a collaborative experience.
 
 \subsection{Microservices in Gardening}
-\begin{itemize}
-    \item Paradigm shift, individual plant care, community interaction, shared data, digital transformation, nature meets tech, social platforms, sensor integration, remote monitoring, enthusiast community, collaborative gardening, data-driven plant care, IoT connectivity
-    \item \textbf{[INSERT FIGURE: Concept Art of Social Gardening with IoT]}
-\end{itemize}
+
+The future of gardening lies in digital transformation. It is no longer just about reading a moisture sensor; it is about connecting nature with technology. By sharing data across an enthusiast community, we enable a paradigm shift from individual plant care to data-driven, collaborative gardening. But how can we build a backend infrastructure capable of handling continuous sensor streams and social interactions simultaneously?
+
+\textbf{[INSERT FIGURE: Concept Art of Social Gardening with IoT]}
 
 \subsubsection{The Core Challenge: Latency and System Dependability}
-\begin{itemize}
-    \item The fundamental motivations for this thesis revolve around managing network latency (Round-Trip Time) for real-time notifications and ensuring system dependability during backend service outages.
-    \item \textbf{Architectural Link:} A detailed theoretical breakdown of these challenges, including the trade-offs between Edge-Centric and Cloud-Centric paradigms, is provided in Section 3.2.4.
-\end{itemize}
+
+Sending sensor data across the continent just to update a dashboard? In a previous IoT project I worked on, environmental data was routed to a server in the Netherlands before it could be displayed on a website. The resulting delay was incredibly frustrating and highlighted a massive flaw in centralized systems. This personal experience proved that managing network latency (Round-Trip Time) and ensuring system dependability are not just theoretical concepts, but practical necessities for a smooth user experience.
+
+These challenges form the architectural core of this thesis: navigating the trade-offs between Edge-Centric and Cloud-Centric paradigms to prevent exactly these types of delays. A detailed theoretical breakdown of these models is provided in Section 3.2.4.
 
 \subsection{Research Question}
 
 \subsubsection{Primary Question}
-\begin{itemize}
-    \item \textbf{"What are the fundamental differences between Edge and Cloud processing within a microservices architecture, and what trade-offs do they present when implementing real-time monitoring, as demonstrated by the 'Plant Up!' ecosystem?"}
-    \item Defining Edge vs. Cloud computing, utilizing PlantUp as the comparative case study, latency vs. throughput, cost vs. complexity, data integrity, system reliability, analyzing the impact of logic placement on the final product.
-\end{itemize}
+
+\textbf{"What are the fundamental differences between Edge and Cloud processing within a microservices architecture, and what trade-offs do they present when implementing real-time monitoring, as demonstrated by the 'Plant Up!' ecosystem?"}
+
+In order to answer this, PlantUp serves as a comparative case study. This thesis will analyze the direct impact of logic placement on the final product, specifically comparing latency versus throughput, infrastructure cost versus complexity, data integrity, and overall system reliability.
 
 \subsection{Scope and Limitations}
 
 \subsubsection{Computational Constraints of the Edge Device (ESP32)}
-\begin{itemize}
-    \item Architectural driver, processing limitations, ESP32 CPU capabilities, memory footprint for logic execution, balancing data collection vs. local decision-making, Edge-side data aggregation strategies.
-    \item \textit{Note: The specific network constraints, awake-time mechanics, and energy consumption profile of the ESP32 hardware are extensively detailed in Onuha's section (Chapter X). This section focuses strictly on how those physical limitations dictate the distribution of processing logic.}
-\end{itemize}
 
-\subsubsection{Comparison limited to Processing Location (Edge vs. Cloud), not Transport Protocols (MQTT assumed)}
-\begin{itemize}
-    \item Scope boundary, processing location focus, edge computing, cloud computing, transport layer abstraction, MQTT protocol, standard compliance, exclusion of CoAP/HTTP, architectural comparison, logic placement, fixed communication variables
-   
-\end{itemize}
+Can a small microcontroller really make autonomous decisions? The ESP32 is capable, but it has strict processing limitations and a tight memory footprint. These constraints act as the primary architectural driver, forcing a careful balance between Edge-side data aggregation and Cloud-side decision-making. 
+
+\textit{Note: The specific network constraints, awake-time mechanics, and energy consumption profile of the ESP32 hardware are extensively detailed in Onuha's section (Chapter X). This section focuses strictly on how those physical limitations dictate the distribution of processing logic.}
+
+\subsubsection{Comparison limited to Processing Location (Edge vs. Cloud), not Transport Protocols}
+
+To ensure a precise comparison, this thesis establishes clear scope boundaries. The analysis is strictly limited to the processing location (Edge computing versus Cloud computing). The transport layer is abstracted, with the MQTT protocol assumed as the baseline standard. Alternative protocols like CoAP or HTTP are excluded to keep communication variables fixed and the architectural comparison sharp.
