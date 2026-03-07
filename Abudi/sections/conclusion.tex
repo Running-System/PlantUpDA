@@ -14,6 +14,6 @@ A critical next step is to evaluate the system's performance at a significantly 
 
 Additionally, future development should investigate mitigating the inherent connectivity dependency of the Thin Edge model at the client layer. Research could focus on implementing advanced offline-capable UI features within the React Native application, utilizing local caching strategies to gracefully mask network latency or temporary cloud outages from the end user without requiring localized logic on the sensor hardware itself.
 
-\subsection{Connection to the Next Chapter}
+\subsection{Transition to the Implementation Layer}
 
 Since the entire edge-to-cloud communication architecture is predicated on MQTT to guarantee robust data ingestion without the complexities of hybrid protocol management, the implementation must be exceptionally reliable. The following chapter details the concrete execution of this design. It explores the empirical trade-offs between MQTT and REST in the real world, and demonstrates how the bespoke IoT Sync mechanism heavily leverages this robust MQTT foundation to ensure seamless, asynchronous data synchronization between the minimal ESP32 hardware and the unified Supabase backend.
