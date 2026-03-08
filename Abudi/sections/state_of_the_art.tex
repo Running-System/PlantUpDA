@@ -10,7 +10,12 @@ Layer 3 (Edge or Fog Computing) contains processing that happens close to the da
 
 Layer 5 (Data Abstraction) transforms and structures stored data into more efficient and meaningful representations, such as aggregated views, hypertables in a time-series database, or standardized APIs serving cleaned data. Data abstraction therefore hides storage details and presents a consistent interface to application logic. Layer 6 (Application) contains the business logic and user interfaces, such as a React Native app, notification engine, or gamification components that interpret sensor data and present it to the user. Finally, Layer 7 (Collaboration \& Processes) models how data drives human action and social interaction---for instance, sharing plant status with friends, participating in community leaderboards, or integrating plant health into broader workflows.
 
-\textbf{[Figure 3.1: The 7-Layer IoT World Forum Reference Model]}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Abudi/figures/Iot_world_reference_model.png}
+    \caption{The 7-Layer IoT World Forum Reference Model \cite{iot_reference_model}}
+    \label{fig:iot_reference_model}
+\end{figure}
 
 In this thesis, a central architectural question is how much decision logic should remain at Layer 3 (Edge) versus being shifted upward into Layer 5 (Data Abstraction) and Layer 6 (Application) in the cloud. The 7-layer model structures this discussion by establishing clear boundaries between physical sensing, connectivity, edge processing, and backend-centric logic.
 
@@ -24,7 +29,12 @@ In modern IoT backends, where telemetry streams must often be correlated with st
 
 Real-time subscription mechanisms are a critical component of modern BaaS offerings. By exposing database changes over persistent WebSocket connections, the backend can instantly push state changes---such as an updated sensor threshold or a new social message---to connected clients without the overhead of continuous HTTP polling. Platforms such as Supabase represent this modern BaaS approach, utilizing PostgreSQL as the core engine to provide relational integrity alongside native real-time subscriptions.
 
-\textbf{[Figure 3.2: Realtime Architecture Flow in Modern BaaS]}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.0\textwidth]{Abudi/figures/realtime_architekture.png}
+    \caption{Realtime Architecture Flow in Modern BaaS \cite{realtime_architecture}}
+    \label{fig:realtime_architecture}
+\end{figure}
 
 A central evaluation criterion for selecting a BaaS in an IoT context is its extensibility. While a standard RDBMS excels at transactional consistency (ACID properties), it is fundamentally poorly equipped for high-velocity, continuous sensor ingestion. Theoretical capability hinges on whether the BaaS permits native extensions—such as spatial or time-series modules—to optimize the core relational engine for these specialized workloads without requiring an entirely separate database instance \cite{closefuture_supabase_firebase, blog_elest_supabase_self_host}.
 
@@ -90,7 +100,12 @@ Conversely, an edge-centric architecture pushes computation, data aggregation, a
 
 This model guarantees ultra-low latency and offline fault tolerance. If the external network fails, the device can still protect the plant. Furthermore, bandwidth usage is minimized since only summarized events, rather than raw streams, are transmitted outward. However, moving complex logic to the edge introduces severe development challenges. Firmware updates become complex deployment operations, remote debugging is highly restricted, and the code must operate within the strict CPU, RAM, and battery constraints of microcontrollers \cite{digitalocean_edge_vs_cloud, scalecomputing_edge_vs_cloud, blog_elest_supabase_self_host, scalecomputing_edge_devices}.
 
-\textbf{[INSERT FIGURE: Visual Comparison of Cloud vs. Edge Architectures]}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Abudi/figures/cloud vs edge.png}
+    \caption{Visual Comparison of Cloud vs. Edge Architectures (Source: Self-made)}
+    \label{fig:cloud_vs_edge}
+\end{figure}
 
 \subsubsection{The Spectrum of Logic Distribution: ``Thick Edge'' vs. ``Thin Edge''}
 
