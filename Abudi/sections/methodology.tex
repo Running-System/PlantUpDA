@@ -1,47 +1,49 @@
 \section{Methodology}
 
-This section describes the experimental design used to objectively evaluate the architectural decisions made for the PlantUp ecosystem. A core conclusion of Chapter 3 was the theoretical superiority of a Cloud-Centric, ``Thin Edge'' model for this specific botanical domain. To empirically validate this decision, controlled experiments were designed to measure the impact of logic distribution on system latency, scalability, and backend resilience.
+This section describes exactly how the architectural decisions made for the PlantUp ecosystem were objectively evaluated. Back in Chapter 3, the theoretical superiority of a Cloud-Centric, ``Thin Edge'' model was established for this specific botanical domain. But theories alone aren't enough. To empirically validate this massive design choice, controlled experiments were built. The goal was to actively measure how changing the location of the operational logic directly impacts system latency, raw scalability, and backend resilience.
 
 \subsection{Experimental Control Framework}
 
-Rather than testing the deployed architecture in isolation, an experimental control group was constructed to facilitate direct comparative analysis. 
+Testing the deployed architecture in isolation was actively avoided because without a comparative baseline, the isolated performance metrics provide absolutely no contextual value. Instead, a strict experimental control group was constructed to facilitate a direct, head-to-head comparative analysis.
 
 \subsubsection{Architecture A: Cloud-Centric (Deployed Variant)}
-Architecture A serves as the primary system under test, representing the \textit{Thin Edge} paradigm fully deployed and detailed in Chapter 4. In this variant, the ESP32 hardware functions exclusively as a data ingress vector, generating raw JSON payloads containing sensor telemetry. All threshold evaluation, condition logic, and historical aggregation are executed centrally within the Supabase cloud infrastructure.
+Architecture A is the primary system under test. This represents the \textit{Thin Edge} paradigm fully deployed and detailed heavily in Chapter 4. In this variant, the physical ESP32 hardware functions completely as a "dumb" data ingress vector. It does nothing but generate raw JSON payloads packed with simple sensor telemetry. All the heavy lifting—threshold evaluation, conditional logic, and complex historical aggregation—is forced straight up into the centralized Supabase cloud infrastructure.
 
 \subsubsection{Architecture B: Edge-Centric (Control Variant)}
-Architecture B represents a \textit{Thick Edge} mock-up, built strictly as a comparative control group. In this variant, threshold comparison and autonomous decision-making are shifted back directly onto the ESP32 firmware. The device still transmits data to the cloud, but the payloads consist of asynchronous decision logs and state summaries rather than high-frequency raw telemetry. By comparing Architecture B against the deployed Architecture A, the experiment aims to quantify the exact latency penalty and structural trade-offs exacted by the Thin Edge approach.
+Architecture B represents an aggressive \textit{Thick Edge} mock-up. This was built strictly to serve as the comparative control group. In this variant, the threshold comparisons and autonomous decision-making were ripped out of the cloud and shoved directly back onto the ESP32 firmware. The device still transmits data to the cloud, but the payloads look entirely different. Instead of high-frequency raw telemetry blasts, it sends quiet, asynchronous decision logs and state summaries. By directly pitting Architecture B against the deployed Architecture A, the exact latency penalty and the brutal structural trade-offs caused by the Thin Edge approach can be mathematically calculated.
 
 \subsection{Implementation Constraints}
 
-To ensure that the only independent variable in the experiment is the \textit{location} of the operational logic, both architectures are constrained by identical structural bounds:
+To guarantee that the absolute only independent variable in this experiment was the physical \textit{location} of the operational logic, both architectures were locked down using incredibly strict bounds:
 \begin{itemize}
-    \item \textbf{Hardware:} Both variants execute on the exact same physical ESP32 microcontrollers.
-    \item \textbf{Transport:} Both variants utilize identical MQTT message brokers and Wi-Fi environments.
-    \item \textbf{Payload Anatomy:} Both variants serialize data into standardized JSON objects, differing only in frequency and semantic content (raw measurements vs. decision logs).
-    \item \textbf{Persistence:} Both instances write to identical Supabase endpoints, targeting the same PostgreSQL schemata and TimescaleDB hypertables.
+    \item \textbf{Hardware:} Both architectural variants strictly execute on the exact same physical ESP32 microcontrollers.
+    \item \textbf{Transport:} Both variants utilize completely identical MQTT message brokers and Wi-Fi environments.
+    \item \textbf{Payload Anatomy:} Both variants serialize their data into rigidly standardized JSON objects. They differ exclusively in transmission frequency and semantic content (sending raw measurements versus calculated decision logs).
+    \item \textbf{Persistence:} Both hardware instances write seamlessly into identical Supabase endpoints, perfectly targeting the same PostgreSQL schemata and massive TimescaleDB hypertables.
 \end{itemize}
 
 \subsection{Measurement Methodology and Environment}
 
-To guarantee the reproducibility of these performance benchmarks, the testing environment and diagnostic methodologies have been standardized.
+To ensure these performance benchmarks can be perfectly reproduced, the testing environment and diagnostic methodologies were fully standardized.
 
 \subsubsection{Testing Environment}
-The backend infrastructure evaluating the payloads was hosted on a \textbf{[INSERT SERVER / NETWORK SPECS HERE]} environment, ensuring a stable baseline devoid of transient local computing bottlenecks. The load generation defining the stress tests was orchestrated using \textbf{[INSERT TESTING TOOL HERE]}, simulating diverse traffic patterns originating outside the local networking subnet to accurately represent real-world cellular and remote Wi-Fi latency.
+The heavy backend infrastructure evaluating the massive payload spikes was hosted on a \textbf{[INSERT SERVER / NETWORK SPECS HERE]} environment. This ensured a rock-solid operational baseline, entirely devoid of transient local computing bottlenecks. To define the stress tests, the load generation was ruthlessly orchestrated using \textbf{[INSERT TESTING TOOL HERE]}. Highly diverse traffic patterns originating from entirely outside the local networking subnet were deliberately simulated. This was necessary to accurately recreate the messy, real-world latency inherently found in cellular and remote Wi-Fi networks.
 
 \subsubsection{Latency Calculation}
-Crucially, end-to-end ingestion latency is not calculated via standard HTTP round-trip bounds, as the MQTT ingress pathway is inherently asynchronous. Instead, latency is empirically derived via differential timestamping. When the ESP32 generates a reading, it injects a highly precise local generation timestamp into the JSON payload. Upon successful ingestion and insertion into the TimescaleDB hypertable, Supabase automatically affixes a \texttt{created\_at} server-side timestamp. The absolute latency per transaction is subsequently calculated by subtracting the ESP32 generation timestamp from the PostgreSQL finalization timestamp, accurately representing the total time required for data transmission, MQTT broker handling, gateway normalization, and final database write.
+Here is a critical detail: end-to-end ingestion latency is absolutely not calculated using standard HTTP round-trip bounds. This exclusion is mandatory because the entire MQTT ingress pathway is inherently asynchronous and does not await a server reply. 
+
+Instead, the exact latency was empirically derived purely through differential timestamping. When the ESP32 generates a reading, it injects an incredibly precise, localized generation timestamp directly inside the JSON payload. Upon successful ingestion and the final insertion into the TimescaleDB hypertable, Supabase immediately slaps a \texttt{created\_at} server-side timestamp onto the row. The absolute latency per transaction is then easily calculated by simply subtracting the hardware's generation timestamp from the PostgreSQL finalization timestamp. This provides the indisputable, total time required for Wi-Fi data transmission, MQTT broker handling, massive gateway normalization, and the final database write.
 
 \subsection{Test Scenarios}
 
-The controlled experiments were structured into two distinct scenarios, designed to evaluate the system under both normal operational cadence and extreme edge-case volatility.
+The controlled experiments were aggressively structured into two highly distinct scenarios. These were explicitly designed to brutalize the system under both normal operational cadence and extreme edge-case volatility.
 
 \subsubsection{Scenario 1: Baseline Operational Thresholds}
-Scenario 1 serves as the benchmark reference, simulating healthy, standard network conditions. The objective is to record native latency variations and end-to-end response times under standard snapshot intervals (e.g., payloads transmitted every 5 to 10 minutes). The goal is to verify that the fundamental network latency introduced by offloading logic to the cloud (Architecture A) remains comfortably within the loose real-time requirements of botanical monitoring.
+Scenario 1 serves as the boring, everyday benchmark reference. It safely simulates healthy, entirely standard network conditions. The sole objective here is to record the native latency variations and standard end-to-end response times under normal snapshot intervals (e.g., payloads lazily transmitted every 5 to 10 minutes). The ultimate goal is to absolutely verify that the fundamental network latency introduced by offloading the heavy logic to the cloud remains comfortably within the incredibly loose real-time requirements of basic botanical monitoring.
 
 \subsubsection{Scenario 2: Infrastructure Stress Test (Disaster Recovery Spike)}
-Scenario 2 shifts focus from latency to backend resilience, evaluating how the unified monolithic database degrades under intense transactional stress.
+Scenario 2 violently shifts the focus. Simple latency becomes irrelevant as the test directly attacks backend resilience. The objective is to evaluate exactly how the unified, monolithic database violently degrades under intense transactional stress.
 
-To push the infrastructure to its structural limits, the test suite injects an immediate, simultaneous burst of 1,000 concurrent write operations into the backend API. It is critical to note that this specific volume does not represent a standard ``Daily Active User'' (DAU) load. In normal operation, 1,000 daily users generating 5-minute snapshots produce an exceptionally low continuous ingestion rate of less than one write per second. 
+To physically push the infrastructure to its structural limits, the test suite mercilessly injects an immediate, simultaneous burst of 1,000 concurrent write operations directly into the backend API. It is incredibly critical to note that this specific volume absolutely does not represent a standard ``Daily Active User'' (DAU) load. Under perfectly normal operation, 1,000 daily users generating 5-minute snapshots produce an exceptionally low, boring continuous ingestion rate of less than one single write per second. 
 
-Instead, this concurrency spike mathematically models a massive \textit{Disaster Recovery} event—simulating a widespread ISP or Wi-Fi outage ending, causing an entire fleet of 1,000 disconnected ESP32 devices to regain connectivity and flush their locally queued payloads at the exact same millisecond. By stressing the system with this theoretical worst-case synchronization event, the experiment observes database lock contention, processor queuing, and how rapidly the architecture normalizes once the peak subsides.
+Instead, this massive concurrency spike mathematically models a severe \textit{Disaster Recovery} event. Imagine a widespread ISP or Wi-Fi outage ending at a massive apartment complex. This causes an entire fleet of 1,000 completely disconnected ESP32 devices to instantly regain connectivity and frantically flush their locally queued payloads at the exact same millisecond. By violently stressing the system with this theoretical worst-case synchronization nightmare, database lock contention, massive processor queuing, and exactly how rapidly the architecture normalizes once the peak finally subsides can be clearly observed.
