@@ -6,31 +6,38 @@ After the measurement cycle described in Section 2.3, Plant Up! receives structu
 
 Building on the safe corridors defined in Section 2.2, each incoming sensor value is compared against an ideal range stored as a plant-specific configuration. The system classifies every parameter into three condition zones: Green (optimal, no action), Yellow (close to a boundary, attention recommended), and Red (outside the safe range, action required).
 
-This applies to soil moisture, temperature, humidity, light, and, if available, the electrical conductivity (EC) of the nutrient solution. The traffic-light mapping is intentionally chosen because green, amber, and red are widely recognized as low, medium, and high status codes in everyday decision aids.
+This applies to soil moisture, temperature, humidity, light, and, if available, the EC of the nutrient solution. The traffic-light mapping is intentionally chosen because green, amber, and red are widely recognized as low, medium, and high status codes in everyday decision aids.
 
 Plant-specific ranges are not a universal default. A cactus is typically configured with lower moisture tolerance and higher light tolerance, while a fern prefers higher humidity and lower exposure to direct sunlight. In Plant Up!, these differences are handled as configurable parameters per plant profile rather than hardcoded constants.
 
 Seasonal adjustment is implemented by storing separate summer and winter ranges. The reasoning is practical: indoor climate and light availability shift with seasons, and the same plant often needs different watering frequency and different tolerance bands depending on these conditions. Instead of forcing users to retune thresholds manually, Plant Up! switches between two predefined sets while keeping them editable.
 
-To avoid overwhelming users with five separate decisions, Plant Up! computes a health score from 0--100\% as a combined indicator. Such composite scoring simplifies interpretation without discarding the underlying data from individual sensors. \cite{boniecki2023smartSensors} The health score compresses complexity into one overall status that is easy to scan. It is mapped to four labels: Great ($\geq$70\%), Okay (40--70\%), Needs Care (20--40\%), and Critical ($<$20\%).
+\noindent
+\begin{minipage}[t]{0.55\textwidth}
+    \vspace{0pt}
+    To avoid overwhelming users with five separate decisions, Plant Up! computes a health score from 0\,--\,100\,\% as a combined indicator. Such composite scoring simplifies interpretation without discarding the underlying data from individual sensors. \cite{boniecki2023smartSensors} The health score compresses complexity into one overall status that is easy to scan. It is mapped to four labels: Great ($\geq$70\,\%), Okay (40\,--\,70\,\%), Needs Care (20\,--\,40\,\%), and Critical ($<$20\,\%).
 
-\begin{figure}[H]
+    \vspace{1em}
+    As shown in Figure~\ref{fig:live_data_health}, the interface exposes both layers at once: the overall health score for quick orientation and the individual sensor values for users who want to verify the cause of a warning. The Daily Mentor feature is an AI-supported component that generates short natural-language hints based on the current zone states, turning combinations like ``too dry'' and ``high temperature'' into a concrete watering suggestion.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.4\textwidth}
+    \vspace{0pt}
     \centering
-    \includegraphics[width=0.35\textwidth]{images/LiveDataHealth.png}
-    \caption{Plant status overview in the Plant Up! application showing health score, individual sensor values, and AI-generated care recommendations via the Daily Mentor feature.}
+    \includegraphics[width=0.8\linewidth]{images/LiveDataHealth.png}
+    \captionof{figure}{Plant status overview in the Plant Up! application showing health score, individual sensor values, and AI-generated care recommendations.}
     \label{fig:live_data_health}
-\end{figure}
+\end{minipage}
 
-As shown in Figure~\ref{fig:live_data_health}, the interface exposes both layers at once: the overall health score for quick orientation and the individual sensor values for users who want to verify the cause of a warning. The Daily Mentor feature is an AI-supported component that generates short natural-language hints based on the current zone states, turning combinations like ``too dry'' and ``high temperature'' into a concrete watering suggestion.
+\vspace{1em}
 
 \subsection{Deriving Care Recommendations}
 
-When a value leaves its ideal range, Plant Up! generates a recommendation phrased as an action, not as a measurement. Translating raw sensor readings into specific, user-facing actions is a well-established approach in threshold-based decision support systems. \cite{dssPlantProtection} The goal is that a user reads ``Water it now'' instead of interpreting ``Soil moisture: 18\%'' under time pressure. The system evaluates parameters individually, and the first parameter that triggers a Yellow or Red state becomes the active recommendation until the next measurement cycle updates the situation.
+When a value leaves its ideal range, Plant Up! generates a recommendation phrased as an action, not as a measurement. Translating raw sensor readings into specific, user-facing actions is a well-established approach in threshold-based decision support systems. \cite{dssPlantProtection} The goal is that a user reads ``Water it now'' instead of interpreting ``Soil moisture: 18\,\%'' under time pressure. The system evaluates parameters individually, and the first parameter that triggers a Yellow or Red state becomes the active recommendation until the next measurement cycle updates the situation.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{images/decision_flowchart.png}
-    \caption[Decision flow from sensor data to care recommendation (AI-generated).]{Simplified decision flow: sensor data is compared against plant-specific thresholds and classified into condition zones, which then trigger the corresponding care recommendation (AI-generated).}
+    \caption[Decision flow from sensor data to care recommendation (generated with ChatGPT 4o, OpenAI).]{Simplified decision flow: sensor data is compared against plant-specific thresholds and classified into condition zones, which then trigger the corresponding care recommendation (generated with ChatGPT 4o, OpenAI).}
     \label{fig:decision_flowchart}
 \end{figure}
 
@@ -54,21 +61,29 @@ Interpretation is not only logic. It is also presentation. Plant Up! uses a traf
         \centering
         \includegraphics[width=\linewidth]{images/CriticalHealth.png}
     \end{minipage}
-    \caption{Traffic light health status in Plant Up!: optimal conditions (left, 100\%), suboptimal conditions requiring attention (center, 50\%), and critical state requiring immediate action (right, 10\%).}
+    \caption{Traffic light health status in Plant Up!: optimal conditions (left, 100\,\%), suboptimal conditions requiring attention (center, 50\,\%), and critical state requiring immediate action (right, 10\,\%).}
     \label{fig:health_traffic_light}
 \end{figure}
 
 Figure~\ref{fig:health_traffic_light} illustrates these three primary health states. Rather than focusing on numbers, the interface leverages the mascot's expression and the background color to immediately communicate whether the plant is thriving, needs attention, or requires urgent care.
 
-Single values are useful, but trends are where the ``why'' becomes visible. Plant Up! therefore shows historical data as bar charts with selectable time ranges (1 hour, 24 hours, 7 days, all time). Time-oriented visualizations make it easier to detect patterns and anomalies than isolated snapshots, because humans can quickly see slopes, cycles, and sudden jumps across a timeline. \cite{jmirTimeSeries}
+\noindent
+\begin{minipage}[t]{0.55\textwidth}
+    \vspace{0pt}
+    Single values are useful, but trends are where the ``why'' becomes visible. Plant Up! therefore shows historical data as bar charts with selectable time ranges (1 hour, 24 hours, 7 days, all time). Time-oriented visualizations make it easier to detect patterns and anomalies than isolated snapshots, because humans can quickly see slopes, cycles, and sudden jumps across a timeline. \cite{jmirTimeSeries}
 
-\begin{figure}[H]
+    \vspace{1em}
+    As illustrated in Figure~\ref{fig:trend_chart}, a 24-hour chart can reveal repeating daily peaks, such as afternoon heating near a window, or unusual drops from night ventilation. These patterns support long-term care decisions like relocating the plant or adjusting the watering schedule proactively.
+
+    \vspace{1em}
+    With these decision rules and visual mappings defined, Plant Up! can transform raw measurements into consistent feedback. The next chapter describes how this interpretation layer is implemented in the real system and tested under practical conditions.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.4\textwidth}
+    \vspace{0pt}
     \centering
-    \includegraphics[width=0.35\textwidth]{images/24HourHealth.png}
-    \caption{Historical sensor data visualization in Plant Up! showing temperature readings over a 24-hour period. Users can switch between different sensors and time ranges to identify trends and patterns.}
+    \includegraphics[width=0.9\linewidth]{images/24HourHealth.png}
+    \captionof{figure}{Historical sensor data visualization in Plant Up! showing temperature readings over a 24-hour period. Users can switch time ranges to identify trends and patterns.}
     \label{fig:trend_chart}
-\end{figure}
+\end{minipage}
 
-As illustrated in Figure~\ref{fig:trend_chart}, a 24-hour chart can reveal repeating daily peaks, such as afternoon heating near a window, or unusual drops from night ventilation. These patterns support long-term care decisions like relocating the plant or adjusting the watering schedule proactively.
-
-With these decision rules and visual mappings defined, Plant Up! can transform raw measurements into consistent feedback. The next chapter describes how this interpretation layer is implemented in the real system and tested under practical conditions.
+\vspace{1em}

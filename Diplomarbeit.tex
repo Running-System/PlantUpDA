@@ -8,6 +8,14 @@
 \usepackage{tabularx}
 \usepackage{lipsum}					    % Als Platzhalter für gewisse Stellen
 \usepackage[english, ngerman]{babel}					%Deutsche Silbentrennung etc.
+
+% Override babel's German captions with English names
+\addto\captionsngerman{%
+  \renewcommand{\contentsname}{Table of Contents}%
+  \renewcommand{\listfigurename}{List of Figures}%
+  \renewcommand{\listtablename}{List of Tables}%
+  \renewcommand{\bibname}{References}%
+}
 \usepackage[utf8]{inputenc}        	    % Umlaute in .tex Files normal schreibbar
 \usepackage[T1]{fontenc}                    % Wichtig für korrekte Darstellung von Sonderzeichen und Copy-Paste
 \usepackage{lmodern}                        % Fixes 'Font shape undefined' errors by providing scalable fonts
@@ -24,6 +32,9 @@
 \usepackage{setspace}					%Größerer Zeilenabstand
 \usepackage{graphicx}					%Grafiken einbinden
 \usepackage{titlesec}
+% Remove 'Chapter X' prefix, show only the number and title, reduce top spacing
+\titleformat{\chapter}[hang]{\sffamily\huge\bfseries}{\thechapter\quad}{0pt}{}
+\titlespacing*{\chapter}{0pt}{-20pt}{20pt}
 \titleformat*{\section}{\sffamily\Large\bfseries}
 \titleformat*{\subsection}{\sffamily\large\bfseries}
 \titleformat*{\subsubsection}{\sffamily\normalsize\bfseries}
@@ -31,6 +42,7 @@
 \titleformat*{\subparagraph}{\sffamily\normalsize\bfseries}
 \usepackage{hyperref}
 \usepackage{float}
+\usepackage{wrapfig}
 \usepackage{amsmath}
 \usepackage{pdfpages}					%Fremde pdfs einbinden
 \usepackage[font={scriptsize}]{caption}
@@ -329,7 +341,7 @@ label=Code Example
 
 	% Fußzeile: Klasse links, Seite X von Y Mitte, Datum rechts
 	\lfoot{\sffamily\footnotesize 22IF2609}
-	\cfoot{\sffamily\footnotesize Seite \thepage\ von \pageref{LastPage}}
+	\cfoot{\sffamily\footnotesize Page \thepage\ of \pageref{LastPage}}
 	\rfoot{\sffamily\footnotesize \today}
 
 %--------------------------------------------------------------------------
@@ -359,14 +371,19 @@ label=Code Example
 %--------------------------------------------------------------------------
    
  
-  \addcontentsline{toc}{chapter}{Anhang}
+  \addcontentsline{toc}{chapter}{Appendix}
     \phantomsection
-	\addcontentsline{toc}{section}{Abbildungsverzeichnis}
+	\addcontentsline{toc}{section}{List of Figures}
 	\listoffigures
 
 	\vspace{1cm}
+	\phantomsection
+	\addcontentsline{toc}{section}{List of Tables}
+	\listoftables
+
+	\vspace{1cm}
 	\subsection*{AI-Generated Figures}
-	The following figures were generated using an AI image generation tool. The prompts used are listed below for transparency.
+	The following figures were generated using ChatGPT 4o by OpenAI. The prompts used are listed below for transparency.
 
 	\begin{small}
 	\begin{description}
@@ -378,7 +395,7 @@ label=Code Example
 
 	\clearpage
 	
-	\addcontentsline{toc}{section}{Literaturverzeichnis}
+	\addcontentsline{toc}{section}{References}
 	\bibliographystyle{IEEEtran}
 	\bibliography{references}
 	

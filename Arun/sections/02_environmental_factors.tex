@@ -5,16 +5,16 @@ Plants are living systems, but they can be treated as measurable input-output sy
 \subsection{Importance of Soil Moisture, Temperature, Light, and Humidity}
 
 \subsubsection*{Soil moisture}
-Soil is a porous material made of solids plus pore space filled with air and water. An ideal soil for plant growth is often described as 50\% solids and 50\% pore space, ideally split into equal parts air and water so roots get both oxygen and moisture. This is the physical reason why ``slightly moist'' often performs better than ``always wet.'' \cite{ncStateSoils}
+Soil is a porous material made of solids plus pore space filled with air and water. An ideal soil for plant growth is often described as 50\,\% solids and 50\,\% pore space, ideally split into equal parts air and water so roots get both oxygen and moisture. This is the physical reason why ``slightly moist'' often performs better than ``always wet.'' \cite{ncStateSoils}
 
 When pore spaces stay waterlogged, air is displaced and the oxygen supply to roots drops. Root function declines and nutrient uptake suffers, even while the pot appears wet. This oxygen deficit is the primary mechanism behind overwatering damage and explains why soggy soil is more dangerous than dry soil for most indoor plants. \cite{ucIpmAeration}
 
 The opposite end of the spectrum is the \textit{permanent wilting point}: the threshold where remaining soil moisture is physically unavailable to roots. Below this point the plant cannot recover through normal watering, because the accessible water reserve is fully depleted. For monitoring, volumetric water content (VWC) expresses soil water as a percentage of total soil volume, which provides a consistent, loggable metric. \cite{cornellWiltingPoint, meterGroupWater}
 
 \subsubsection*{Light}
-Light is the energy input that drives photosynthesis. Plants do not use all wavelengths equally, so the relevant band is Photosynthetically Active Radiation (PAR), typically defined as the 400--700\,nm range. This distinction matters because ``bright to humans'' and ``usable for plants'' are not the same thing. \cite{nasaPAR2}
+Light is the energy input that drives photosynthesis. Plants do not use all wavelengths equally, so the relevant band is Photosynthetically Active Radiation (PAR), typically defined as the 400\,--\,700 nanometer (nm) range. This distinction matters because ``bright to humans'' and ``usable for plants'' are not the same thing. \cite{nasaPAR2}
 
-The plant-focused intensity metric is PPFD (Photosynthetic Photon Flux Density), which counts photons in the PAR range arriving per area per second. Many low-cost systems instead measure illuminance in lux, which is weighted for human vision and therefore does not map cleanly to PPFD. Lux is still practical for relative comparisons within one setup, such as comparing a dark corner to a bright window. \cite{apogeePpfdLux}
+The plant-focused intensity metric is Photosynthetic Photon Flux Density (PPFD), which counts photons in the PAR range arriving per area per second. Many low-cost systems instead measure illuminance in lux, which is weighted for human vision and therefore does not map cleanly to PPFD. Lux is still practical for relative comparisons within one setup, such as comparing a dark corner to a bright window. \cite{apogeePpfdLux}
 
 \subsubsection*{Temperature and humidity}
 Temperature controls how fast plant processes run. When it is too low, growth slows as biochemical reactions become sluggish. When it is too high, regulation mechanisms lose efficiency and heat damage risk increases. For indoor monitoring, temperature is a core variable because it directly affects water demand and interacts with humidity. \cite{ncStateSoils}
@@ -43,7 +43,7 @@ Excess light and heat can cause leaf scorch, especially when a shade-adapted pla
 \subsubsection*{Safe corridors and thresholds}
 A monitoring system needs a control model that prevents both deficiency and excess. The simplest model is a safe corridor: a defined acceptable range for each variable. Inside the corridor, stress risk is low. Near corridor edges, the system should warn before the plant enters a damage trajectory. These corridors are species-dependent, so they must be configurable rather than hard-coded. \cite{unhHumidity}
 
-A practical example: many houseplants prefer relative humidity around 40--60\%, while tropical species often prefer higher levels. This is exactly why a system should start with reasonable defaults and then refine them using observed trends. Data makes the corridor adaptive instead of theoretical.
+A practical example: many houseplants prefer relative humidity around 40\,--\,60\,\%, while tropical species often prefer higher levels. This is exactly why a system should start with reasonable defaults and then refine them using observed trends. Data makes the corridor adaptive instead of theoretical.
 
 \subsection{Why Sensor-Based Logging Matters}
 
