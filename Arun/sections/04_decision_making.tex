@@ -73,7 +73,7 @@ Figure~\ref{fig:health_traffic_light} illustrates these three primary health sta
     Single values are useful, but trends are where the ``why'' becomes visible. Plant Up! therefore shows historical data as bar charts with selectable time ranges (1 hour, 24 hours, 7 days, all time). Time-oriented visualizations make it easier to detect patterns and anomalies than isolated snapshots, because humans can quickly see slopes, cycles, and sudden jumps across a timeline. \cite{jmirTimeSeries}
 
     \vspace{1em}
-    As illustrated in Figure~\ref{fig:trend_chart}, a 24-hour chart can reveal repeating daily peaks, such as afternoon heating near a window, or unusual drops from night ventilation. These patterns support long-term care decisions like relocating the plant or adjusting the watering schedule proactively.
+    As illustrated in Figure~\ref{fig:trend_chart}, a 1-hour chart focuses on immediate short-term variations, providing live insight into sudden environmental shifts. These patterns support quick reactions and help users confirm if their immediate physical actions, like watering the plant, register correctly within the system.
 
     \vspace{1em}
     With these decision rules and visual mappings defined, Plant Up! can transform raw measurements into consistent feedback. The next chapter describes how this interpretation layer is implemented in the real system and tested under practical conditions.
@@ -81,8 +81,8 @@ Figure~\ref{fig:health_traffic_light} illustrates these three primary health sta
 \begin{minipage}[t]{0.4\textwidth}
     \vspace{0pt}
     \centering
-    \includegraphics[width=0.9\linewidth]{images/24HourHealth.png}
-    \captionof{figure}{Historical sensor data visualization in Plant Up! showing temperature readings over a 24-hour period. Users can switch time ranges to identify trends and patterns.}
+    \includegraphics[width=0.9\linewidth]{images/1hourgraph.png}
+    \captionof{figure}{Historical sensor data visualization in Plant Up! showing soil moisture readings over a 1-hour period. Users can switch time ranges to identify trends and patterns.}
     \label{fig:trend_chart}
 \end{minipage}
 

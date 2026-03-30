@@ -95,7 +95,14 @@ The read sequence matters. The soil moisture and EC sensors are analog, meaning 
 
 In Plant Up!, the default measurement interval is 10 minutes, though it can be configured. This is long enough to keep battery consumption low but short enough to capture typical indoor changes such as watering events, sunlight shifts, or heating cycles.
 
-The design relies on the extreme difference between active and sleep current. During active operation with Wi-Fi enabled, the ESP32 draws around 240 milliamperes (mA) and can briefly peak above 300\,mA during wireless calibration. \cite{esp32Datasheet} In deep sleep, current consumption drops to approximately 10 microamperes ($\mu$A). \cite{esp32Datasheet} With timer-based automatic wake-up, this duty-cycling enables an estimated battery life of several weeks on a standard Li-Ion cell, depending on board design and signal quality. Shorter intervals, such as every 1\,--\,5 minutes, are supported for debugging and calibration but reduce runtime proportionally, because the Wi-Fi startup and transmission overhead becomes the dominant consumer. \cite{espIdfDeepSleep}
+The design relies on the extreme difference between active and sleep current, as visualized in Figure~\ref{fig:power_profile}. During active operation with Wi-Fi enabled, the ESP32 draws around 240 milliamperes (mA) and can briefly peak above 300\,mA during wireless calibration. In deep sleep, current consumption drops to approximately 10 microamperes ($\mu$A). \cite{esp32Datasheet} With timer-based automatic wake-up, this duty-cycling enables an estimated battery life of several weeks on a standard Li-Ion cell, depending on board design and signal quality. Shorter intervals, such as every 1\,--\,5 minutes, are supported for debugging and calibration but reduce runtime proportionally, because the Wi-Fi startup and transmission overhead becomes the dominant consumer. \cite{espIdfDeepSleep}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/power_profile.pdf}
+    \caption{Idealized power profile of the ESP32 microcontroller during a 10-minute duty cycle, illustrating the extreme contrast between the brief active transmission phase and the long deep sleep phase.}
+    \label{fig:power_profile}
+\end{figure}
 
 \subsubsection*{Signal processing and data cleaning}
 

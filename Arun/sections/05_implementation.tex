@@ -1,24 +1,24 @@
 \section{System Implementation and Validation}
 
-This chapter describes the practical realization of the Plant Up! sensor station. With the sensor selection (Section 2.3.3), firmware pipeline (Section 2.3.4), and decision logic (Chapter 2.4) already established, the focus here is on three things that have not yet been covered: how the components were physically wired and housed, how raw ADC readings were calibrated into meaningful moisture values, and how the assembled system was validated against real plant data.
+This chapter describes the practical realization of the Plant Up! sensor station. Hardware configuration, sensor calibration, and a real-world validation test are covered to demonstrate how the theoretical concepts from previous sections translate into a functional physical device.
 
 \subsection{Hardware Assembly}
 
-With the sensor types and firmware pipeline already defined, the remaining step is physical: connecting the selected components to the ESP32-S3 and housing everything in a package suitable for long-term indoor use.
+The physical assembly consists of connecting the chosen sensors to the ESP32-S3 microcontroller, securing a power source, and protecting the electronics with an enclosure.
 
 \subsubsection*{Wiring and pin assignment}
 
-Connecting the selected components to the ESP32 microcontroller requires bridging the physical hardware with the software. This is done using the General-Purpose Input/Output (GPIO) pins on the ESP32 board. A GPIO pin is a programmable interface that can either send digital signals out to control a component, receive digital signals to read sensor data, or read analog voltage levels. Depending on the complexity of a sensor, it may need one, two, or up to four of these pins to transmit its measurements.
+Connecting the selected components to the ESP32 requires bridging the physical hardware with the software via General-Purpose Input/Output (GPIO) pins. Depending on the complexity of a sensor, it may need one, two, or up to four pins to transmit its measurements.
 
-The Plant Up! sensor station uses three different communication protocols for its components. Knowing how these protocols work explains why some sensors can share the same pins, while others need their own separate connections. In electronics, a shared connection is often called a ``bus''. A bus acts like a single communication channel that multiple devices can connect to simultaneously, drastically reducing the number of pins required on the microcontroller. Instead of each sensor having its own dedicated wire, they all share the same lines and take turns communicating based on unique hardware addresses.
+The Plant Up! sensor station uses three different communication protocols. Knowing how these protocols work explains why some sensors can cleanly share the same pins, while others demand their own separate connections. In electronics, a shared connection is often called a ``bus''. A bus acts like a single communication channel that multiple devices can connect to simultaneously, drastically reducing the number of pins required on the microcontroller. 
 
-The BH1750 light sensor and the MLX90614 infrared air temperature sensor both communicate over I\textsuperscript{2}C, the two-wire protocol introduced in Section 2.3.1. This protocol uses exactly two wires to form a bus: a serial data line (SDA) for exchanging information, and a serial clock line (SCL) to provide a repeating timing signal that prevents data collisions. Because the I\textsuperscript{2}C architecture allows multiple devices to sit safely on this shared bus, both sensors are wired in parallel to the exact same two GPIO pins: GPIO\,8 for SDA and GPIO\,9 for SCL. 
+The BH1750 light sensor and the MLX90614 infrared air temperature sensor both communicate over I\textsuperscript{2}C, the two-wire protocol introduced in Section 2.3.1. This protocol uses exactly two wires: a serial data line (SDA) and a serial clock line (SCL). Because the I\textsuperscript{2}C architecture allows multiple devices to sit safely on this shared bus, both sensors are wired in parallel to the exact same two GPIO pins: GPIO\,8 for SDA and GPIO\,9 for SCL. 
 
-The DS18B20 soil temperature probe uses the 1-Wire protocol. As the name implies, it only needs a single communication pin instead of separate data and clock lines, because the timing signal is combined directly into the data line itself. In this hardware layout, that single data line is routed to GPIO\,5, keeping it strictly separate from the I\textsuperscript{2}C bus to prevent any timing collisions.
+The DS18B20 soil temperature probe uses the 1-Wire protocol. Because the timing signal is combined directly into the data line itself, it only needs a single communication pin. To prevent any timing collisions with the continuous I\textsuperscript{2}C traffic, this single data line is routed safely to its own isolated pin, GPIO\,5.
 
-The SD card module handles continuous data logging and needs a higher transmission speed. It communicates over the Serial Peripheral Interface (SPI), a protocol requiring four dedicated lines: input (MISO), output (MOSI), a clock signal (SCK), and a chip select line (CS) to indicate when the module is active. Unlike the shared I\textsuperscript{2}C bus, this specific SPI setup does not share access with other components. Therefore, the SD card occupies four individual GPIO pins (10, 11, 12, and 13) exclusively.
+The SD card module handles continuous data logging and needs a much higher transmission speed. It communicates over the Serial Peripheral Interface (SPI), a protocol requiring four dedicated lines: input (MISO), output (MOSI), a clock signal (SCK), and a chip select line (CS). Unlike the shared I\textsuperscript{2}C bus, this specific SPI setup does not share access with other components. Therefore, the SD card exclusively occupies four individual GPIO pins (10, 11, 12, and 13).
 
-The final two components, the capacitive soil moisture probe and the EC sensor, do not use digital protocols. They are analog devices that output a continuous electrical voltage based on the measured environmental levels. As discussed in Section 2.3.2, the ESP32 interprets these levels using its internal ADC. Because these raw voltage signals are sensitive to electrical noise, they cannot be shared on a common wire. As a result, each analog sensor gets its own dedicated ADC-capable pin (GPIO\,1 and GPIO\,4) to ensure the readings remain clean.
+The final two components, the capacitive soil moisture probe and the EC sensor, do not use digital communication at all. They are analog devices that output a continuous electrical voltage. Because these raw voltage signals are sensitive to electrical noise, they cannot be shared on a common wire. As a result, each analog sensor gets its own dedicated ADC-capable pin (GPIO\,1 and GPIO\,4) to ensure the readings remain clean.
 
 Table~\ref{tab:pin_mapping} summarizes the complete pin assignment resulting from these combined hardware requirements.
 
@@ -52,57 +52,58 @@ All sensors operate at 3.3\,V, matching the ESP32's logic level requirements dis
 
 \subsubsection*{Power supply}
 
-The sensor station is powered by a rechargeable lithium-ion battery. Because lithium batteries are sensitive to overcharging and deep discharge, a TP4056 charge controller module is used as a safety bridge between the battery and the ESP32. 
+To make the device mobile, it is powered by a rechargeable lithium-ion battery. Because lithium batteries are extremely sensitive to overcharging and deep discharge, a TP4056 charge controller module is used as a safety bridge between the battery and the ESP32. 
 
-The TP4056 safely charges the battery via a standard USB connection and provides power to the microcontroller. Its positive output (OUT+) is connected to the ESP32's 5V pin. The ESP32 then uses its own internal voltage regulator to step this power down to a clean, stable 3.3\,V, which is then distributed to all the connected sensors. The negative output (OUT-) connects to the common ground (GND) rail.
-
-This power layout allows the Plant Up! station to run completely cord-free, which is a major practical advantage since plant pots are rarely placed directly next to wall outlets. When the battery runs low, it can simply be recharged with a standard USB cable while the device remains in operation.
+The TP4056 safely charges the battery via a standard USB connection and forwards power to the microcontroller. The ESP32 then uses its own internal voltage regulator to step this power down to a clean, stable 3.3\,V, which is distributed to all the connected sensors. This power layout allows the Plant Up! station to run completely cord-free, which is a major practical advantage since plant pots are rarely placed directly next to wall outlets. 
 
 \subsubsection*{Enclosure}
 
-The assembled electronics are housed in a custom 3D-printed case. The chosen material for the print is polylactic acid (PLA). Since the sensor station is designed strictly for indoor use and will not be exposed to extreme heat or weather, PLA offers the perfect balance of being lightweight, affordable, and easy to print.
+With the electronics wired and powered, the final hardware step is a protective physical shell. The assembled components are housed in a custom 3D-printed case made of polylactic acid (PLA). Since the sensor station is designed strictly for indoor use and will not be exposed to extreme heat or weather, PLA offers a perfect balance of being lightweight, affordable, and easy to print.
 
-Designing an enclosure for plant sensors comes with a few physical challenges. Most importantly, the electronics must be kept safe from the wet soil and accidental water spills during watering. Therefore, the main board and battery are safely elevated inside the upper part of the case. Only the waterproof cables for the soil moisture and DS18B20 soil temperature probes exit through the bottom to be inserted into the dirt.
+Designing an enclosure for plant sensors comes with specific physical challenges. Most importantly, the main board and battery must be kept safe from wet soil and accidental water spills during watering. Therefore, all delicate electronics are elevated inside the upper part of the case, while only the waterproof cables for the soil probes exit through the bottom to be inserted into the dirt. Additionally, the case features necessary ventilation cutouts near the top so the infrared sensor measures actual room temperature rather than trapped heat radiating from the ESP32 board. 
 
-Additionally, the case features ventilation cutouts near the top. This airflow is absolutely necessary for the MLX90614 sensor. Without these slots, the sensor would just measure the trapped heat generated by the ESP32 board instead of the actual room temperature. Finally, small internal guides help keep the wires organized and away from the lithium battery, preventing accidental short circuits when the station is moved around.
+While the physical components are now active, some sensors output raw continuous voltages rather than standard units. These analog signals must be calibrated before the backend can interpret them.
+
+
 
 \subsection{Sensor Calibration}
 
-The digital sensors used in the Plant Up! station, such as the DS18B20 or BH1750, transmit their readings in directly usable units like degrees Celsius or lux. However, the analog capacitive soil moisture sensor outputs a raw voltage. As discussed in Section 2.3.2, the ESP32 measures this voltage using its ADC and translates it into a digital value ranging from 0 to 4095. 
+Digital sensors like the DS18B20 or BH1750 transmit readings in standard units such as degrees Celsius or lux. The analog capacitive soil moisture sensor, however, outputs a raw voltage that the ESP32 translates into a digital value ranging from 0 to 4095.
 
-For an average user, a raw ADC reading like ``2340'' has no practical meaning. To make the data useful within the app, this raw hardware value must be mapped to a human-readable 0\,\% to 100\,\% scale, where 0\,\% represents completely dry earth and 100\,\% indicates fully saturated soil.
+A raw hardware value of ``2340'' has no practical meaning for a user. To make the data useful within the mobile app, this ADC value must be mapped to a human-readable 0\,\% to 100\,\% scale, representing completely dry to completely saturated soil.
 
-This translation is achieved using a standard two-point calibration method. First, the sensor is inserted into air-dry potting soil, establishing the baseline for 0\,\% moisture. Because capacitive sensors yield higher voltage in dry conditions, this dry reference typically records a high ADC value (for the test setup, around 3100). Next, the soil is thoroughly watered until it is fully saturated. Water has a much higher dielectric constant than air, which lowers the sensor's output voltage. This wet reference point typically records a lower ADC value (for the test setup, around 1400), representing 100\,\% moisture.
+This translation uses a standard two-point calibration method. First, the sensor is inserted into air-dry potting soil to establish the baseline for 0\,\% moisture. Because capacitive sensors yield higher voltage in dry conditions, this dry reference typically records a high value (around 3100 in the test setup). Next, the soil is thoroughly watered until it is fully saturated. Because water has a much higher dielectric constant than air, the sensor's voltage drops significantly. This wet reference point typically records a lower value (around 1400), representing 100\,\% moisture.
 
-Once these upper and lower boundaries are established, the firmware uses a simple linear mapping function to convert any reading between 1400 and 3100 into a percentage.
+Once these upper and lower boundaries are known, the firmware uses a linear mapping function to convert any reading between 1400 and 3100 into a percentage.
 
-While this relative calibration is highly effective for everyday plant care, it comes with physical limitations. The specific readings are heavily dependent on the type of substrate being used. Loose, sandy soil will yield different baseline measurements than dense, moisture-retaining clay. Furthermore, this method provides a relative moisture index rather than an absolute scientific measurement of VWC. As a result, if a plant is repotted into a completely different type of earth, the two-point calibration process should ideally be repeated to ensure the boundaries remain accurate.
+While this relative calibration is effective for everyday plant care, it depends heavily on the specific substrate. Loose, sandy soil yields different baseline measurements than dense, moisture-retaining clay. This method produces a relative moisture index rather than an absolute VWC measurement. If a plant is repotted into a completely different soil mixture, the two-point calibration must be repeated to establish the correct boundaries.
+
+
 
 \subsection{Practical Validation}
-\begin{itemize}
-    \item \textbf{Test setup:}
-    \begin{itemize}
-        \item Specific plant type, location, and monitoring duration
-        \item Controlled watering event during test phase
-    \end{itemize}
 
-    \item \textbf{Expected vs. measured behavior:}
-    \begin{itemize}
-        \item Soil moisture: spike after watering, gradual decline from evaporation and uptake (consistent with theory from Section 2.2)
-        \item Light: daily cycle visible (bright daytime, low at night)
-        \item Temperature and humidity: stable baseline with minor shifts from heating or ventilation
-    \end{itemize}
+To verify the functional correctness of the system, the Plant Up! station was tested in a standard indoor environment. The goal was to observe how the hardware and interpretation logic handle physical environmental changes, specifically watering events and natural daily light cycles.
 
-    \item \textbf{Evidence:}
-    \begin{itemize}
-        \item At least one figure showing real sensor data from the Plant Up! app
-        \item Visual comparison between measured curve and expected physical behavior
-    \end{itemize}
+Figure~\ref{fig:val_moisture} shows the system's reaction to a controlled watering event. Before watering, the soil moisture sensor transmitted a stable baseline of approximately 28\,\%. When water was added, the measured value immediately spiked, reaching a peak of over 85\,\% before gradually stabilizing as the water distributed throughout the soil. This confirms that the sensor reacts correctly to physical changes and that the calibration logic successfully translates the hardware signals into the expected percentage range.
 
-    \item \textbf{Limitations:}
-    \begin{itemize}
-        \item Limited number of test plants and short test duration
-        \item No laboratory reference sensor for absolute accuracy verification
-        \item Results validate functional correctness, not scientific precision
-    \end{itemize}
-\end{itemize}
+Figure~\ref{fig:val_light} illustrates how the station tracks continuous environmental shifts. During a one-hour afternoon window, the recorded light intensity declined steadily from approximately 600\,lux to 0\,lux. This matches the physical reality of a sunset, showing that the I\textsuperscript{2}C light sensor can reliably monitor daily cycles without significant signal noise.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{minipage}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[height=11cm]{images/moisturegraph.png}
+        \caption{Sensor data visualization confirming a sharp increase in soil moisture directly following a watering event.}
+        \label{fig:val_moisture}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[height=11cm]{images/lightgraph.png}
+        \caption{Ambient light tracking showing a smooth decline in lux values, reflecting fading afternoon sunlight.}
+        \label{fig:val_light}
+    \end{minipage}
+\end{figure}
+
+\subsubsection*{Limitations}
+
+These observations validate the basic functionality of the Plant Up! hardware and software pipeline. However, the test was conducted over a short timeframe without laboratory reference sensors. The recorded 85.4\,\% moisture is a calibrated relative index, not an absolute scientific measurement. Given the project focus on providing accessible smart gardening feedback, this relative accuracy is sufficient for the application.
