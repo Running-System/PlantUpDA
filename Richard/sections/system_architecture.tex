@@ -1,49 +1,51 @@
 \section{Plant Up! System Architecture and Implementation}
 
-\subsection{System Overview and Vision}
-The ``Plant Up!'' platform fundamentally attempts to integrate distributed IoT hardware, a scalable cloud microservices backend, and a mobile application into one cohesive ecosystem. This setup effectively represents a practical realization of the Social Internet of Things (SIoT) concept outlined previously in the theoretical background. Ultimately, it enables plants to digitally communicate their environmental status to their caretakers. The primary objective behind this architecture is the collection of high-precision environmental data from custom edge devices, the subsequent synchronization of this data through the cloud, and its presentation to users via slightly gamified interactions.
+The previous section outlined the protocol-level and distributed-systems concepts required for the evaluation of MQTT and REST. Building on that foundation, this section presents the concrete architecture of ``Plant Up!'' as it was implemented for the practical comparison. The focus lies on the interaction between the edge node, the backend services, and the application layer, with particular attention to how sensor data is structured, transmitted, and processed throughout the system.
 
-To realize this broader vision, the architecture naturally had to address three rather critical requirements:
+\subsection{System Overview and Vision}
+The ``Plant Up!'' platform integrates distributed IoT hardware, a scalable cloud microservices backend, and a mobile application into one ecosystem. This setup represents a practical realization of the Social Internet of Things (SIoT) concept outlined previously in the theoretical background. It enables plants to communicate their environmental status digitally to their caretakers. The primary objective of this architecture is the collection of environmental data from custom edge devices, the synchronization of this data through the cloud, and its presentation to users through lightly gamified interactions.
+
+To realize this vision, the architecture had to address three critical requirements:
 \begin{itemize}
-    \item Low-latency sensor synchronization: When a plant requires attention, it is generally expected that the user is notified promptly. The feedback loop between biological need and human action ought to be closed as rapidly as feasible.
-    \item Energy-efficient operation: IoT devices intended for casual home use must realistically be designed for long-term deployment. This implies conserving battery power through intelligent deep sleep cycles and keeping radio usage to an absolute minimum.
-    \item Distributed consistency: Because data is inherently distributed across User, Social, and Hardware domains, the system must maintain a relatively coherent state, even during the expected periods of localized network instability.
+    \item Low-latency sensor synchronization: When a plant requires attention, the user is expected to be notified promptly. The feedback loop between biological need and human action should therefore be closed as quickly as possible.
+    \item Energy-efficient operation: IoT devices intended for casual home use must be designed for long-term deployment. This requires conserving battery power through deep sleep cycles and minimizing radio usage.
+    \item Distributed consistency: Because data is distributed across User, Social, and Hardware domains, the system must maintain a coherent state even during periods of localized network instability.
 \end{itemize}
 
-These requirements visibly informed almost every major architectural decision, extending from the specific sensors selected for the hardware up to the overarching structure of the microservices. As a result, the design follows a clearly separated multi-layered approach: the Edge Node, the Cloud Layer, and the Application Layer.
+These requirements informed the main architectural decisions, ranging from the hardware design to the structure of the microservices. As a result, the system follows a clearly separated multi-layered approach consisting of the Edge Node, the Cloud Layer, and the Application Layer.
 
 \subsection{Hardware Layer: The Edge Node}
-The hardware layer effectively constitutes the physical sensing infrastructure of the project. It serves as the tangible bridge between the digital cloud backend and the physical environment of the plant. At the center of this design is the ESP32-S3 microcontroller, paired with a fairly comprehensive suite of sensors capable of measuring temperature, humidity, light, soil moisture, and electrical conductivity. Together, this configuration is intended to provide a relatively complete picture of the plant's current health. Due to the strict constraints of battery capacity, the device is programmed to spend the vast majority of its operational time in a deep sleep state. Consequently, its active cycle follows a rather strict sequence:
+Within the scope of this chapter, the hardware layer is relevant primarily because it defines the constraints under which MQTT and REST were evaluated. It forms the physical sensing infrastructure of the project and acts as the bridge between the plant environment and the cloud backend. At the center of this design is the ESP32-S3 microcontroller together with sensors for temperature, humidity, light, soil moisture, and electrical conductivity. Because the system is battery-powered, the device spends most of its operational time in deep sleep. Its active cycle therefore follows a defined sequence:
 
 \begin{enumerate}
     \item Acquisition: The microcontroller wakes up, temporarily powers the attached sensors, and captures a brief environmental snapshot.
-    \item Serialization: The recorded sensor readings are subsequently packed into a compact JSON format.
-    \item Transmission: The data packet is finally transmitted to the cloud (utilizing either MQTT or REST), immediately after which the device is instructed to return to its deep sleep mode.
+    \item Serialization: The recorded sensor readings are packed into a compact JSON format.
+    \item Transmission: The data packet is transmitted to the cloud via MQTT or REST, after which the device returns to deep sleep.
 \end{enumerate}
 
 \subsubsection{Component Selection and Sensor Interface}
-Hardware selection typically involves a careful trade-off between technical capability and energy longevity. With these constraints in mind, the following components were chosen for the ``Plant Up!'' edge node.
+Hardware selection involves a trade-off between technical capability and energy longevity. For this chapter, the relevant point is not the full hardware design in isolation, but how the selected components influence payload creation, wake-up behavior, and communication with the backend. With these constraints in mind, the following components were chosen for the ``Plant Up!'' edge node.
 
 Microcontroller: Espressif ESP32-S3
-The ESP32-S3 acts as the central processing unit. It was selected primarily for its reasonable balance between computational power and energy efficiency. It features a dual-core processor alongside built-in Wi-Fi and Bluetooth connectivity. Of particular relevance here is its Ultra-Low Power (ULP) co-processor, which theoretically allows the main CPU to remain asleep while basic environmental monitoring continues in the background. Priced at approximately 20 Euro, it offers what can be considered a favorable cost-to-performance ratio for this context.
+The ESP32-S3 acts as the central processing unit. It was selected for its balance between computational power and energy efficiency. It features a dual-core processor together with built-in Wi-Fi and Bluetooth connectivity. Of particular relevance here is its Ultra-Low Power (ULP) co-processor, which allows the main CPU to remain asleep while basic environmental monitoring continues in the background.
 
 Soil Moisture Sensor: HiLetgo LM393
-The HiLetgo LM393 (costing approximately 7.89 Euro) measures the dielectric permittivity of the soil. Unlike many lower-cost sensors that are notoriously prone to rapid corrosion, this resistive variant provides the reasonably reliable moisture readings necessary to accurately trigger watering notifications.
+The HiLetgo LM393 measures soil moisture and provides the readings required to trigger watering-related notifications. In the context of this chapter, its relevance lies primarily in the fact that it contributes to the telemetry payload transmitted by the edge node.
 
 Light Sensor: HiLetgo BH1750
-The BH1750 (approximately 11.39 Euro) is a standard digital I2C sensor providing relatively precise lux readings. Having this data enables the system to assess whether a plant is receiving adequate light exposure based on its species and to generate corresponding adjustments or notifications.
+The BH1750 is a digital I2C sensor that provides lux readings. This data allows the system to assess whether a plant is receiving adequate light exposure based on its species and to generate corresponding notifications.
 
 Electrical Conductivity (EC) Sensor: DFRobot Gravity V2
-The DFRobot Gravity Analog EC Sensor (around 12.10 Euro) is utilized to measure the overall electrical conductivity of the soil, a metric heavily correlated with general nutrient concentration.
+The DFRobot Gravity Analog EC Sensor is used to measure the electrical conductivity of the soil, a metric correlated with nutrient concentration.
 \begin{itemize}
-    \item \textit{Relevance of EC:} The rationale here is that electrical conductivity correlates reasonably well with underlying nutrient levels. A plant might be perfectly well-watered yet still severely deficient in nitrogen. Integrating this sensor therefore attempts to elevate the system from functioning merely as a watering alarm into a broader, somewhat more comprehensive health monitor.
+    \item \textit{Relevance of EC:} Electrical conductivity correlates with nutrient levels. A plant may therefore be adequately watered while still showing nutrient-related problems. Integrating this sensor extends the system beyond a simple watering alarm and supports a broader view of plant health.
 \end{itemize}
 
 Power Supply and Sustainability
-To support remote, long-term operation, the main device pairs a standard lithium-ion battery with a small 0.5\,W photovoltaic solar panel (costing approximately 3.48 Euro). This combined setup is designed to be largely self-sustaining under decent light conditions, while a standard USB-C port is still included as a practical fallback charging option.
+To support remote long-term operation, the device pairs a lithium-ion battery with a small 0.5\,W photovoltaic solar panel. This combined setup is intended to remain self-sustaining under suitable light conditions, while a USB-C port is included as a fallback charging option.
 
 \subsubsection{Data Structure}
-Prior to transmission, all compiled sensor data is serialized into a structured JSON payload. This specific payload is designed to map directly to the \texttt{Controllers} table situated within the backend \texttt{microcontroller\_schema}:
+Prior to transmission, all compiled sensor data is serialized into a structured JSON payload. This payload is designed to map directly to the \texttt{Controllers} table within the backend \texttt{microcontroller\_schema}:
 
 \begin{figure}[H]
     \centering
@@ -61,20 +63,20 @@ The corresponding database table deployed in Supabase is shown below:
     \label{fig:controllers_table_rx}
 \end{figure}
 
-A particularly critical design decision implemented at this stage involves timestamping every measurement at the source, that is, directly on the edge node itself. This approach ensures that even during extended periods of network unavailability, the backend can accurately reconstruct the historical data timeline based on the original recording time, rather than relying on a potentially delayed arrival time at the server.
+A particularly important design decision at this stage is the timestamping of every measurement at the source, directly on the edge node itself. This approach ensures that even during extended periods of network unavailability, the backend can reconstruct the historical data timeline based on the original recording time rather than on a delayed arrival time at the server.
 
 \subsection{Microservice Architecture Design}
-The backend infrastructure is fundamentally structured as a collection of microservices, organized largely around isolated Supabase schemas. In this architecture, each schema functions roughly as a Bounded Context \cite{fowlerMicroservices}, encapsulating a designated domain:
+The backend infrastructure is structured as a collection of microservices organized around isolated Supabase schemas. In this architecture, each schema functions as a bounded context \cite{fowlerMicroservices}, encapsulating a designated domain:
 \begin{itemize}
-    \item \texttt{user\_schema}: This area manages raw user profiles, activity streaks, and virtual wallets.
+    \item \texttt{user\_schema}: This area manages user profiles, activity streaks, and virtual wallets.
     \item \texttt{social\_media\_schema}: Responsible for community content, including user posts, comments, and public plant profiles.
-    \item \texttt{microcontroller\_schema}: Acts essentially as the centralized data warehouse for all incoming raw sensor readings.
-    \item \texttt{gamification}: Houses the core game engine logic, including quests, overall progress tracking, and accumulated XP.
+    \item \texttt{microcontroller\_schema}: Acts as the centralized data store for incoming raw sensor readings.
+    \item \texttt{gamification}: Houses the core game logic, including quests, progress tracking, and accumulated XP.
 \end{itemize}
 
-From a practical perspective, this strict separation provides notable development and operational benefits. For instance, any necessary modifications to the quest system can be carried out without risking inadvertent disruptions to the rather sensitive sensor ingestion pipeline. Consequently, failures isolated in one domain are highly unlikely to cascade into the others.
+This strict separation provides practical development and operational benefits. For instance, modifications to the quest system can be carried out without risking disruptions to the sensor ingestion pipeline. Consequently, failures isolated in one domain are unlikely to cascade into the others.
 
-By way of example, the \texttt{Plants} table located in the social schema simply links a given user's plant to its ideal, scientifically established growing conditions, which are independently stored in \texttt{Plant\_data}. This setup allows various other services to retrieve the required botanical reference data without unnecessarily tangling dependencies within the social database.
+By way of example, the \texttt{Plants} table located in the social schema links a user's plant to its ideal growing conditions, which are stored independently in \texttt{Plant\_data}. This setup allows other services to retrieve the required botanical reference data without creating unnecessary dependencies within the social database.
 
 \begin{figure}[H]
     \centering
@@ -84,17 +86,17 @@ By way of example, the \texttt{Plants} table located in the social schema simply
 \end{figure}
 
 \subsection{Real-Time Data Synchronization Mechanism}
-One of the central challenges encountered in the ``Plant Up!'' architecture is the ongoing attempt to balance real-time data delivery against the need for strict energy conservation on the remote sensor devices. While users generally expect to see fresh data reflected in the app quite promptly, the sensor nodes simply cannot afford the immense energy cost of maintaining entirely persistent network connections. It is therefore necessary to briefly explain the reasoning behind the adopted synchronization strategy.
+One of the central challenges in the ``Plant Up!'' architecture is balancing real-time data delivery against the need for energy conservation on remote sensor devices. While users expect to see fresh data reflected in the application promptly, the sensor nodes cannot afford the energy cost of maintaining fully persistent network connections. It is therefore necessary to explain the reasoning behind the adopted synchronization strategy.
 
-During the planning phase, two primary contenders were evaluated for handling the core sensor-to-cloud communication:
+During the planning phase, two primary approaches were evaluated for handling sensor-to-cloud communication:
 \begin{itemize}
-    \item REST (HTTPS): Readily recognized as the standard approach of the modern web. It is highly structured and universally supported, which clearly makes it well-suited for traditional, user-facing API interactions. Nevertheless, when utilized for transmitting small, frequent sensor packets, the necessary connection overhead becomes substantial.
-    \item MQTT: Originating as a protocol designed specifically with constrained IoT scenarios in mind. It is observably lightweight and operates on a publish/subscribe model, a structure that theoretically appears well-matched to the severe constraints of battery-powered microcontrollers such as the ESP32.
+    \item REST (HTTPS): The standard approach of the modern web. It is highly structured and universally supported, which makes it well-suited for traditional user-facing API interactions. When it is used to transmit small, frequent sensor packets, however, the required connection overhead becomes substantial.
+    \item MQTT: A protocol designed specifically for constrained IoT scenarios. It is lightweight and operates on a publish/subscribe model, a structure that aligns well with the constraints of battery-powered microcontrollers such as the ESP32.
 \end{itemize}
 
-Ultimately, a hybrid approach was adopted in an attempt to leverage the distinct strengths of both protocols. The rationale framing this decision is largely as follows: MQTT is utilized exclusively for the uplink sensor-to-cloud communication path. This is because its lightweight binary protocol nature and persistent broker connection help minimize the energy expenditure required for each transmission cycle. Conversely, the user-facing mobile application continues to communicate with the backend via standard REST APIs, mostly because smartphones do not face the same extreme energy constraints and actively benefit from the request-response semantics typical of HTTP when loading complex user profiles or social feeds.
+Ultimately, a hybrid approach was adopted in order to leverage the strengths of both protocols. MQTT is used exclusively for the uplink sensor-to-cloud communication path because its lightweight binary format and persistent broker connection help minimize the energy expenditure required for each transmission cycle. By contrast, the user-facing mobile application continues to communicate with the backend via standard REST APIs because smartphones do not face the same energy constraints and benefit from the request-response semantics of HTTP when loading complex user profiles or social feeds.
 
-Following this architecture, the deployed IoT devices reliably publish their sensor data via MQTT to a central broker. A dedicated backend service then naturally subscribes to the relevant topics and securely persists the incoming data stream into the database. Only then does the mobile application periodically retrieve this processed data through standard RESTful endpoints.
+Following this architecture, the deployed IoT devices publish their sensor data via MQTT to a central broker. A dedicated backend service subscribes to the relevant topics and persists the incoming data stream into the database. The mobile application then retrieves this processed data through standard RESTful endpoints.
 
 A typical data ingestion flow under this model is illustrated below:
 
@@ -106,16 +108,16 @@ A typical data ingestion flow under this model is illustrated below:
 \end{figure}
 
 \subsection{User Engagement and Data Processing}
-It is worth noting that the social and gamification components integrated into ``Plant Up!'' are not intended merely as cosmetic additions; rather, they serve as the primary mechanism for actively driving user engagement over time. Naturally, this logic is housed within the \texttt{gamification} schema, where it continuously monitors the various data streams arriving from the other interconnected layers.
+The social and gamification components integrated into ``Plant Up!'' are not merely cosmetic additions; they serve as the primary mechanism for driving user engagement over time. This logic is housed within the \texttt{gamification} schema, where it monitors the data streams arriving from the other system layers.
 
-The system relies heavily on three core database tables:
+The system relies on three core database tables:
 \begin{itemize}
-    \item Quests: Essentially the master catalog of available challenges, incorporating tasks such as ``Water your Monstera'' or perhaps ``Check the overall light level''.
-    \item User\_quests: Maintains a record of the individual user's active progress on their explicitly assigned quests.
-    \item player\_stats: Stores the user's cumulative behavioral statistics, including their overall XP and current level ranking.
+    \item Quests: The catalog of available challenges, including tasks such as ``Water your Monstera'' or ``Check the light level''.
+    \item User\_quests: Maintains a record of the user's progress on assigned quests.
+    \item player\_stats: Stores cumulative behavioral statistics, including total XP and current level.
 \end{itemize}
 
-For context, the \texttt{quests} table fundamentally defines the parameters of the available challenges:
+For context, the \texttt{quests} table defines the parameters of the available challenges:
 
 \begin{figure}[H]
     \centering
@@ -124,7 +126,7 @@ For context, the \texttt{quests} table fundamentally defines the parameters of t
     \label{fig:quests_table}
 \end{figure}
 
-The intended integration between the raw sensor layer and the higher-level gamification layer functions roughly as follows. When the sensor layer detects a noticeably sharp increase in soil moisture, the system logically infers that the user has recently watered the plant. The designated processing service then predictably triggers an immediate update to the user's internal quest progress. This creates a relatively direct link between physical, real-world action and digital, rewarding feedback.
+The integration between the raw sensor layer and the higher-level gamification layer functions as follows. When the sensor layer detects a sharp increase in soil moisture, the system infers that the user has recently watered the plant. The processing service then triggers an update to the user's quest progress. This creates a direct link between physical action and digital feedback.
 
 \begin{figure}[H]
     \centering
@@ -133,7 +135,7 @@ The intended integration between the raw sensor layer and the higher-level gamif
     \label{fig:user_quest_progression}
 \end{figure}
 
-Once a specified quest goal is verifiably met (for instance, successfully watering a plant three times in a given week), the system proceeds to award the user with a predetermined amount of experience points.
+Once a specified quest goal is met, for instance watering a plant three times in one week, the system awards the user a predetermined amount of experience points.
 
 \begin{figure}[H]
     \centering
@@ -142,6 +144,6 @@ Once a specified quest goal is verifiably met (for instance, successfully wateri
     \label{fig:xp_award}
 \end{figure}
 
-As one might argue, this distinctly modular design helps maintain a very clear operational separation between the higher-level engagement logic and the underlying hardware infrastructure. The various game mechanics, such as adjusting overall quest difficulty or running temporary seasonal events, can thus be modified entirely independently, without ever requiring a risky firmware update on the deployed edge devices.
+This modular design helps maintain a clear operational separation between the engagement logic and the underlying hardware infrastructure. Game mechanics such as adjusting quest difficulty or running temporary seasonal events can therefore be modified independently without requiring a firmware update on the deployed edge devices.
 
-While the architectural decisions presented throughout this section are certainly grounded in widely established theoretical principles, their real-world effectiveness still requires empirical validation. To provide this, the following section will detail a controlled experimental evaluation designed to quantify the actual performance differences between MQTT and REST under realistic operating conditions, thereby directly addressing the research question posed earlier in the introduction.
+While the architectural decisions presented throughout this section are grounded in established theoretical principles, their real-world effectiveness still requires empirical validation. The following section therefore presents a controlled experimental evaluation designed to quantify the performance differences between MQTT and REST under realistic operating conditions and to address the research question introduced earlier.
