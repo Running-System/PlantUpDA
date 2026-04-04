@@ -1,17 +1,1677 @@
-Initial Win CP for (console input, console output, system): (CP850, CP65001, CP1252)
-I changed them all to CP1252
-Rc files read:
-  NONE
-Latexmk: This is Latexmk, John Collins, 15 June 2025. Version 4.87.
-Latexmk: Nothing to do for 'Diplomarbeit.tex'.
-Latexmk: All targets (Diplomarbeit.pdf) are up-to-date
-Collected error summary (may duplicate other messages):
-  bibtex Diplomarbeit: gave an error in previous invocation of latexmk.
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex.fmt)
+ \write18 enabled.
+entering extended mode
+(Diplomarbeit.tex
+LaTeX2e <2023-11-01> patch level 1
+L3 programming layer <2024-01-04>
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/base\report.cls
+Document Class: report 2023/05/17 v1.4n Standard LaTeX document class
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/base\size12.clo))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/tools\longtable.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/tools\tabularx.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/tools\array.sty))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lipsum\lipsum.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/l3packages/l3keys2e\l3k
+eys2e.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/l3kernel\expl3.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
+tex.def)))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lipsum\lipsum.ltd.tex))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/babel\babel.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/babel\txtbabel.def)
+*************************************
+* Local config file bblopts.cfg used
+*
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/arabi\bblopts.cfg)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/babel-english\english.l
+df)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/babel-german\ngerman.ld
+f
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/babel-german\ngermanb.l
+df)))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/babel/locale/de\babel
+-ngerman.tex)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/babel/locale/en\babel
+-english.tex)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/base\inputenc.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lm\lmodern.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\helvet.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/graphics\keyval.sty))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\courier.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/fancyhdr\fancyhdr.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/ntgclass\a4.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/base\makeidx.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/listings\listings.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstmisc.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/listings\listings.cfg))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/graphics\color.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\color.cfg)
 
-Latexmk: Sometimes, the -f option can be used to get latexmk
-  to try to force complete processing.
-  But normally, you will need to correct the file(s) that caused the
-  error, and then rerun latexmk.
-  In some cases, it is best to clean out generated files before rerunning
-  latexmk after you've corrected the files.
-Reverting Windows console CPs to (in,out) = (850,65001)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/graphics-def\pdftex.def
+)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/graphics\mathcolor.ltx)
+) (C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/setspace\setspace.sty
+) (C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphics.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/graphics\trig.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\graphics.c
+fg)))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/titlesec\titlesec.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hyperref.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/iftex\iftex.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/infwarerr\infwarerr.s
+ty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/kvsetkeys\kvsetkeys.sty
+)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/kvdefinekeys\kvdefine
+keys.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/pdfescape\pdfescape.s
+ty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/ltxcmds\ltxcmds.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/pdftexcmds\pdftexcmds
+.sty))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/hycolor\hycolor.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/letltxmacro\letltxmacro
+.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/auxhook\auxhook.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\nameref.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/refcount\refcount.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/gettitlestring\gettit
+lestring.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/kvoptions\kvoptions.sty
+)))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/etoolbox\etoolbox.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\pd1enc.def)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/intcalc\intcalc.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\puenc.def)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/url\url.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/bitset\bitset.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/bigintcalc\bigintcalc
+.sty))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/base\atbegshi-ltx.sty))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hpdftex.def
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/base\atveryend-ltx.sty)
+
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/rerunfilecheck\rerunfil
+echeck.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/uniquecounter\uniquec
+ounter.sty)))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/float\float.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/wrapfig\wrapfig.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsmath.sty
+For additional information on amsmath, use the `?' option.
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amstext.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsgen.sty))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsbsy.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsopn.sty))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/pdfpages\pdfpages.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/base\ifthen.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/tools\calc.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/eso-pic\eso-pic.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/pdfpages\pppdftex.def))
+ (C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption3.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/caption\ltcaption.sty))
+
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/emptypage\emptypage.sty
+) (C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/tools\verbatim.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/minted\minted.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/catchfile\catchfile.s
+ty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/etexcmds\etexcmds.sty
+)) (C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/fvextra\fvextra.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/fancyvrb\fancyvrb.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/upquote\upquote.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/base\textcomp.sty))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lineno\lineno.sty))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/latex2pydata\latex2pyda
+ta.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities\pgfkeys.s
+ty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeys
+.code.tex
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeys
+libraryfiltered.code.tex)))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/pgfopts\pgfopts.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/tools\shellesc.sty))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/booktabs\booktabs.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/iftex\ifvtex.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.cfg))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lastpage\lastpage.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lastpage\lastpage2e.sty
+
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lastpage\lastpageclassi
+c.sty) 
+))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmr.fd)
+(Diplomarbeit.aux)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
+ii
+[Loading MPS to PDF converter (version 2006.09.02).]
+)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
+ase.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.c
+fg))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/pdflscape\pdflscape.sty
+
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/pdflscape\pdflscape-nom
+etadata.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/graphics\lscape.sty)))
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\t1phv.fd)
+(Allgemein/titel.tex
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lm\ot1lmr.fd)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lm\omllmm.fd)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lm\omslmsy.fd)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lm\omxlmex.fd))
+Overfull \hbox (2.54398pt too wide) in paragraph at lines 65--280
+[][][]  
+[1{C:/Users/denni/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/de
+nni/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc} <./images/Logo_t
+ransparent.png> <./images/Logo.png> <./images/HTLzukunft.jpg>]
+(Allgemein/erklaerung.tex) [1{C:/Users/denni/AppData/Local/Programs/MiKTeX/font
+s/enc/dvips/lm/lm-ec.enc}] (Allgemein/danksagungen.tex) [2]
+(Allgemein/abstract.tex) [3]
+No file Diplomarbeit.toc.
+[4] (Allgemein/einleitung.tex
+Chapter 1.
+
+LaTeX Warning: Citation `floristsReviewTrends' on page 1 undefined on input lin
+e 6.
+
+
+LaTeX Warning: Citation `kunrHouseplants2022' on page 1 undefined on input line
+ 7.
+
+
+LaTeX Warning: Citation `mordorIndoorPlants' on page 1 undefined on input line 
+9.
+
+
+LaTeX Warning: Citation `floralDailyKillPlants' on page 1 undefined on input li
+ne 9.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 1 undefined on input line 15.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 1 undefined on input line 20.
+
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lm\ts1lmr.fd))
+(Arun/einfuehrung.tex
+pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.1 \chapter
+            [Combining Nature and Technology]{Combining Nature and Technolog...
+[1{C:/Users/denni/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}]
+
+Chapter 2.
+(Arun/sections/01_introduction.tex
+
+LaTeX Warning: Citation `terrariumTribeStats2024' on page 2 undefined on input 
+line 3.
+
+
+LaTeX Warning: Citation `lsuWaterWisely' on page 2 undefined on input line 3.
+
+
+LaTeX Warning: Citation `lsuWaterWisely' on page 2 undefined on input line 5.
+
+
+LaTeX Warning: Citation `rootRotsWisc' on page 2 undefined on input line 5.
+
+
+LaTeX Warning: Citation `frontiersLightAdaptation' on page 2 undefined on input
+ line 7.
+
+
+LaTeX Warning: Citation `marketsandmarketsSmartHome2024' on page 2 undefined on
+ input line 9.
+
+
+LaTeX Warning: Citation `precedenceSmartHome2025' on page 2 undefined on input 
+line 9.
+
+[2]
+
+LaTeX Warning: Citation `faoWaterSustainableFood' on page 3 undefined on input 
+line 21.
+
+
+LaTeX Warning: Citation `worldbankFreshwater70' on page 3 undefined on input li
+ne 21.
+
+) (Arun/sections/02_environmental_factors.tex
+
+LaTeX Warning: Citation `ncStateSoils' on page 3 undefined on input line 3.
+
+
+LaTeX Warning: Citation `ncStateSoils' on page 3 undefined on input line 8.
+
+
+LaTeX Warning: Reference `LastPage' on page 3 undefined on input line 9.
+
+[3]
+
+LaTeX Warning: Citation `ucIpmAeration' on page 4 undefined on input line 10.
+
+
+LaTeX Warning: Citation `cornellWiltingPoint' on page 4 undefined on input line
+ 12.
+
+
+LaTeX Warning: Citation `meterGroupWater' on page 4 undefined on input line 12.
+
+
+
+LaTeX Warning: Citation `nasaPAR2' on page 4 undefined on input line 15.
+
+
+LaTeX Warning: Citation `apogeePpfdLux' on page 4 undefined on input line 17.
+
+
+LaTeX Warning: Citation `ncStateSoils' on page 4 undefined on input line 20.
+
+
+LaTeX Warning: Citation `britannicaTranspiration' on page 4 undefined on input 
+line 22.
+
+
+LaTeX Warning: Citation `blancaflor2025measuring' on page 4 undefined on input 
+line 22.
+
+
+LaTeX Warning: Reference `LastPage' on page 4 undefined on input line 23.
+
+[4]
+
+LaTeX Warning: Citation `cornellWiltingPoint' on page 5 undefined on input line
+ 32.
+
+
+LaTeX Warning: Citation `openstaxSensory' on page 5 undefined on input line 34.
+
+
+
+LaTeX Warning: Citation `blancaflor2025measuring' on page 5 undefined on input 
+line 36.
+
+
+LaTeX Warning: Citation `ucIpmAeration' on page 5 undefined on input line 39.
+
+
+LaTeX Warning: Citation `rootRotsWisc' on page 5 undefined on input line 39.
+
+
+LaTeX Warning: Citation `umdSunburn' on page 5 undefined on input line 41.
+
+
+LaTeX Warning: Reference `LastPage' on page 5 undefined on input line 42.
+
+[5]
+
+LaTeX Warning: Citation `unhHumidity' on page 6 undefined on input line 44.
+
+
+LaTeX Warning: Citation `usuOverwatering' on page 6 undefined on input line 50.
+
+
+
+LaTeX Warning: Citation `pittLightAdaptation' on page 6 undefined on input line
+ 50.
+
+
+LaTeX Warning: Citation `blancaflor2025measuring' on page 6 undefined on input 
+line 50.
+
+) (Arun/sections/03_sensor_technologies.tex
+Overfull \hbox (1.73497pt too wide) in paragraph at lines 1--1
+|[]\T1/phv/b/n/17.28 Sensor Tech-nolo-gies and the Mea-sure-ment Pipeline| 
+
+LaTeX Warning: Reference `LastPage' on page 6 undefined on input line 11.
+
+[6]
+
+LaTeX Warning: Citation `chowdhuryCalibration2022' on page 7 undefined on input
+ line 11.
+
+
+LaTeX Warning: Citation `seeedCapacitive' on page 7 undefined on input line 13.
+
+
+
+LaTeX Warning: Citation `hacksterMoistureSensors' on page 7 undefined on input 
+line 20.
+
+
+LaTeX Warning: Citation `hacksterMoistureSensors' on page 7 undefined on input 
+line 20.
+
+
+LaTeX Warning: Citation `hacksterMoistureSensors' on page 7 undefined on input 
+line 26.
+
+
+LaTeX Warning: Citation `hacksterMoistureSensors' on page 7 undefined on input 
+line 26.
+
+
+LaTeX Warning: Reference `fig:sensor_resistive' on page 7 undefined on input li
+ne 31.
+
+
+LaTeX Warning: Reference `fig:sensor_capacitive' on page 7 undefined on input l
+ine 31.
+
+
+LaTeX Warning: Citation `chowdhuryCalibration2022' on page 7 undefined on input
+ line 31.
+
+
+LaTeX Warning: Citation `seeedCapacitive' on page 7 undefined on input line 31.
+
+
+
+LaTeX Warning: Reference `LastPage' on page 7 undefined on input line 36.
+
+[7 <./images/sensor_resistive.png> <./images/sensor_capacitive.png>]
+
+LaTeX Warning: Citation `nxpI2C' on page 8 undefined on input line 37.
+
+
+LaTeX Warning: Citation `bipmPhotometry' on page 8 undefined on input line 41.
+
+
+LaTeX Warning: Citation `nasaPAR2' on page 8 undefined on input line 43.
+
+
+LaTeX Warning: Reference `LastPage' on page 8 undefined on input line 59.
+
+[8]
+
+LaTeX Warning: Reference `fig:moisture_distortion' on page 9 undefined on input
+ line 60.
+
+
+LaTeX Warning: Citation `chowdhuryCalibration2022' on page 9 undefined on input
+ line 64.
+
+
+LaTeX Warning: Citation `seeedCapacitive' on page 9 undefined on input line 64.
+
+
+
+LaTeX Warning: Citation `seeedCapacitive' on page 9 undefined on input line 72.
+
+
+
+LaTeX Warning: Reference `LastPage' on page 9 undefined on input line 73.
+
+[9 <./images/moisture_distortion.png>]
+
+LaTeX Warning: Citation `espIdfDeepSleep' on page 10 undefined on input line 90
+.
+
+
+LaTeX Warning: Reference `LastPage' on page 10 undefined on input line 91.
+
+[10]
+
+LaTeX Warning: Citation `espIdfDeepSleep' on page 11 undefined on input line 92
+.
+
+
+LaTeX Warning: Reference `fig:power_profile' on page 11 undefined on input line
+ 98.
+
+
+LaTeX Warning: Citation `esp32Datasheet' on page 11 undefined on input line 98.
+
+
+
+LaTeX Warning: Citation `espIdfDeepSleep' on page 11 undefined on input line 98
+.
+
+
+LaTeX Warning: File `images/power_profile.pdf' not found on input line 102.
+
+
+! Package pdftex.def Error: File `images/power_profile.pdf' not found: using dr
+aft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.102 ...=0.8\textwidth]{images/power_profile.pdf}
+                                                  
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\t1pcr.fd)
+
+LaTeX Warning: Citation `rfcJSON' on page 11 undefined on input line 115.
+
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1phv.fd)
+
+LaTeX Warning: Reference `LastPage' on page 11 undefined on input line 116.
+
+[11{C:/Users/denni/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathit.e
+nc}]
+
+LaTeX Warning: Reference `LastPage' on page 12 undefined on input line 116.
+
+[12]
+
+LaTeX Warning: Citation `oasisMQTT' on page 13 undefined on input line 117.
+
+
+Overfull \hbox (17.75426pt too wide) in paragraph at lines 117--118
+[]\T1/phv/m/n/12 The pay-load is trans-mit-ted via Mes-sage Queu-ing Teleme-try
+ Trans-port (MQTT), a lightweight
+) (Arun/sections/04_decision_making.tex
+
+LaTeX Warning: Reference `LastPage' on page 13 undefined on input line 12.
+
+[13]
+
+LaTeX Warning: Citation `boniecki2023smartSensors' on page 14 undefined on inpu
+t line 18.
+
+
+LaTeX Warning: Reference `fig:live_data_health' on page 14 undefined on input l
+ine 21.
+
+
+Underfull \hbox (badness 1005) in paragraph at lines 21--22
+\T1/phv/m/n/12 natural-language hints based on the cur-rent
+
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 27.
+See the caption package documentation for explanation.
+
+
+LaTeX Warning: Citation `dssPlantProtection' on page 14 undefined on input line
+ 35.
+
+
+LaTeX Warning: Reference `LastPage' on page 14 undefined on input line 43.
+
+[14{C:/Users/denni/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathsy.e
+nc} <./images/LiveDataHealth.png>]
+
+LaTeX Warning: Reference `fig:decision_flowchart' on page 15 undefined on input
+ line 44.
+
+
+LaTeX Warning: Citation `iso3864' on page 15 undefined on input line 48.
+
+
+LaTeX Warning: Reference `fig:health_traffic_light' on page 15 undefined on inp
+ut line 68.
+
+
+LaTeX Warning: Reference `LastPage' on page 15 undefined on input line 69.
+
+[15 <./images/decision_flowchart.png (PNG copy)> <./images/GreatHealth.png> <./
+images/OkayHealth.png> <./images/CriticalHealth.png>]
+
+LaTeX Warning: Citation `jmirTimeSeries' on page 16 undefined on input line 73.
+
+
+
+LaTeX Warning: Reference `fig:trend_chart' on page 16 undefined on input line 7
+6.
+
+
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 85.
+See the caption package documentation for explanation.
+
+) (Arun/sections/05_implementation.tex
+
+LaTeX Warning: Reference `LastPage' on page 16 undefined on input line 9.
+
+[16 <./images/1hourgraph.png>]
+
+LaTeX Warning: Reference `tab:pin_mapping' on page 17 undefined on input line 2
+3.
+
+
+LaTeX Warning: Reference `LastPage' on page 17 undefined on input line 52.
+
+[17]
+
+LaTeX Warning: Reference `LastPage' on page 18 undefined on input line 64.
+
+[18]
+
+LaTeX Warning: Reference `fig:val_moisture' on page 19 undefined on input line 
+87.
+
+
+LaTeX Warning: Reference `LastPage' on page 19 undefined on input line 89.
+
+[19]
+
+LaTeX Warning: Reference `fig:val_light' on page 20 undefined on input line 89.
+
+
+) (Arun/sections/06_conclusion.tex
+
+LaTeX Warning: Reference `LastPage' on page 20 undefined on input line 4.
+
+[20 <./images/moisturegraph.png> <./images/lightgraph.png>]))
+
+LaTeX Warning: Reference `LastPage' on page 21 undefined on input line 359.
+
+[21] (Abudi/einfuehrung.tex
+Kapitel 3.
+
+Overfull \hbox (2.33836pt too wide) in paragraph at lines 1--1
+|[] \T1/phv/b/n/24.88 Ed-ge vs. Cloud Pro-ces-sing in Smart
+
+Overfull \hbox (1.16327pt too wide) in paragraph at lines 1--1
+\T1/phv/b/n/24.88 Gar-de-ning: A Com-pa-ra-ti-ve Stu-dy for
+(Abudi/sections/introduction.tex [22]) (Abudi/sections/state_of_the_art.tex
+
+LaTeX Warning: Reference `LastPage' on page 23 undefined on input line 3.
+
+[23]
+
+LaTeX Warning: Citation `iot_reference_model' on page 24 undefined on input lin
+e 6.
+
+
+LaTeX Warning: Citation `iot_reference_model' on page 24 undefined on input lin
+e 13.
+
+
+LaTeX Warning: Citation `iot_reference_model' on page 24 undefined on input lin
+e 13.
+
+
+LaTeX Warning: Reference `LastPage' on page 24 undefined on input line 19.
+
+[24 <./Abudi/figures/Iot_world_reference_model.png>]
+Overfull \hbox (12.37852pt too wide) in paragraph at lines 20--21
+\T1/phv/m/n/12 forms and spe-cia-li-zed da-ta-ba-se ex-ten-si-ons that sol-ve t
+his dual-workload pro-blem^^Ventirely
+
+LaTeX Warning: Citation `closefuture_supabase_firebase' on page 25 undefined on
+ input line 24.
+
+
+LaTeX Warning: Citation `supabase_alternatives' on page 25 undefined on input l
+ine 24.
+
+
+LaTeX Warning: Citation `blog_elest_supabase_self_host' on page 25 undefined on
+ input line 26.
+
+
+LaTeX Warning: Citation `realtime_architecture' on page 25 undefined on input l
+ine 31.
+
+
+LaTeX Warning: Citation `realtime_architecture' on page 25 undefined on input l
+ine 31.
+
+
+LaTeX Warning: Citation `closefuture_supabase_firebase' on page 25 undefined on
+ input line 35.
+
+
+LaTeX Warning: Citation `blog_elest_supabase_self_host' on page 25 undefined on
+ input line 35.
+
+
+LaTeX Warning: Citation `tigerdata_tsdb_vs_rdbms' on page 25 undefined on input
+ line 39.
+
+
+LaTeX Warning: Citation `milvus_rdbms_limitations' on page 25 undefined on inpu
+t line 41.
+
+
+LaTeX Warning: Reference `LastPage' on page 25 undefined on input line 42.
+
+[25]
+
+LaTeX Warning: Reference `LastPage' on page 26 undefined on input line 42.
+
+[26 <./Abudi/figures/realtime_architekture.png (PNG copy)>]
+
+LaTeX Warning: Citation `tigerdata_tsdb_compared' on page 27 undefined on input
+ line 46.
+
+
+LaTeX Warning: Citation `tigerdata_best_practices_hypertables' on page 27 undef
+ined on input line 46.
+
+
+LaTeX Warning: Citation `tigerdata_timescale_alternatives' on page 27 undefined
+ on input line 46.
+
+
+LaTeX Warning: Citation `tigerdata_caggs_retention' on page 27 undefined on inp
+ut line 46.
+
+
+LaTeX Warning: Citation `tigerdata_best_practices_hypertables' on page 27 undef
+ined on input line 50.
+
+
+LaTeX Warning: Citation `tigerdata_timescale_alternatives' on page 27 undefined
+ on input line 50.
+
+
+LaTeX Warning: Citation `tigerdata_caggs_retention' on page 27 undefined on inp
+ut line 50.
+
+
+LaTeX Warning: Citation `tigerdata_tsdb_compared' on page 27 undefined on input
+ line 50.
+
+
+LaTeX Warning: Citation `tigerdata_caggs_retention' on page 27 undefined on inp
+ut line 54.
+
+
+LaTeX Warning: Citation `tigerdata_tsdb_compared' on page 27 undefined on input
+ line 54.
+
+
+LaTeX Warning: Citation `tigerdata_best_practices_hypertables' on page 27 undef
+ined on input line 54.
+
+
+LaTeX Warning: Reference `LastPage' on page 27 undefined on input line 60.
+
+[27]
+
+LaTeX Warning: Citation `microservices_io_gateway' on page 28 undefined on inpu
+t line 61.
+
+
+LaTeX Warning: Citation `microservices_io_gateway' on page 28 undefined on inpu
+t line 65.
+
+
+LaTeX Warning: Citation `microservices_io_patterns' on page 28 undefined on inp
+ut line 65.
+
+
+LaTeX Warning: Citation `microservices_io_apigateway' on page 28 undefined on i
+nput line 65.
+
+
+LaTeX Warning: Citation `microservices_io_apigateway' on page 28 undefined on i
+nput line 69.
+
+
+LaTeX Warning: Citation `digitalapi_gateway_pattern' on page 28 undefined on in
+put line 71.
+
+
+LaTeX Warning: Citation `microservices_io_apigateway' on page 28 undefined on i
+nput line 71.
+
+
+LaTeX Warning: Citation `microservices_io_apigateway' on page 28 undefined on i
+nput line 73.
+
+
+LaTeX Warning: Reference `LastPage' on page 28 undefined on input line 74.
+
+[28]
+
+LaTeX Warning: Citation `gfg_microservices_communication' on page 29 undefined 
+on input line 77.
+
+
+LaTeX Warning: Citation `gfg_sync_vs_async_system_design' on page 29 undefined 
+on input line 79.
+
+
+LaTeX Warning: Citation `cerbos_inter_service_communication' on page 29 undefin
+ed on input line 79.
+
+
+LaTeX Warning: Citation `digitalocean_edge_vs_cloud' on page 29 undefined on in
+put line 87.
+
+
+LaTeX Warning: Citation `blog_elest_supabase_self_host' on page 29 undefined on
+ input line 87.
+
+
+LaTeX Warning: Citation `nsf_par_10184999' on page 29 undefined on input line 8
+9.
+
+
+LaTeX Warning: Citation `gfg_cloud_computing' on page 29 undefined on input lin
+e 89.
+
+
+LaTeX Warning: Citation `digitalocean_edge_vs_cloud' on page 29 undefined on in
+put line 89.
+
+
+LaTeX Warning: Citation `blog_elest_supabase_self_host' on page 29 undefined on
+ input line 89.
+
+
+LaTeX Warning: Reference `LastPage' on page 29 undefined on input line 90.
+
+[29]
+
+LaTeX Warning: Citation `scalecomputing_edge_vs_cloud' on page 30 undefined on 
+input line 93.
+
+
+LaTeX Warning: Citation `scalecomputing_edge_devices' on page 30 undefined on i
+nput line 93.
+
+
+LaTeX Warning: Citation `blog_elest_supabase_self_host' on page 30 undefined on
+ input line 93.
+
+
+LaTeX Warning: Citation `digitalocean_edge_vs_cloud' on page 30 undefined on in
+put line 95.
+
+
+LaTeX Warning: Citation `scalecomputing_edge_vs_cloud' on page 30 undefined on 
+input line 95.
+
+
+LaTeX Warning: Citation `blog_elest_supabase_self_host' on page 30 undefined on
+ input line 95.
+
+
+LaTeX Warning: Citation `scalecomputing_edge_devices' on page 30 undefined on i
+nput line 95.
+
+
+LaTeX Warning: Citation `digitalocean_edge_vs_cloud' on page 30 undefined on in
+put line 108.
+
+
+LaTeX Warning: Citation `scalecomputing_edge_vs_cloud' on page 30 undefined on 
+input line 108.
+
+
+LaTeX Warning: Citation `scalecomputing_edge_devices' on page 30 undefined on i
+nput line 108.
+
+
+LaTeX Warning: Reference `LastPage' on page 30 undefined on input line 109.
+
+[30]
+
+LaTeX Warning: Citation `blog_elest_supabase_self_host' on page 31 undefined on
+ input line 110.
+
+
+LaTeX Warning: Citation `iotclass_edge_fog_cloud' on page 31 undefined on input
+ line 110.
+
+) (Abudi/sections/architecture.tex
+
+LaTeX Warning: Reference `LastPage' on page 31 undefined on input line 4.
+
+[31 <./Abudi/figures/cloud vs edge.png>]
+
+LaTeX Warning: Reference `LastPage' on page 32 undefined on input line 18.
+
+[32]
+
+LaTeX Warning: Reference `LastPage' on page 33 undefined on input line 33.
+
+[33 <./Abudi/figures/high_level_architecture.png>]
+
+LaTeX Warning: Citation `broadwaySupabase' on page 34 undefined on input line 4
+6.
+
+
+LaTeX Warning: Citation `supabaseReactNative' on page 34 undefined on input lin
+e 46.
+
+
+LaTeX Warning: Citation `tigerdataRelational' on page 34 undefined on input lin
+e 46.
+
+
+LaTeX Warning: Reference `LastPage' on page 34 undefined on input line 51.
+
+[34]
+
+LaTeX Warning: Reference `LastPage' on page 35 undefined on input line 65.
+
+[35]) (Abudi/sections/methodology.tex
+
+LaTeX Warning: Reference `LastPage' on page 36 undefined on input line 4.
+
+[36]
+Overfull \hbox (2.92365pt too wide) in paragraph at lines 21--22
+[]\T1/phv/b/n/12 Payload Ana-to-my: \T1/phv/m/n/12 Both va-ri-ants se-ria-li-ze
+ their da-ta in-to ri-gid-ly stan-dar-di-zed JSON
+
+LaTeX Warning: Reference `LastPage' on page 37 undefined on input line 22.
+
+[37]
+Overfull \hbox (3.20256pt too wide) in paragraph at lines 33--34
+\T1/phv/m/n/12 stan-dard HTTP round-trip bounds. This ex-clu-si-on is man-da-to
+-ry be-cau-se the en-ti-re MQTT
+
+LaTeX Warning: Reference `LastPage' on page 38 undefined on input line 40.
+
+[38]) (Abudi/sections/results.tex
+
+LaTeX Warning: Reference `LastPage' on page 39 undefined on input line 8.
+
+[39]
+Overfull \hbox (111.63956pt too wide) in paragraph at lines 9--10
+[]\T1/phv/m/n/12 Source: []$\T1/pcr/m/n/12 https : / / ifactoryapp . com / blog
+ / real-[]time-[]ai-[]cloud-[]latency-[]manufacturing$[] 
+
+Overfull \hbox (148.13954pt too wide) in paragraph at lines 24--26
+[]\T1/phv/m/n/12 Source: []$\T1/pcr/m/n/12 https : / / metadeskglobal . com / f
+rom-[]raw-[]sensor-[]data-[]to-[]intelligent-[]automation/$[] 
+
+Overfull \hbox (52.84169pt too wide) in paragraph at lines 24--26
+[]$\T1/pcr/m/n/12 https : / / stonefly . com / blog / iot-[]data-[]storage-[]ar
+chitectures-[]databases/$[] 
+
+LaTeX Warning: Reference `LastPage' on page 40 undefined on input line 33.
+
+[40]
+Overfull \hbox (293.13948pt too wide) in paragraph at lines 34--35
+[]\T1/phv/m/n/12 Source: []$\T1/pcr/m/n/12 https : / / www . opal-[]rt . com / 
+blog / 5-[]essential-[]computer-[]simulation-[]techniques-[]for-[]systems-[]eng
+ineers/$[] 
+) (Abudi/sections/discussion.tex
+Overfull \hbox (2.88638pt too wide) in paragraph at lines 3--4
+\T1/phv/m/n/12 The ex-pe-ri-men-tal stress tests and mas-si-ve load eva-lua-ti-
+ons con-duc-ted throug-hout Chap-
+
+LaTeX Warning: Reference `LastPage' on page 41 undefined on input line 12.
+
+[41]
+
+LaTeX Warning: Citation `zeetimThickThin' on page 42 undefined on input line 29
+.
+
+
+LaTeX Warning: Citation `outsourceThinThick' on page 42 undefined on input line
+ 29.
+
+
+LaTeX Warning: Citation `deepwikiSupabase' on page 42 undefined on input line 2
+9.
+
+
+LaTeX Warning: Reference `LastPage' on page 42 undefined on input line 30.
+
+[42]) (Abudi/sections/conclusion.tex
+
+LaTeX Warning: Reference `LastPage' on page 43 undefined on input line 9.
+
+[43]))
+
+LaTeX Warning: Reference `LastPage' on page 44 undefined on input line 362.
+
+[44] (Richard/einfuehrung.tex
+Kapitel 4.
+
+Overfull \hbox (3.00337pt too wide) in paragraph at lines 1--1
+|[]\T1/phv/b/n/24.88 IoT Da-ta Sync in Mi-cro-ser-vices: Eva-
+(Richard/sections/introduction.tex
+
+LaTeX Warning: Citation `leherAg40' on page 45 undefined on input line 5.
+
+
+LaTeX Warning: Citation `streetsolverSmartGarden' on page 45 undefined on input
+ line 7.
+
+
+LaTeX Warning: Citation `growdirectorUrbanAg' on page 45 undefined on input lin
+e 9.
+
+
+LaTeX Warning: Citation `bpbSiot' on page 45 undefined on input line 9.
+
+
+LaTeX Warning: Citation `jungWeon2025' on page 45 undefined on input line 9.
+
+
+LaTeX Warning: Citation `kaaiotChallenges' on page 45 undefined on input line 1
+3.
+
+
+LaTeX Warning: Citation `emnifyChallenges' on page 45 undefined on input line 1
+3.
+
+[45]
+
+LaTeX Warning: Citation `smarticoGamification' on page 46 undefined on input li
+ne 17.
+
+
+LaTeX Warning: Citation `cheThreeTier' on page 46 undefined on input line 19.
+
+
+LaTeX Warning: Citation `spinifyGamification' on page 46 undefined on input lin
+e 25.
+
+
+LaTeX Warning: Citation `progElecDeepSleep' on page 46 undefined on input line 
+27.
+
+
+LaTeX Warning: Citation `redditEsp32Wake' on page 46 undefined on input line 27
+.
+
+
+LaTeX Warning: Citation `redditEsp32Wake' on page 46 undefined on input line 29
+.
+
+
+LaTeX Warning: Citation `psiborg2024mqtt' on page 46 undefined on input line 29
+.
+
+
+LaTeX Warning: Reference `LastPage' on page 46 undefined on input line 30.
+
+[46]
+
+LaTeX Warning: Citation `designGurusCAP' on page 47 undefined on input line 31.
+
+
+
+LaTeX Warning: Citation `diplomarbeitSelf' undefined on input line 39.
+
+) (Richard/sections/theoretical_background.tex
+
+LaTeX Warning: Citation `awsMicroservices' on page 47 undefined on input line 6
+.
+
+
+LaTeX Warning: Citation `fowlerMicroservices' on page 47 undefined on input lin
+e 6.
+
+
+LaTeX Warning: Reference `LastPage' on page 47 undefined on input line 7.
+
+[47]
+
+LaTeX Warning: Citation `newmanBuilding' on page 48 undefined on input line 8.
+
+
+Overfull \hbox (9.22607pt too wide) in paragraph at lines 13--14
+[]\T1/pcr/m/n/12 social_media_schema\T1/phv/m/n/12 : Re-spon-si-ble for com-mu-
+ni-ty fea-tu-res, in-clu-ding user posts
+
+LaTeX Warning: Reference `LastPage' on page 48 undefined on input line 31.
+
+[48 <./images/controllers_table.png>]
+
+LaTeX Warning: Citation `richardsonDbPerService' on page 49 undefined on input 
+line 33.
+
+
+LaTeX Warning: Citation `esp32s3Datasheet' on page 49 undefined on input line 4
+6.
+
+
+LaTeX Warning: Reference `LastPage' on page 49 undefined on input line 50.
+
+[49 <./images/gamification_stats.png>]
+
+LaTeX Warning: Citation `lastMinuteActive' on page 50 undefined on input line 5
+1.
+
+
+LaTeX Warning: Citation `lastMinuteActive' on page 50 undefined on input line 5
+2.
+
+
+LaTeX Warning: Citation `esp32s3Datasheet' on page 50 undefined on input line 5
+3.
+
+
+LaTeX Warning: Citation `adafruitWake' on page 50 undefined on input line 57.
+
+
+LaTeX Warning: Citation `psiborg2024mqtt' on page 50 undefined on input line 63
+.
+
+
+Overfull \hbox (20.60083pt too wide) in paragraph at lines 65--67
+\T1/phv/m/n/12 sor, ac-ting as the pu-blis-her, sends da-ta to a de-si-gna-ted 
+to-pic such as \T1/pcr/m/n/12 plantup/sensor/01
+
+LaTeX Warning: Reference `LastPage' on page 50 undefined on input line 67.
+
+[50]
+
+LaTeX Warning: Citation `psiborg2024mqtt' on page 51 undefined on input line 71
+.
+
+
+LaTeX Warning: Citation `psiborg2024mqtt' on page 51 undefined on input line 71
+.
+
+
+LaTeX Warning: Citation `oasisMqtt31' on page 51 undefined on input line 76.
+
+
+LaTeX Warning: Citation `rfc7230Http' on page 51 undefined on input line 76.
+
+
+LaTeX Warning: Citation `oasisMqtt31' on page 51 undefined on input line 79.
+
+
+LaTeX Warning: Citation `rfc7230Http' on page 51 undefined on input line 87.
+
+
+LaTeX Warning: Reference `LastPage' on page 51 undefined on input line 89.
+
+[51 <./images/mqtt_converted.png (PNG copy)>]
+
+LaTeX Warning: Citation `dreamfactory2024rest' on page 52 undefined on input li
+ne 95.
+
+
+LaTeX Warning: Citation `dreamfactory2024rest' on page 52 undefined on input li
+ne 95.
+
+
+LaTeX Warning: Citation `brewerCap' on page 52 undefined on input line 103.
+
+
+LaTeX Warning: Citation `designGurusCAP' on page 52 undefined on input line 103
+.
+
+
+LaTeX Warning: Citation `jaiswalCAP' on page 52 undefined on input line 103.
+
+
+LaTeX Warning: Reference `LastPage' on page 52 undefined on input line 108.
+
+[52 <./images/rest_converted.png>]) (Richard/sections/system_architecture.tex
+Overfull \hbox (0.6332pt too wide) in paragraph at lines 12--13
+[]\T1/phv/m/n/12 Distributed con-sis-ten-cy: Be-cau-se da-ta is dis-tri-bu-ted 
+across User, So-ci-al, and Hard-
+
+LaTeX Warning: Reference `LastPage' on page 53 undefined on input line 13.
+
+[53]
+
+LaTeX Warning: Reference `LastPage' on page 54 undefined on input line 35.
+
+[54]
+
+LaTeX Warning: Reference `LastPage' on page 55 undefined on input line 65.
+
+[55 <./images/Sensor payload structure.png>]
+
+LaTeX Warning: Citation `fowlerMicroservices' on page 56 undefined on input lin
+e 69.
+
+
+Overfull \hbox (8.92592pt too wide) in paragraph at lines 72--73
+[]\T1/pcr/m/n/12 social_media_schema\T1/phv/m/n/12 : Re-spon-si-ble for com-mu-
+ni-ty con-tent, in-clu-ding user posts,
+
+LaTeX Warning: Reference `LastPage' on page 56 undefined on input line 87.
+
+[56]
+
+LaTeX Warning: Reference `LastPage' on page 57 undefined on input line 109.
+
+[57 <./images/Plants table.png>]
+
+LaTeX Warning: Reference `LastPage' on page 58 undefined on input line 137.
+
+[58 <./images/Insert example for sensor readings.png> <./images/quests_table.pn
+g>]) (Richard/sections/experimental_evaluation.tex
+
+LaTeX Warning: Reference `LastPage' on page 59 undefined on input line 8.
+
+[59 <./images/user_quest.png> <./images/awarding_xp.png>]
+
+LaTeX Warning: Reference `LastPage' on page 60 undefined on input line 31.
+
+[60{C:/Users/denni/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc} 
+<./images/payload_mqtt_rest.png>]
+
+LaTeX Warning: Reference `fig:results_table_img' on page 61 undefined on input 
+line 52.
+
+
+LaTeX Warning: Reference `LastPage' on page 61 undefined on input line 60.
+
+[61 <./images/verification_packets.png>]
+
+LaTeX Warning: Citation `rfc8446Tls' on page 62 undefined on input line 64.
+
+
+LaTeX Warning: Citation `emqxMqttVsHttp' on page 62 undefined on input line 64.
+
+
+
+LaTeX Warning: Citation `iotForAllMqttHttp' on page 62 undefined on input line 
+66.
+
+
+Overfull \hbox (43.91852pt too wide) in paragraph at lines 66--67
+\T1/phv/m/n/12 se text-based hea-der in-for-ma-ti-on ty-pi-cal of HTTP, such as
+ \T1/pcr/m/n/12 User-Agent \T1/phv/m/n/12 and \T1/pcr/m/n/12 Content-Type \T1/p
+hv/m/n/12 [[]].
+
+LaTeX Warning: Citation `emqxMqttVsHttp' on page 62 undefined on input line 70.
+
+
+
+LaTeX Warning: Citation `iotForAllMqttHttp' on page 62 undefined on input line 
+70.
+
+
+LaTeX Warning: Citation `comeStarMqttHttp' on page 62 undefined on input line 7
+0.
+
+
+LaTeX Warning: Reference `LastPage' on page 62 undefined on input line 71.
+
+[62 <./images/markdown-table.png>]
+
+LaTeX Warning: Citation `awsApiLimits' on page 63 undefined on input line 72.
+
+
+LaTeX Warning: Citation `nginxWorkerLimits' on page 63 undefined on input line 
+72.
+
+
+LaTeX Warning: Citation `dreamFactoryEdgeMqtt' on page 63 undefined on input li
+ne 72.
+
+
+LaTeX Warning: Citation `emqxBenchmark' on page 63 undefined on input line 72.
+
+
+LaTeX Warning: Citation `hivemqPubSub' on page 63 undefined on input line 72.
+
+
+LaTeX Warning: Citation `oasisMqtt5' on page 63 undefined on input line 72.
+
+
+Overfull \hbox (16.5476pt too wide) in paragraph at lines 76--77
+\T1/phv/m/n/12 con-di-ti-ons. When the Wi-Fi en-vi-ron-ment be-ca-me tem-po-ra-
+ri-ly un-sta-ble, the time-constrained
+
+LaTeX Warning: Citation `lastMinuteActive' on page 63 undefined on input line 8
+1.
+
+
+LaTeX Warning: Citation `esp32s3Datasheet2026' on page 63 undefined on input li
+ne 81.
+
+
+LaTeX Warning: Citation `esp32s3Datasheet2026' on page 63 undefined on input li
+ne 81.
+
+
+LaTeX Warning: Reference `LastPage' on page 63 undefined on input line 87.
+
+[63]
+
+LaTeX Warning: Citation `jara2023mqtt' on page 64 undefined on input line 103.
+
+))
+
+LaTeX Warning: Reference `LastPage' on page 64 undefined on input line 365.
+
+[64]
+
+LaTeX Warning: Reference `LastPage' on page 65 undefined on input line 365.
+
+[65] (Dennis/einfuehrung.tex
+Kapitel 5.
+
+Overfull \hbox (22.19234pt too wide) in paragraph at lines 2--2
+|[]\T1/phv/b/n/24.88 Gamification. Ga-ming de-sign pat-terns
+(Dennis/sections/introduction.tex
+
+LaTeX Warning: Citation `businessOfAppsRetention' on page 66 undefined on input
+ line 4.
+
+
+LaTeX Warning: Citation `ethoraRetention' on page 66 undefined on input line 4.
+
+
+
+LaTeX Warning: Citation `localyticsRetention' on page 66 undefined on input lin
+e 6.
+
+
+LaTeX Warning: Citation `barariGamification2024' on page 66 undefined on input 
+line 8.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 66 undefined on input line 10.
+
+
+
+LaTeX Warning: Citation `diplomarbeitSelfDennis' undefined on input line 17.
+
+) (Dennis/sections/theoretical_background.tex
+
+LaTeX Warning: Citation `gablerGamification' on page 66 undefined on input line
+ 7.
+
+
+LaTeX Warning: Citation `grendelGamification' on page 66 undefined on input lin
+e 7.
+
+[66]
+
+LaTeX Warning: Citation `MDPI' on page 67 undefined on input line 16.
+
+
+LaTeX Warning: Citation `salesscreenOlderGenerations' on page 67 undefined on i
+nput line 21.
+
+
+LaTeX Warning: Citation `haufeGamification' on page 67 undefined on input line 
+24.
+
+
+LaTeX Warning: Citation `haufeGamification' on page 67 undefined on input line 
+30.
+
+
+LaTeX Warning: Reference `LastPage' on page 67 undefined on input line 31.
+
+[67]
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 68 undefined on input li
+ne 38.
+
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 68 undefined on input li
+ne 43.
+
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 68 undefined on input li
+ne 43.
+
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 68 undefined on input li
+ne 50.
+
+
+LaTeX Warning: Citation `sdtOrgTheory' on page 68 undefined on input line 51.
+
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 68 undefined on input li
+ne 52.
+
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 68 undefined on input li
+ne 58.
+
+
+LaTeX Warning: Citation `sdtOrgTheory' on page 68 undefined on input line 58.
+
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 68 undefined on input li
+ne 63.
+
+
+LaTeX Warning: Reference `LastPage' on page 68 undefined on input line 65.
+
+[68 <./images/bandhu_motivation_model.png>]
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 69 undefined on input li
+ne 71.
+
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 69 undefined on input li
+ne 78.
+
+
+LaTeX Warning: Citation `gamifyMotivation' on page 69 undefined on input line 8
+7.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 69 undefined on input line 88.
+
+
+
+LaTeX Warning: Citation `gamifyMotivation' on page 69 undefined on input line 8
+8.
+
+
+LaTeX Warning: Reference `LastPage' on page 69 undefined on input line 96.
+
+[69]
+
+LaTeX Warning: Citation `gamifyMotivation' on page 70 undefined on input line 1
+01.
+
+
+LaTeX Warning: Citation `gamifyMotivation' on page 70 undefined on input line 1
+03.
+
+
+LaTeX Warning: Citation `duolingoStreak' on page 70 undefined on input line 103
+.
+
+
+LaTeX Warning: Citation `duolingoStreak' on page 70 undefined on input line 108
+.
+
+
+LaTeX Warning: Citation `duolingoStreak' on page 70 undefined on input line 108
+.
+
+
+LaTeX Warning: Reference `LastPage' on page 70 undefined on input line 111.
+
+[70 <./images/plantup_level_rewards.png>]
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 71 undefined on input li
+ne 115.
+
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 71 undefined on input li
+ne 117.
+
+
+Overfull \hbox (8.94768pt too wide) in paragraph at lines 117--118
+[]\T1/phv/b/n/12 Controlling Ex-trin-sic Mo-ti-va-ti-on: \T1/phv/m/n/12 When re
+-wards feel ob-li-ga-to-ry or pressure-driven,
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 71 undefined on input li
+ne 118.
+
+
+LaTeX Warning: Citation `haufeGamification' on page 71 undefined on input line 
+121.
+
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 71 undefined on input li
+ne 121.
+
+
+LaTeX Warning: Citation `gamifyMotivation' on page 71 undefined on input line 1
+22.
+
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 71 undefined on input li
+ne 122.
+
+
+LaTeX Warning: Reference `LastPage' on page 71 undefined on input line 127.
+
+[71 <./images/duolingo_streak.png>]
+
+LaTeX Warning: Citation `redwhiteAttribution' on page 72 undefined on input lin
+e 131.
+
+
+LaTeX Warning: Citation `scienceDirectExpectancy' on page 72 undefined on input
+ line 153.
+
+
+LaTeX Warning: Citation `scienceDirectExpectancy' on page 72 undefined on input
+ line 158.
+
+
+LaTeX Warning: Reference `LastPage' on page 72 undefined on input line 159.
+
+[72 <./images/attribution_theory_2.png>]
+
+LaTeX Warning: Citation `feedbackLoop' on page 73 undefined on input line 172.
+
+
+LaTeX Warning: Citation `feedbackLoop' on page 73 undefined on input line 172.
+
+
+LaTeX Warning: Citation `feedbackLoop2' on page 73 undefined on input line 177.
+
+
+) (Dennis/sections/designpattern.tex
+
+LaTeX Warning: Reference `LastPage' on page 73 undefined on input line 6.
+
+[73 <./images/feedback_loop.png>]
+
+LaTeX Warning: Citation `chouGamification2015' on page 74 undefined on input li
+ne 8.
+
+
+LaTeX Warning: Citation `chouGamification2015' on page 74 undefined on input li
+ne 10.
+
+
+LaTeX Warning: Reference `fig:plantup_shop' on page 74 undefined on input line 
+12.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 74 undefined on input line 12.
+
+
+
+LaTeX Warning: Reference `LastPage' on page 74 undefined on input line 20.
+
+[74]
+
+LaTeX Warning: Citation `chouGamification2015' on page 75 undefined on input li
+ne 27.
+
+
+LaTeX Warning: Reference `LastPage' on page 75 undefined on input line 29.
+
+[75 <./images/plantup_shop.png (PNG copy)>]
+
+LaTeX Warning: Citation `chouGamification2015' on page 76 undefined on input li
+ne 30.
+
+
+LaTeX Warning: Citation `chouGamification2015' on page 76 undefined on input li
+ne 37.
+
+
+LaTeX Warning: Citation `chouGamification2015' on page 76 undefined on input li
+ne 39.
+
+
+LaTeX Warning: Citation `chouGamification2015' on page 76 undefined on input li
+ne 46.
+
+
+LaTeX Warning: Reference `LastPage' on page 76 undefined on input line 47.
+
+[76]
+
+LaTeX Warning: Citation `chouGamification2015' on page 77 undefined on input li
+ne 48.
+
+) (Dennis/sections/whyitworks.tex
+
+LaTeX Warning: Citation `rewardzGamification' on page 77 undefined on input lin
+e 3.
+
+
+LaTeX Warning: Citation `deterding2011' on page 77 undefined on input line 12.
+
+
+LaTeX Warning: Citation `gorillaPlantGrowth' on page 77 undefined on input line
+ 14.
+
+
+LaTeX Warning: Citation `ukcoachingSDT' on page 77 undefined on input line 14.
+
+
+LaTeX Warning: Reference `LastPage' on page 77 undefined on input line 15.
+
+[77]
+
+LaTeX Warning: Citation `decisionLabFogg' on page 78 undefined on input line 16
+.
+
+
+LaTeX Warning: Citation `gorillaPlantGrowth' on page 78 undefined on input line
+ 21.
+
+
+LaTeX Warning: Citation `simplyPsychologyOperant' on page 78 undefined on input
+ line 23.
+
+
+LaTeX Warning: Citation `oamkGamification' on page 78 undefined on input line 2
+5.
+
+
+LaTeX Warning: Citation `mediumMeaningfulGamification' on page 78 undefined on 
+input line 25.
+
+
+LaTeX Warning: Reference `LastPage' on page 78 undefined on input line 27.
+
+[78]
+
+LaTeX Warning: Citation `decisionLabIkea' on page 79 undefined on input line 32
+.
+
+
+LaTeX Warning: Citation `amplitudeHookModel' on page 79 undefined on input line
+ 36.
+
+
+LaTeX Warning: Citation `mediumHookFramework' on page 79 undefined on input lin
+e 36.
+
+) (Dennis/sections/plantup.tex
+
+LaTeX Warning: Citation `plantUpProject' on page 79 undefined on input line 3.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 79 undefined on input line 5.
+
+
+LaTeX Warning: Reference `LastPage' on page 79 undefined on input line 6.
+
+[79]
+
+LaTeX Warning: Citation `plantUpProject' on page 80 undefined on input line 8.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 80 undefined on input line 12.
+
+
+
+LaTeX Warning: Citation `ukcoachingSDT' on page 80 undefined on input line 13.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 80 undefined on input line 18.
+
+
+
+LaTeX Warning: Reference `fig:plantup_sprig_tutorial' on page 80 undefined on i
+nput line 19.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 80 undefined on input line 24.
+
+
+
+LaTeX Warning: Citation `plantUpProject' on page 80 undefined on input line 24.
+
+
+
+LaTeX Warning: Reference `LastPage' on page 80 undefined on input line 27.
+
+[80]
+
+LaTeX Warning: Citation `ukcoachingSDT' on page 81 undefined on input line 37.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 81 undefined on input line 41.
+
+
+
+LaTeX Warning: Reference `LastPage' on page 81 undefined on input line 42.
+
+[81 <./images/sprig.png (PNG copy)>]
+
+LaTeX Warning: Citation `plantUpProject' on page 82 undefined on input line 46.
+
+
+
+LaTeX Warning: Citation `plantUpProject' on page 82 undefined on input line 50.
+
+
+) (Dennis/sections/evaluation.tex
+
+LaTeX Warning: Reference `LastPage' on page 82 undefined on input line 9.
+
+[82]))
+
+LaTeX Warning: Reference `LastPage' on page 83 undefined on input line 377.
+
+[83]
+No file Diplomarbeit.lof.
+[84]
+No file Diplomarbeit.lot.
+[85]
+
+LaTeX Warning: Reference `fig:moisture_distortion' on page 86 undefined on inpu
+t line 391.
+
+
+LaTeX Warning: Reference `fig:decision_flowchart' on page 86 undefined on input
+ line 393.
+
+[86] (Diplomarbeit.bbl)
+
+Package lastpage Warning: Rerun to get the references right on input line 409.
+
+
+AED: lastpage setting LastPage
+(Diplomarbeit.aux)
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
+Package rerunfilecheck Warning: File `Diplomarbeit.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+ )
+(see the transcript file for additional information)<C:/Users/denni/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/lm/lmbx10.pfb><C:/Users/denni/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/Users/denni/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/lm/lmbx8.pfb><C:/Users/denni/AppData/Loca
+l/Programs/MiKTeX/fonts/type1/public/lm/lmmi12.pfb><C:/Users/denni/AppData/Loca
+l/Programs/MiKTeX/fonts/type1/public/lm/lmr12.pfb><C:/Users/denni/AppData/Local
+/Programs/MiKTeX/fonts/type1/public/lm/lmr8.pfb><C:/Users/denni/AppData/Local/P
+rograms/MiKTeX/fonts/type1/public/lm/lmro10.pfb><C:/Users/denni/AppData/Local/P
+rograms/MiKTeX/fonts/type1/public/lm/lmro12.pfb><C:/Users/denni/AppData/Local/P
+rograms/MiKTeX/fonts/type1/public/lm/lmsy10.pfb><C:/Users/denni/AppData/Local/P
+rograms/MiKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Users/denni/AppData/Local
+/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Users/denni/AppData/Lo
+cal/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Users/denni/AppData
+/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvro8a.pfb>
+Output written on Diplomarbeit.pdf (91 pages, 6946802 bytes).
+Transcript written on Diplomarbeit.log.

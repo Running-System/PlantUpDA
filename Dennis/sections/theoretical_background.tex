@@ -1,44 +1,31 @@
 %!TEX root = ../../Diplomarbeit.tex
 \section{Theoretical Foundations of Gamification}
 
-\subsection{Definition of Gamification}
+Gamification refers to the integration of game design elements and mechanics into non-game contexts.
+Its purpose is to increase user engagement and motivation by making routine or mundane tasks more appealing \cite{gablerGamification, grendelGamification}.
 
-Gamification is when game design elements and mechanics are integrated into non-game contexts.
-The goal of introducing these elements is to increase user engagement and motivation by making otherwise boring or routine tasks more appealing \cite{gablerGamification, grendelGamification}.
+However, this concept is occasionally conflated with related fields, so it is important to distinguish it clearly. Although the terms gamification, serious games, and games for entertainment sound similar, they describe fundamentally different concepts. Serious games are fully developed games designed primarily for purposes other than entertainment, such as education, training, or simulation. Examples include flight simulators for pilot training and surgery simulations for medical education.
+Games for entertainment are created solely for enjoyment, without any educational or functional objective \cite{MDPI}.
 
-However, this concept is occasionally conflated with other game-related fields, making it crucial to establish clear boundaries before diving deeper.
-
-\subsection{Difference between Gamification, Serious Games, and Games for Entertainment}
-
-It is important to note that gamification is not the same as serious games or games for entertainment.
-Although the terms sound similar, they describe different concepts.
-Gamification refers to the integration of game elements into non-game contexts in order to increase user engagement and motivation.
-Serious games are complete games that are explicitly designed for a primary purpose other than entertainment, such as education, training, or simulation.
-For example, a flight simulator used for pilot training or a surgery simulation used for medical training.
-Games for entertainment, on the other hand, are produced only for enjoyment, without any educational or functional objective \cite{MDPI}.
+With these distinctions in place, a central question arises: if gamification is not a full game and not purely for fun, why does it actually work?
 
 \subsection{Why Gamification Works in Non-Game Contexts}
 
-Understanding what gamification is and what it is not naturally leads to exploring its efficacy. While many people question the effectiveness of gamification, research has shown that it can be an effective strategy for enhancing user engagement and motivation. 
-Specifically, ``Many older generations associate the word `game' with `wasting time,''' says Dr. Donna Davis, associate professor and director of the Strategic Communication Master's Program at the University of Oregon \cite{salesscreenOlderGenerations}. Despite this skepticism, data demonstrates that gamification can still bridge these generational gaps when properly implemented.
-This raises the questions: Why and how?
+Despite growing evidence in its favor, gamification still faces skepticism. ``Many older generations associate the word `game' with `wasting time,''' says Dr. Donna Davis, associate professor and director of the Strategic Communication Master's Program at the University of Oregon \cite{salesscreenOlderGenerations}. Yet research consistently shows that gamification can enhance user engagement and motivation across generational boundaries when properly implemented. The reason lies in human psychology.
 
-According to the Haufe Akademie \cite{haufeGamification}, the effectiveness of gamification lies deep within the human psyche.
-It addresses the basic needs of autonomy, competence, and social relatedness, which form the foundation of human motivation.
-How gamification achieves this can be explained using three central mechanisms.
+According to the Haufe Akademie \cite{haufeGamification}, the effectiveness of gamification is rooted in three basic psychological needs: autonomy (the desire for control over one's actions), competence (the desire to develop and master skills), and social relatedness (the desire for meaningful connections with others). Together, these needs form the foundation of human motivation. Gamification activates them through three central mechanisms:
 \begin{itemize}
-    \item \textbf{1:} Gamification integrates the human need for autonomy, competence, and social relatedness not merely through external rewards, but by actively supporting these needs.
-    \item \textbf{2:} It redefines user interaction with a system. Instead of removing all difficult or boring tasks to maximize efficiency, gamification introduces voluntary challenges that encourage people to improve themselves. These tasks are transformed into engaging activities in which progress is clearly visualized and supported by immediate feedback mechanisms such as points and badges.
-    \item \textbf{3:} Gamification uses social interaction to build a sense of community. Features such as cooperative challenges and leaderboards satisfy the desire to be noticed by others, increasing attachment to the activity through competitive or collaborative motivation \cite{haufeGamification}.
+    \item \textbf{1:} It taps into intrinsic drives rather than relying solely on external rewards. By offering meaningful choices and visible skill progression, the system satisfies autonomy and competence at the same time.
+    \item \textbf{2:} It redefines how users interact with a system. Instead of removing all difficult or boring tasks to maximize efficiency, gamification introduces voluntary challenges that encourage self-improvement. Progress is clearly visualized through immediate feedback mechanisms such as points and badges.
+    \item \textbf{3:} It leverages social interaction to build community. Features such as cooperative challenges and leaderboards satisfy the desire for recognition, increasing attachment to the activity through competitive or collaborative dynamics \cite{haufeGamification}.
 \end{itemize}
 
-As these mechanisms highlight, the core driving force behind any successful gamified system is human motivation. To fully grasp how these game elements interact with user behavior, we must delve deeper into the underlying psychological theories.
+All three mechanisms point to the same underlying principle: gamification succeeds because it aligns with how humans are naturally motivated. To fully understand this alignment and how game elements interact with user behavior, the underlying psychological theories must be examined.
 
 \subsection{Motivation Theory}
 
-To understand why gamification can be effective in practice, it is necessary to examine the foundations of human motivation.
 Motivation is the psychological force that initiates, guides, and sustains goal-directed behavior.
-In the context of gamification, a key distinction is made between engaging in an activity because it is inherently rewarding (intrinsic motivation) and engaging in it to obtain an external outcome (extrinsic motivation) \cite{bandhuMotivation2024}.
+In the context of gamification, a key distinction exists between intrinsic motivation (engaging in an activity because it is inherently rewarding) and extrinsic motivation (engaging in an activity to obtain an external outcome such as a reward or to avoid punishment) \cite{bandhuMotivation2024}.
 
 \begin{figure}[H]
     \centering
@@ -50,47 +37,46 @@ In the context of gamification, a key distinction is made between engaging in an
 
 \subsubsection{Intrinsic Motivation (The Engine of Engagement)}
 
-Intrinsic motivation is when a person engages in an activity because it is satisfying, enjoyable, or meaningful, while it also comes from within the person and not from external factors \cite{bandhuMotivation2024}.
-According to Self-Determination Theory (SDT) \cite{sdtOrgTheory}, intrinsic motivation is supported when three basic psychological needs are fulfilled:  Autonomy, Competence, and Relatedness.
-
-When these needs are satisfied, individuals demonstrate increased curiosity, creativity, and persistence \cite{bandhuMotivation2024}.
-But first, let's define what Self-Determination Theory is.
-\subparagraph{Self-Determination Theory (SDT) in Gamification}
+\subparagraph{Self-Determination Theory (SDT)}
 ~\\
-Self-Determination Theory establishes a framework for human motivation based on three fundamental psychological needs: autonomy, competence, and relatedness.
-Meeting these needs fosters self-determined motivation, which drives improved performance, persistence, and creativity.
-Failing to support them can significantly reduce motivation and well-being \cite{bandhuMotivation2024, sdtOrgTheory}.
-Each of these three needs plays a specialized role when applied to a gamified context, starting with autonomy.
+Before examining intrinsic motivation in detail, it is essential to introduce the theory that underpins it. Self-Determination Theory (SDT) is a widely recognized psychological framework proposing that people are most motivated when three fundamental needs are met: autonomy, competence, and relatedness.
+When these needs are supported, individuals experience self-determined motivation, leading to improved performance, persistence, and creativity.
+Conversely, neglecting them can significantly diminish both motivation and well-being \cite{bandhuMotivation2024, sdtOrgTheory}.
+
+With this framework in mind, the role of intrinsic motivation becomes clear.
+Intrinsic motivation occurs when a person engages in an activity because it is inherently satisfying or meaningful, rather than in response to external pressures or rewards \cite{bandhuMotivation2024}.
+According to SDT \cite{sdtOrgTheory}, intrinsic motivation flourishes precisely when autonomy, competence, and relatedness are fulfilled.
+When these needs are satisfied, individuals demonstrate increased curiosity, creativity, and persistence \cite{bandhuMotivation2024}.
 
 \subparagraph{Supporting Autonomy}
 ~\\
-Autonomy refers to the user's sense of control over their actions and decisions. 
-This is achievable with integrating optional tasks, multiple paths to success, and customization options \cite{bandhuMotivation2024}.
+Autonomy refers to the user's sense of control over their own actions and decisions. 
+In gamified systems, this is achieved by offering optional tasks, multiple paths to success, and customization options \cite{bandhuMotivation2024}.
 \vspace{0.5em}
 
-While autonomy provides users with the freedom to choose, this freedom must be paired with clear feedback on their progress. This leads to the second psychological need: competence.
+While autonomy gives users the freedom to choose, this freedom must be paired with clear feedback on their progress. This leads to the second psychological need: competence.
 
 \subparagraph{Supporting Competence}
 ~\\
-Competence refers to the user's sense of accomplishment and skill development. 
-It is mostly done by integrating experience points, progress indicators, adaptive difficulty, and immediate feedback loops \cite{bandhuMotivation2024}.
+Competence refers to the user's feeling of mastery and skill development. 
+It is fostered through experience points, progress indicators, adaptive difficulty (challenges that automatically adjust to the user's skill level), and immediate feedback loops \cite{bandhuMotivation2024}.
 \vspace{0.5em}
 
-However, even when users feel autonomous and competent, human beings remain inherently social creatures. Gamification systems capitalize on this through the final pillar of SDT: relatedness.
+However, even when users feel autonomous and competent, human beings remain inherently social. Gamification systems capitalize on this through the final pillar of SDT: relatedness.
 
 \subparagraph{Supporting Relatedness}
 ~\\
-Users are more engaged when they feel socially connected, hence integrating social feeds, cooperative goals, peer comparison, and mentorship features is a go-to strategy \cite{bandhuMotivation2024}.
+Relatedness reflects the need to feel socially connected and valued by others. Gamified systems address this by integrating social feeds, cooperative goals, peer comparison, and mentorship features \cite{bandhuMotivation2024}.
 \vspace{0.5em}
 
-Fulfilling these three psychological needs (autonomy, competence, and relatedness) builds a strong foundation for intrinsic motivation. In practical gamification, however, satisfying these inherently internal needs often requires the careful distribution of external rewards.
+Fulfilling these three psychological needs builds a strong foundation for intrinsic motivation. In practice, however, sustaining these internal drives often requires the strategic use of external rewards.
 
 
 \subparagraph{Rewards that Support Intrinsic Motivation}
 ~\\
-Motivators that support intrinsic motivation are linked to a personal desire to master, explore, and enjoy an activity.
-They are the main motivator for long-term commitment, when implemented right, trying to keep them as informational feedback rather than controlling mechanisms is the key to succeeding \cite{gamifyMotivation}
-Most of the time, just like in Plant Up! \cite{plantUpProject}, those are accomplished by integrating, badges, that indicate achievement and mastery, experience points, virtual currency for customization and titles \cite{gamifyMotivation}.
+Rewards that support intrinsic motivation are tied to a personal desire to master, explore, and enjoy an activity.
+They serve as the primary driver of long-term engagement when implemented correctly. The key is to frame them as informational feedback (signals that communicate progress and competence) rather than controlling mechanisms \cite{gamifyMotivation}.
+In Plant Up! \cite{plantUpProject}, for example, this is accomplished through badges that signify achievement and mastery, experience points, virtual currency for customization, and titles \cite{gamifyMotivation}.
 
 \begin{figure}[H]
     \centering
@@ -99,13 +85,13 @@ Most of the time, just like in Plant Up! \cite{plantUpProject}, those are accomp
     \label{fig:plantup_rewards}
 \end{figure}
 
-While well-designed rewards enhance intrinsic motivation, their improper use can quickly have the exact opposite effect.
+While well-designed rewards enhance intrinsic motivation, their improper use can have the opposite effect.
 
 \subparagraph{Rewards that Undermine Intrinsic Motivation}
 ~\\
-Some rewards can be counterproductive when they seem controlling or worthless \cite{gamifyMotivation}.
-Such as over-rewarding insignificant actions, excessive penalties that induce stress, rankings without fairness or relevance, 
-and when rewards replace genuine interest in the activity itself \cite{gamifyMotivation}. This often makes those rewards feel like a chore, just like the Duolingo Streak \cite{duolingoStreak}.
+Certain reward structures become counterproductive when they feel controlling or meaningless \cite{gamifyMotivation}.
+Examples include over-rewarding insignificant actions, imposing excessive penalties that induce stress, displaying rankings without fairness or relevance, 
+and replacing genuine interest with obligation-driven participation \cite{gamifyMotivation}. A well-known example of this risk is the streak system in Duolingo, a popular language-learning app. A streak in Duolingo tracks the number of consecutive days a user completes at least one lesson. Each day the user practices, the streak counter increases by one; if a single day is missed, the entire streak resets to zero. While this mechanic is designed to encourage daily learning habits, it can backfire: users often report feeling pressured to complete lessons solely to protect their streak rather than out of genuine interest in the language. The learning experience then shifts from a voluntary, enjoyable activity into a stress-driven obligation, illustrating exactly how a poorly balanced extrinsic reward can erode intrinsic motivation \cite{duolingoStreak}.
 
 \begin{figure}[H]
     \centering
@@ -116,69 +102,60 @@ and when rewards replace genuine interest in the activity itself \cite{gamifyMot
 
 \subsubsection{Extrinsic Motivation (The Spark)}
 
-Extrinsic motivation involves performing an activity in order to receive a reward or avoid negative consequences.
-Common gamification elements such as points, badges, and leaderboards are examples of extrinsic motivators \cite{bandhuMotivation2024}.
+Extrinsic motivation involves performing an activity to receive a reward or avoid negative consequences.
+Common gamification elements such as points, badges, and leaderboards are typical extrinsic motivators \cite{bandhuMotivation2024}.
 \begin{itemize}
-    \item \textbf{Controlling Extrinsic Motivation:} When rewards are perceived as chore-like, they can reduce intrinsic motivation, resulting in short-term compliance but reduced long-term engagement. A typical example is a streak-based system that pressures users to perform regularly, which can lead to stress and burnout.\cite{bandhuMotivation2024}.
-    \item \textbf{Autonomy-Supportive Extrinsic Motivation:} When rewards provide informational feedback or signal competence, they can be internalized and reinforce intrinsic motivation. Feedback such as positive reinforcement for progress or improvement is more effective than obligation-based incentives.\cite{bandhuMotivation2024}.
+    \item \textbf{Controlling Extrinsic Motivation:} When rewards feel obligatory or pressure-driven, they can diminish intrinsic motivation, leading to short-term compliance but reduced long-term engagement. A typical example is a streak-based system that pressures users into daily participation, potentially causing stress and burnout \cite{bandhuMotivation2024}.
+    \item \textbf{Autonomy-Supportive Extrinsic Motivation:} When rewards provide informational feedback or acknowledge competence, they can be internalized and actually reinforce intrinsic motivation. Positive reinforcement for progress is consistently more effective than obligation-based incentives \cite{bandhuMotivation2024}.
 \end{itemize}
 
-Effective gamification strategies use extrinsic rewards not as the primary objective, but as a means of supporting intrinsic motivation \cite{haufeGamification, bandhuMotivation2024}.
-Ultimately, the goal is to strike a delicate balance between providing immediate incentives and preserving the user's inherent interest.
-
-
-
-\subparagraph{The Role of Extrinsic Rewards}
-~\\
-Gamification is not merely about adding rewards, but about how they are implemented.
-Extrinsic motivators can be powerful drivers of engagement but may reduce creativity and encourage mechanical behavior.
-This can result in retention driven by obligation rather than enjoyment \cite{gamifyMotivation}.
-When used carefully, extrinsic motivators can still provide short-term motivational boosts that foster intrinsic interests such as mastery or competition \cite{gamifyMotivation, bandhuMotivation2024}.
+Effective gamification uses extrinsic rewards not as the primary objective, but as a means of supporting intrinsic motivation \cite{haufeGamification, bandhuMotivation2024}.
+The critical challenge lies in balancing immediate incentives with preserving the user's genuine interest. When applied carefully, extrinsic motivators provide short-term boosts that can foster intrinsic drives such as mastery or healthy competition. However, over-reliance on external rewards may reduce creativity and encourage mechanical behavior, resulting in retention driven by obligation rather than enjoyment \cite{gamifyMotivation, bandhuMotivation2024}.
 
 \subsection{Attribution Theory}
 
-While intrinsic and extrinsic motivations explain the \textit{why} of user engagement, how users perceive their own success or failure within these systems is equally critical. This perception is the focus of Attribution Theory.
+While motivation theories explain \textit{why} users engage, how users interpret their own success or failure is equally critical. This perception is the focus of the Attribution Theory, a psychological framework examining how people explain the causes of events and outcomes.
 
-Attribution theory describes how individuals explain success and failure.
-In gamified systems, it is important that users get rewarded for their own effort and strategies rather than luck or fixed ability.
-Implementing effort-based feedback can increase motivation and encourage continued user engagement.
-Additionally, designing penalties and failure in such a way that it only seems temporary and improvable can lead to less frustration, hence making the user more likely to continue using the app \cite{redwhiteAttribution}.
+The Attribution Theory describes how individuals assign causes to their successes and failures along three dimensions: locus (whether the cause is internal, such as effort, or external, such as luck), stability (whether the cause is permanent or temporary), and controllability (whether the cause is within or outside one's control).
+In gamified systems, it is important that users attribute their achievements to personal effort and strategy rather than to luck or fixed ability.
+Implementing effort-based feedback reinforces a growth-oriented mindset (the belief that abilities can be developed through dedication) and encourages continued engagement.
+Additionally, designing penalties and failure states as temporary and improvable reduces frustration and makes users more likely to persist \cite{redwhiteAttribution}.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{images/attribution_theory_2.png}
-    \caption{Attributional Process of Motivation.}
+    \caption{Attributional Process of Motivation \cite{tamAttribution}.}
     \label{fig:attribution_theory_2}
 \end{figure}
 
-Closely related to how users attribute their success or failure is their initial assessment of a task before even attempting it. 
-Expectancy-value theory sheds light on this preparatory phase of motivation.
+As illustrated in Figure \ref{fig:attribution_theory_2}, the attributional process unfolds in a clear sequence. It begins with an outcome, such as a plant thriving or wilting. The user then identifies possible causes for that outcome, which typically fall into four categories: ability, effort, task difficulty, or luck. These causes are next filtered through the three dimensions of the causal locus: locus (was the cause internal or external?), stability (is this cause likely to persist?), and controllability (can the user change it?). Depending on how the user classifies the cause, different emotional responses arise. Attributing success to an internal, controllable factor like personal effort triggers pride and self-esteem, while attributing failure to a stable, uncontrollable factor like fixed ability leads to hopelessness. Similarly, perceiving a failure as controllable but self-caused can produce shame or guilt. These emotional responses then directly shape the user's motivational consequences: their overall motivation to continue, their persistence through setbacks, and the intensity of their future engagement. In a gamified system, the goal is to guide users toward attributions that foster positive emotions and sustained motivation, for example by emphasizing effort-based feedback over luck-based outcomes.
+
+Closely related to how users explain their outcomes is their initial assessment of a task before even attempting it. 
+Expectancy-Value Theory addresses this preparatory phase of motivation.
 
 \subsection{Expectancy-Value Theory}
 
-Expectancy-value theory explains what motivates a user before engaging in an activity: the expectation of success and the subjective value of the task.
-When a user thinks that they can succeed in an activity and values it, they are more likely to engage in it.
+Expectancy-Value Theory explains what motivates a user before engaging in an activity: the expectation of success and the perceived value of the task.
+When users believe they can succeed and find the task worthwhile, they are significantly more likely to engage.
 
 \begin{enumerate}
     \item \textbf{Expectancy for Success:} 
-    Expectancy for success can be defined by the question: ``How likely is it that I will succeed in this activity?'' 
-    In games and gamified systems, this belief is answered with a clear definition of goals, transparent rules, the difficulty of the task, and feedback provided during the activity.
-    To make the user have a clear vision of their success, it is important to provide clear objectives, transparent mechanics, and visible indicators of progress.
-    When the criteria for the question ``Is this challenge achievable?'' are met, the user is more likely to invest effort in it \cite{scienceDirectExpectancy}.
+    This component addresses the question: ``How likely is it that I will succeed in this activity?'' 
+    In gamified systems, this belief is shaped by clearly defined goals, transparent rules, appropriate difficulty levels, and feedback provided during the activity.
+    Clear objectives, visible progress indicators, and understandable mechanics help users develop a realistic sense of their likelihood of success.
+    When users perceive a challenge as achievable, they are more likely to invest effort \cite{scienceDirectExpectancy}.
     
     \item \textbf{Subjective Task Value:}  
-    Subjective Task Value describes whether the task is worth the effort, which varies for each user.
-    This value consists of several components, including intrinsic value, the importance of performing well, usefulness for future goals, and effort, such as time investment.
-    In games, a value can be increased by making the user progress faster, reducing frustration, or making those tasks relevant for future goals \cite{scienceDirectExpectancy}.
+    This component addresses whether the task is worth the effort, a judgment that varies for each user.
+    Task value consists of several dimensions: intrinsic value (personal enjoyment), attainment value (importance of performing well), utility value (usefulness for future goals), and cost (required effort and time investment).
+    In gamified systems, perceived value can be increased by accelerating progress, reducing frustration, or connecting tasks to meaningful goals \cite{scienceDirectExpectancy}.
 \end{enumerate}
 
-Ultimately, motivation theories aim not just for temporary spikes in activity, but for sustained user participation. Translating these theoretical concepts into lasting behaviors requires effective engagement mechanics.
+Ultimately, motivation theories aim not merely for temporary spikes in activity, but for sustained user participation. Translating these theoretical concepts into lasting behaviors requires effective engagement mechanics, most notably, feedback loops.
 
-\subsection{Engagement and Habit Formation}
+\subsection{Feedback Loops}
 
-\subsubsection{Feedback Loops}
-
-A feedback loop is an important component of gamification, as it provides users with immediate feedback on their progress and achievements.
+A feedback loop is a cyclical process in which a user's action produces a response from the system, which in turn influences the user's next action. It is a fundamental component of gamification, providing users with immediate information about their progress and achievements.
 
 \begin{figure}[H]
     \centering
@@ -187,8 +164,7 @@ A feedback loop is an important component of gamification, as it provides users 
     \label{fig:feedback_loop}
 \end{figure}
 
-It is important to note that the feedback loop should consist of both positive and negative feedback.
+As shown in Figure \ref{fig:feedback_loop}, this process relies on three continuous stages: Action, Reaction, and Modifier. First, the user performs an \textit{Action} (e.g., watering a plant or completing a task). The system then provides a \textit{Reaction}, such as updating a status bar, dispensing points, or simply confirming the task was registered. This reaction acts as a \textit{Modifier} on the user's psychological state (perhaps giving them a sense of competence or showing how close they are to a milestone) which in turn motivates and shapes their next \textit{Action}. By keeping this cycle tight and responsive, gamified systems effectively sustain continuous engagement.
 
-Most people prefer to receive positive feedback, such as badges, experience points, virtual currency, and titles. However, it is important to note that negative feedback can also be a motivator.
-Not only can negative feedback, such as penalties, warnings, or punishments, be a wake-up call for users to start improving their behavior, but it can also motivate them to avoid those penalties in the future \cite{feedbackLoop2}.
-
+Effective feedback loops incorporate both positive and negative feedback.
+Positive feedback, such as earning badges, experience points, virtual currency, or titles, reinforces desired behaviors and rewards progress. Negative feedback, such as penalties, warnings, or setbacks, serves a different but equally important role: it signals areas for improvement and motivates users to adjust their behavior to avoid future consequences \cite{feedbackLoop2}.
