@@ -1,0 +1,3 @@
+Line 2524: !pdfTeX error: pdflatex (file ./images/Fogg-Behavior-Model.png): libpng: intern
+al error
+ ==> Fatal error occurred, no output PDF file produced!

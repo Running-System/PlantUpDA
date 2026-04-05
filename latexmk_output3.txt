@@ -3,12 +3,12 @@ I changed them all to CP1252
 Rc files read:
   NONE
 Latexmk: This is Latexmk, John Collins, 15 June 2025. Version 4.87.
+No existing .aux file, so I'll make a simple one, and require run of *latex.
 Latexmk: applying rule 'pdflatex'...
 Rule 'pdflatex':  Reasons for rerun
-Changed files or newly in use/created:
-  images/Fogg-Behavior-Model.png
-Category 'changed_user':
-  images/Fogg-Behavior-Model.png
+Category 'other':
+  Rerun of 'pdflatex' forced or previously required:
+    Reason or flag: 'Initial setup'
 
 ------------
 Run number 1 of rule 'pdflatex'
@@ -1564,7 +1564,6 @@ LaTeX Warning: Citation `ukcoachingSDT' on page 78 undefined on input line 15.
 
 LaTeX Warning: Reference `LastPage' on page 78 undefined on input line 16.
 
-libpng error: Not a PNG file
 [78]
 
 LaTeX Warning: Citation `decisionLabFogg' on page 79 undefined on input line 17
@@ -1575,21 +1574,183 @@ LaTeX Warning: Reference `fig:fogg_model' on page 79 undefined on input line 19
 .
 
 
-!pdfTeX error: pdflatex (file ./images/Fogg-Behavior-Model.png): libpng: intern
-al error
- ==> Fatal error occurred, no output PDF file produced!
-Latexmk: fls file doesn't appear to have been made.
+LaTeX Warning: Reference `LastPage' on page 79 undefined on input line 29.
+
+[79 <./images/Fogg-Behavior-Model.png>]
+
+LaTeX Warning: Citation `gorillaPlantGrowth' on page 80 undefined on input line
+ 33.
+
+
+LaTeX Warning: Citation `simplyPsychologyOperant' on page 80 undefined on input
+ line 35.
+
+
+LaTeX Warning: Citation `oamkGamification' on page 80 undefined on input line 3
+7.
+
+
+LaTeX Warning: Citation `mediumMeaningfulGamification' on page 80 undefined on 
+input line 37.
+
+
+LaTeX Warning: Reference `LastPage' on page 80 undefined on input line 38.
+
+[80]
+
+LaTeX Warning: Citation `decisionLabIkea' on page 81 undefined on input line 44
+.
+
+
+LaTeX Warning: Citation `amplitudeHookModel' on page 81 undefined on input line
+ 48.
+
+
+LaTeX Warning: Citation `mediumHookFramework' on page 81 undefined on input lin
+e 48.
+
+) (Dennis/sections/plantup.tex
+
+LaTeX Warning: Citation `plantUpProject' on page 81 undefined on input line 3.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 81 undefined on input line 5.
+
+
+LaTeX Warning: Reference `LastPage' on page 81 undefined on input line 6.
+
+[81]
+
+LaTeX Warning: Citation `plantUpProject' on page 82 undefined on input line 8.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 82 undefined on input line 12.
+
+
+
+LaTeX Warning: Citation `ukcoachingSDT' on page 82 undefined on input line 13.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 82 undefined on input line 18.
+
+
+
+LaTeX Warning: Reference `fig:plantup_sprig_tutorial' on page 82 undefined on i
+nput line 19.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 82 undefined on input line 24.
+
+
+
+LaTeX Warning: Citation `plantUpProject' on page 82 undefined on input line 24.
+
+
+
+LaTeX Warning: Reference `LastPage' on page 82 undefined on input line 27.
+
+[82]
+
+LaTeX Warning: Citation `ukcoachingSDT' on page 83 undefined on input line 37.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 83 undefined on input line 41.
+
+
+
+LaTeX Warning: Reference `LastPage' on page 83 undefined on input line 42.
+
+[83 <./images/sprig.png (PNG copy)>]
+
+LaTeX Warning: Citation `plantUpProject' on page 84 undefined on input line 46.
+
+
+
+LaTeX Warning: Citation `plantUpProject' on page 84 undefined on input line 50.
+
+
+) (Dennis/sections/evaluation.tex
+
+LaTeX Warning: Reference `LastPage' on page 84 undefined on input line 9.
+
+[84]))
+
+LaTeX Warning: Reference `LastPage' on page 85 undefined on input line 379.
+
+[85]
+No file Diplomarbeit.lof.
+[86]
+No file Diplomarbeit.lot.
+[87]
+
+LaTeX Warning: Reference `fig:moisture_distortion' on page 88 undefined on inpu
+t line 393.
+
+
+LaTeX Warning: Reference `fig:decision_flowchart' on page 88 undefined on input
+ line 395.
+
+[88] (Diplomarbeit.bbl)
+
+Package lastpage Warning: Rerun to get the references right on input line 411.
+
+
+AED: lastpage setting LastPage
+(Diplomarbeit.aux)
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
+Package rerunfilecheck Warning: File `Diplomarbeit.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+ )
+(see the transcript file for additional information)<C:/Users/denni/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/lm/lmbx10.pfb><C:/Users/denni/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/Users/denni/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/lm/lmbx8.pfb><C:/Users/denni/AppData/Loca
+l/Programs/MiKTeX/fonts/type1/public/lm/lmmi12.pfb><C:/Users/denni/AppData/Loca
+l/Programs/MiKTeX/fonts/type1/public/lm/lmmi8.pfb><C:/Users/denni/AppData/Local
+/Programs/MiKTeX/fonts/type1/public/lm/lmr12.pfb><C:/Users/denni/AppData/Local/
+Programs/MiKTeX/fonts/type1/public/lm/lmr8.pfb><C:/Users/denni/AppData/Local/Pr
+ograms/MiKTeX/fonts/type1/public/lm/lmro10.pfb><C:/Users/denni/AppData/Local/Pr
+ograms/MiKTeX/fonts/type1/public/lm/lmro12.pfb><C:/Users/denni/AppData/Local/Pr
+ograms/MiKTeX/fonts/type1/public/lm/lmsy10.pfb><C:/Users/denni/AppData/Local/Pr
+ograms/MiKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Users/denni/AppData/Local/
+Programs/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Users/denni/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Users/denni/AppData/
+Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvro8a.pfb>
+Output written on Diplomarbeit.pdf (93 pages, 7115239 bytes).
+Transcript written on Diplomarbeit.log.
 Latexmk: Getting log file 'Diplomarbeit.log'
+Latexmk: Examining 'Diplomarbeit.fls'
 Latexmk: Examining 'Diplomarbeit.log'
 Latexmk: Missing input file 'Diplomarbeit.toc' message in .log file:
   No file Diplomarbeit.toc.
 Latexmk: Missing input file 'images/power_profile.pdf' message in .log file:
   LaTeX Warning: File `images/power_profile.pdf' not found on input line 102.
+Latexmk: Missing input file 'Diplomarbeit.lof' message in .log file:
+  No file Diplomarbeit.lof.
+Latexmk: Missing input file 'Diplomarbeit.lot' message in .log file:
+  No file Diplomarbeit.lot.
+Latexmk: Found input bbl file 'Diplomarbeit.bbl'
+Latexmk: References changed.
+Latexmk: References changed.
+Latexmk: References changed.
+Latexmk: Log file says output to 'Diplomarbeit.pdf'
 Latexmk: Using bibtex to make bibliography file(s).
+  ===Source file 'Diplomarbeit.bbl' for 'pdflatex'
+Create bibtex Diplomarbeit
+Latexmk: Found bibliography file(s):
+  ./references.bib
 Latexmk: Summary of warnings from last run of *latex:
 Latexmk: ====Undefined refs and citations with line #s in .tex file:
-  Latex failed to resolve 90 reference(s)
-  Latex failed to resolve 250 citation(s)
+  Latex failed to resolve 100 reference(s)
+  Latex failed to resolve 276 citation(s)
 Latexmk: Errors, so I did not complete making targets
   Citation `floristsReviewTrends' on page 1 undefined on input line 6
   Citation `kunrHouseplants2022' on page 1 undefined on input line 7
@@ -1598,9 +1759,8 @@ Latexmk: Errors, so I did not complete making targets
   Citation `plantUpProject' on page 1 undefined on input line 15
   Citation `plantUpProject' on page 1 undefined on input line 20
   Citation `terrariumTribeStats2024' on page 2 undefined on input line 3
- And 333 more --- see log file 'Diplomarbeit.log'
+ And 369 more --- see log file 'Diplomarbeit.log'
 Collected error summary (may duplicate other messages):
-  bibtex Diplomarbeit: gave an error in previous invocation of latexmk.
   pdflatex: Command for 'pdflatex' gave return code 1
       Refer to 'Diplomarbeit.log' and/or above output for details
 
