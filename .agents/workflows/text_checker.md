@@ -47,7 +47,7 @@ Find weaknesses, inconsistencies, vague claims, bad wording, weak structure, poo
      - clear
      - technical
      - structured
-     - not overly dramatic
+     - not overly dramatic (Exception: An emotional, engaging introduction is explicitly allowed and welcomed).
      - not too informal
      - not pretending to be more academic than it is
    - Flag awkward wording, pseudo-academic phrases, empty buzzwords, and unnatural thesis language.
@@ -71,6 +71,11 @@ Find weaknesses, inconsistencies, vague claims, bad wording, weak structure, poo
    - Check whether headings match actual content.
    - Flag when a subsection is too broad, too narrow, or misplaced.
    - Identify sections that should be merged, split, shortened, or reordered.
+   - **Crucial**: Avoid excessive subheadings. Strongly prefer writing transition sentences ("Zwischensätze") to create smooth transitions ("Übergänge schaffen") between points instead of just adding a new heading.
+   - **Crucial**: Avoid going too deep into nested subheadings. 4 layers deep (e.g., `\paragraph` or `\subsubsubsection`) should rarely happen.
+
+8. Format and Naming Check
+   - Verify that the product name is always exactly written as: **Plant Up!** (with a space and exclamation mark). Flag any variations (e.g., PlantUp, Plant-up) as errors.
 
 ## Output format:
 For every review pass, structure your output exactly like this:
@@ -91,7 +96,8 @@ For each issue, provide:
 - Mention overlaps, gaps, and broken transitions
 
 ### D. Style check
-- List recurring writing weaknesses in this part
+   - List recurring writing weaknesses in this part
+   - Flag excessive subheadings and suggest specific transition sentences ("Zwischensätze").
 
 ### E. Priority fixes
 - Rank the top 5 fixes that would most improve the thesis
