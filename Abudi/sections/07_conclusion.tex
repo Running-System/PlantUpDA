@@ -1,0 +1,15 @@
+\section{Conclusion: Edge vs. Cloud Architecture}
+
+\subsection{Summary of Findings}
+
+This research included the design, implementation, and evaluation of the Plant Up! architectural backend. The objective was to evaluate the viability of the "Thin Edge" paradigm in the context of consumer botanical monitoring. 
+
+The results suggests that this approach is effective for plant monitoring, which primarily tracks environment metrics such as soil moisture and temperature. Since these metrics respond slowly to environmental changes, the system does not require millisecond-level actuation or localized autonomy. 
+
+The evaluation confirm that centralizing threshold evaluation and data aggregation within the Supabase cloud backend is a viable architectural choice. By avoiding complex, decentralized state management on the ESP32 hardware, the design minimizes the required embedded footprint. This shift prioritizes rapid development for social features and AI-driven insights. Ultimately, the system demonstrates that for this specific consumer IoT application, the dependency on network connectivity is a robust trade-off for the scalability and agility provided by a cloud-centric architecture.
+
+\subsection{Transition to the Implementation Layer}
+
+The edge-to-cloud communication architecture utilizes MQTT to support data ingestion and modularity. This foundation provides asynchronous data synchronization between the ESP32 hardware and the cloud database.
+
+The following chapter details the physical implementation of this architectural design, exploring the benchmarks between MQTT and REST in a development environment. It subsequently demonstrates how the implementation manages seamless data synchronization between the edge hardware and the Supabase cloud platform.

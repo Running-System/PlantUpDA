@@ -1,0 +1,45 @@
+\section{Methodology}
+
+This section describes the systematic evaluation of the architectural decisions implemented for the Plant Up! ecosystem. As established in Chapter 3, the theoretical foundation for this environment relies on a Cloud-Centric, ``Thin Edge'' model. To empirically validate this design choice, controlled experiments were conducted to measure how the execution location of the operational logic impacts system latency, scalability, and backend resilience.
+
+\subsection{Experimental Control Framework}
+
+To ensure the validity of the performance metrics, the architecture was evaluated against a comparative baseline. A control group was established to facilitate a direct analysis of the technical trade-offs between centralized and localized processing.
+
+\subsubsection{Architecture A: Cloud-Centric (Deployed Variant)}
+Architecture A represents the primary system under test, implementing the \textit{Thin Edge} paradigm detailed in Chapter 4. In this configuration, the physical ESP32 hardware serves as a data ingress vector, generating JSON payloads containing raw sensor telemetry. The application logic, including threshold evaluation and data aggregation, is executed exclusively within the Supabase cloud infrastructure.
+
+\subsubsection{Architecture B: Edge-Centric (Control Variant)}
+Architecture B serves as the control variant, implementing a \textit{Thick Edge} model. In this setup, threshold comparisons and decision-making logic are integrated into the ESP32 firmware. While the device still transmits state summaries to the cloud, the primary computational processing is performed locally. By comparing Architecture B against the deployed Architecture A, the latency overhead and structural impacts of the Thin Edge approach can be accurately quantified.
+
+\subsection{Implementation Constraints}
+
+To isolate the execution location as the independent variable, the following constraints were maintained across both experimental variants:
+\begin{itemize}
+    \item \textbf{Hardware:} Identical ESP32 microcontrollers were utilized for both variants.
+    \item \textbf{Transport:} All communications were handled via the same MQTT message broker and Wi-Fi environment.
+    \item \textbf{Payload Structure:} Data was serialized into standardized JSON objects, differing only in transmission frequency and semantic content.
+    \item \textbf{Persistence:} Both variants utilized identical Supabase endpoints, targeting the same PostgreSQL schemata and TimescaleDB hypertables.
+\end{itemize}
+
+\subsection{Measurement Methodology and Environment}
+
+The diagnostic methodologies were standardized to ensure the reproducibility of the performance benchmarks.
+
+\subsubsection{Testing Environment}
+The backend infrastructure was hosted on a \textbf{[FIXED HOSTING ENVIRONMENT]} to provide a consistent operational baseline. Load generation for the stress tests was performed using \textbf{[INSERT TESTING TOOL, e.g., Python scripts]}, simulating diverse traffic patterns originating from external network subnets to replicate real-world latency.
+
+\subsubsection{Latency Calculation}
+End-to-end ingestion latency was calculated using differential timestamping, as the asynchronous nature of the MQTT protocol does not support traditional request-response measurement. When the ESP32 generates a reading, a high-precision local timestamp is injected into the JSON payload. Upon successful insertion into the TimescaleDB hypertable, a server-side \texttt{created\_at} timestamp is recorded. The total latency is then derived from the difference between these two values, encompassing Wi-Fi transmission, MQTT brokering, gateway processing, and database latency.
+
+\subsection{Test Scenarios}
+
+The experiments were structured into two distinct scenarios designed to evaluate the system under both standard operational conditions and high-load edge cases.
+
+\subsubsection{Scenario 1: Baseline Operational Performance}
+Scenario 1 establishes a reference benchmark under standard network conditions. The objective is to record latency variations during normal snapshot intervals (e.g., payloads transmitted every 5 to 10 minutes). This validates whether the network latency introduced by the cloud-centric logic remains within the functional requirements of botanical monitoring.
+
+\subsubsection{Scenario 2: Infrastructure Resilience (Concurrent Load Spike)}
+Scenario 2 evaluates backend stability under transactional stress. The objective is to determine how the unified database environment handles sudden bursts of concurrent write operations.
+
+\simulating a burst of [NUMBER, e.g., 50--1000] concurrent operations, the test measures database contention, process queuing, and the rate at which the architecture recovers to a stable operational state.

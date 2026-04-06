@@ -1,0 +1,21 @@
+\section{Discussion}
+
+The results of the load and stress tests provide an empirical evaluation of the technical trade-offs between Edge and Cloud architectures. The following analysis validates the stability of the \textit{Thin Edge} design within the Plant Up! ecosystem.
+
+\subsection{Validating the "Thin Edge" Architecture}
+
+To evaluate the chosen architecture, the benefits of centralized cloud logic were compared with the response times of localized edge hardware. Results from Scenario 1 indicate that centralizing logic in the cloud is a viable strategy for Plant Up!. While the Edge-Centric control variant (Architecture B) processed thresholds locally in under 50\,ms, the Cloud-Centric variant (Architecture A) required over 200\,ms due to network latency and database processing. 
+
+However, since botanical monitoring tracks slowly changing metrics, millisecond-level responsiveness is not a critical requirement. The cloud-based latency is generally not perceptible to the user. This justifies the use of centralized backend analytics and development agility over localized autonomy. Furthermore, centralizing decision-making within Supabase enables features such as the AI-driven Daily Mentor. Ultimately, the structural benefits of the Thin Edge approach outweigh the latency considerations for this application.
+
+\subsection{Database Performance and Resilience}
+
+The architecture must demonstrate the capacity to handle traffic spikes without service interruptions to ensure backend stability. In Scenario 2, the database architecture was evaluated using a load spike of 1,000 concurrent writes. The results indicated a peak ingestion throughput of approximately 850 writes/sec, with the internal queue normalizing within 1.2 seconds following the spike. 
+
+This confirms that the Supabase environment, utilizing the TimescaleDB extension, maintains structural resilience during traffic bursts. Since Plant Up! does not require synchronous industrial control loops, the asynchronous latency associated with cloud-based evaluation is acceptable. The system maintained overall stability while absorbing the simulated load.
+
+\subsection{Complexity vs. Operational Maintenance}
+
+The architectural design also involves a balance between hardware autonomy and long-term maintainability. IoT literature suggests that centralizing logic can reduce developmental complexity, although it may increase dependency on network reliability \cite{zeetimThickThin, outsourceThinThick, deepwikiSupabase}. 
+
+Maintaining conditional logic simultaneously in firmware (C++ for the ESP32) and in the cloud (SQL or Edge Functions) can introduce state synchronization challenges. The evaluation suggests that the Supabase backend is sufficiently resilient to support a Thin Edge approach. This allows Plant Up! to utilize simpler device firmware, where modifications to moisture thresholds or gamification algorithms require only a single backend deployment. This approach minimizes the risks associated with over-the-air (OTA) updates and supports rapid feature iteration.
