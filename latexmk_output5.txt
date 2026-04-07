@@ -1,0 +1,1995 @@
+Initial Win CP for (console input, console output, system): (CP850, CP65001, CP1252)
+I changed them all to CP1252
+Rc files read:
+  NONE
+Latexmk: This is Latexmk, John Collins, 15 June 2025. Version 4.87.
+Latexmk: applying rule 'bibtex Diplomarbeit'...
+Rule 'bibtex Diplomarbeit':  Reasons for rerun
+Changed files or newly in use/created:
+  Diplomarbeit.aux
+
+------------
+Run number 1 of rule 'bibtex Diplomarbeit'
+------------
+------------
+Running 'bibtex  "Diplomarbeit.aux"'
+------------
+This is BibTeX, Version 0.99d (MiKTeX 24.1)
+The top-level auxiliary file: Diplomarbeit.aux
+The style file: IEEEtran.bst
+Database file #1: references.bib
+Warning--I didn't find a database entry for "Zimmer2022Personalized"
+-- IEEEtran.bst version 1.14 (2015/08/26) by Michael Shell.
+-- http://www.michaelshell.org/tex/ieeetran/bibtex/
+-- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
+Warning--missing institution in mqttv5_oasis_2019
+Warning--missing institution in mqttv311_oasis_2014
+Warning--missing institution in esp32s3_datasheet_2025
+Warning--missing institution in rfc7230_http11_2014
+Warning--missing institution in rfc7231_http11_2014
+Warning--missing institution in rfc9293_tcp_2022
+Warning--missing institution in rfc8446_tls13_2018
+Warning--missing institution in cisco_wlan_sitesurvey_2023
+Warning--missing institution in rfc8446Tls
+Warning--missing institution in rfc7230Http
+
+Done.
+(There were 11 warnings)
+Latexmk: applying rule 'pdflatex'...
+Rule 'pdflatex':  Reasons for rerun
+Changed files or newly in use/created:
+  Dennis/sections/whyitworks.tex
+  Diplomarbeit.aux
+  Diplomarbeit.bbl
+  Diplomarbeit.toc
+Category 'changed_user':
+  Dennis/sections/whyitworks.tex
+
+------------
+Run number 1 of rule 'pdflatex'
+------------
+------------
+Running 'pdflatex  -interaction=nonstopmode -shell-escape -recorder  "Diplomarbeit.tex"'
+------------
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex.fmt)
+ \write18 enabled.
+entering extended mode
+(Diplomarbeit.tex
+LaTeX2e <2023-11-01> patch level 1
+L3 programming layer <2024-01-04>
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/base\report.cls
+Document Class: report 2023/05/17 v1.4n Standard LaTeX document class
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/base\size12.clo))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/tools\longtable.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/tools\tabularx.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/tools\array.sty))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lipsum\lipsum.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/l3packages/l3keys2e\l3k
+eys2e.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/l3kernel\expl3.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
+tex.def)))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lipsum\lipsum.ltd.tex))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/babel\babel.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/babel\txtbabel.def)
+*************************************
+* Local config file bblopts.cfg used
+*
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/arabi\bblopts.cfg)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/babel-english\english.l
+df)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/babel-german\ngerman.ld
+f
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/babel-german\ngermanb.l
+df)))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/babel/locale/de\babel
+-ngerman.tex)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/babel/locale/en\babel
+-english.tex)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/base\inputenc.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lm\lmodern.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\helvet.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/graphics\keyval.sty))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\courier.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/fancyhdr\fancyhdr.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/ntgclass\a4.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/base\makeidx.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/listings\listings.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstmisc.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/listings\listings.cfg))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/graphics\color.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\color.cfg)
+
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/graphics-def\pdftex.def
+)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/graphics\mathcolor.ltx)
+) (C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/setspace\setspace.sty
+) (C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphics.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/graphics\trig.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\graphics.c
+fg)))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/titlesec\titlesec.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hyperref.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/iftex\iftex.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/infwarerr\infwarerr.s
+ty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/kvsetkeys\kvsetkeys.sty
+)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/kvdefinekeys\kvdefine
+keys.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/pdfescape\pdfescape.s
+ty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/ltxcmds\ltxcmds.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/pdftexcmds\pdftexcmds
+.sty))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/hycolor\hycolor.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/letltxmacro\letltxmacro
+.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/auxhook\auxhook.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\nameref.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/refcount\refcount.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/gettitlestring\gettit
+lestring.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/kvoptions\kvoptions.sty
+)))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/etoolbox\etoolbox.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\pd1enc.def)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/intcalc\intcalc.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\puenc.def)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/url\url.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/bitset\bitset.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/bigintcalc\bigintcalc
+.sty))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/base\atbegshi-ltx.sty))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hpdftex.def
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/base\atveryend-ltx.sty)
+
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/rerunfilecheck\rerunfil
+echeck.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/uniquecounter\uniquec
+ounter.sty)))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/float\float.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/wrapfig\wrapfig.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsmath.sty
+For additional information on amsmath, use the `?' option.
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amstext.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsgen.sty))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsbsy.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsopn.sty))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/pdfpages\pdfpages.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/base\ifthen.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/tools\calc.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/eso-pic\eso-pic.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/pdfpages\pppdftex.def))
+ (C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption3.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/caption\ltcaption.sty))
+
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/emptypage\emptypage.sty
+) (C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/tools\verbatim.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/minted\minted.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/catchfile\catchfile.s
+ty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/etexcmds\etexcmds.sty
+)) (C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/fvextra\fvextra.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/fancyvrb\fancyvrb.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/upquote\upquote.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/base\textcomp.sty))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lineno\lineno.sty))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/latex2pydata\latex2pyda
+ta.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities\pgfkeys.s
+ty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeys
+.code.tex
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeys
+libraryfiltered.code.tex)))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/pgfopts\pgfopts.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/tools\shellesc.sty))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/booktabs\booktabs.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/generic/iftex\ifvtex.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.cfg))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lastpage\lastpage.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lastpage\lastpage2e.sty
+
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lastpage\lastpageclassi
+c.sty) 
+))
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmr.fd)
+(Diplomarbeit.aux)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
+ii
+[Loading MPS to PDF converter (version 2006.09.02).]
+)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
+ase.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.c
+fg)) (Diplomarbeit.out) (Diplomarbeit.out)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/pdflscape\pdflscape.sty
+
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/pdflscape\pdflscape-nom
+etadata.sty
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/graphics\lscape.sty)))
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\t1phv.fd)
+(Allgemein/titel.tex
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lm\ot1lmr.fd)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lm\omllmm.fd)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lm\omslmsy.fd)
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lm\omxlmex.fd))
+Overfull \hbox (2.54398pt too wide) in paragraph at lines 65--282
+[][][]  
+[1{C:/Users/denni/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/de
+nni/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc} <./images/Logo_t
+ransparent.png> <./images/Logo.png> <./images/HTLzukunft.jpg>]
+(Allgemein/erklaerung.tex) [1{C:/Users/denni/AppData/Local/Programs/MiKTeX/font
+s/enc/dvips/lm/lm-ec.enc}] (Allgemein/danksagungen.tex) [2]
+(Allgemein/abstract.tex) [3] (Diplomarbeit.toc [4]
+Overfull \hbox (1.41904pt too wide) in paragraph at lines 40--40
+ [][] [][]\T1/phv/m/n/12 Service Inter-communication: Syn-chro-nous vs. Asyn-ch
+ro-nous Pat- 
+[5] [6] [7] [8]) [9] (Allgemein/einleitung.tex
+Chapter 1.
+
+LaTeX Warning: Citation `floristsReviewTrends' on page 1 undefined on input lin
+e 6.
+
+
+LaTeX Warning: Citation `kunrHouseplants2022' on page 1 undefined on input line
+ 7.
+
+
+LaTeX Warning: Citation `mordorIndoorPlants' on page 1 undefined on input line 
+9.
+
+
+LaTeX Warning: Citation `floralDailyKillPlants' on page 1 undefined on input li
+ne 9.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 1 undefined on input line 15.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 1 undefined on input line 20.
+
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/lm\ts1lmr.fd))
+(Arun/einfuehrung.tex
+pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.1 \chapter
+            [Combining Nature and Technology]{Combining Nature and Technolog...
+[1{C:/Users/denni/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}]
+
+Chapter 2.
+(Arun/sections/01_introduction.tex
+
+LaTeX Warning: Citation `terrariumTribeStats2024' on page 2 undefined on input 
+line 3.
+
+
+LaTeX Warning: Citation `lsuWaterWisely' on page 2 undefined on input line 3.
+
+
+LaTeX Warning: Citation `lsuWaterWisely' on page 2 undefined on input line 5.
+
+
+LaTeX Warning: Citation `rootRotsWisc' on page 2 undefined on input line 5.
+
+
+LaTeX Warning: Citation `frontiersLightAdaptation' on page 2 undefined on input
+ line 7.
+
+
+LaTeX Warning: Citation `marketsandmarketsSmartHome2024' on page 2 undefined on
+ input line 9.
+
+
+LaTeX Warning: Citation `precedenceSmartHome2025' on page 2 undefined on input 
+line 9.
+
+[2]
+
+LaTeX Warning: Citation `faoWaterSustainableFood' on page 3 undefined on input 
+line 21.
+
+
+LaTeX Warning: Citation `worldbankFreshwater70' on page 3 undefined on input li
+ne 21.
+
+) (Arun/sections/02_environmental_factors.tex
+
+LaTeX Warning: Citation `ncStateSoils' on page 3 undefined on input line 3.
+
+
+LaTeX Warning: Citation `ncStateSoils' on page 3 undefined on input line 8.
+
+[3]
+
+LaTeX Warning: Citation `ucIpmAeration' on page 4 undefined on input line 10.
+
+
+LaTeX Warning: Citation `cornellWiltingPoint' on page 4 undefined on input line
+ 12.
+
+
+LaTeX Warning: Citation `meterGroupWater' on page 4 undefined on input line 12.
+
+
+
+LaTeX Warning: Citation `nasaPAR2' on page 4 undefined on input line 15.
+
+
+LaTeX Warning: Citation `apogeePpfdLux' on page 4 undefined on input line 17.
+
+
+LaTeX Warning: Citation `ncStateSoils' on page 4 undefined on input line 20.
+
+
+LaTeX Warning: Citation `britannicaTranspiration' on page 4 undefined on input 
+line 22.
+
+
+LaTeX Warning: Citation `blancaflor2025measuring' on page 4 undefined on input 
+line 22.
+
+[4]
+
+LaTeX Warning: Citation `cornellWiltingPoint' on page 5 undefined on input line
+ 32.
+
+
+LaTeX Warning: Citation `openstaxSensory' on page 5 undefined on input line 34.
+
+
+
+LaTeX Warning: Citation `blancaflor2025measuring' on page 5 undefined on input 
+line 36.
+
+
+LaTeX Warning: Citation `ucIpmAeration' on page 5 undefined on input line 39.
+
+
+LaTeX Warning: Citation `rootRotsWisc' on page 5 undefined on input line 39.
+
+
+LaTeX Warning: Citation `umdSunburn' on page 5 undefined on input line 41.
+
+[5]
+
+LaTeX Warning: Citation `unhHumidity' on page 6 undefined on input line 44.
+
+
+LaTeX Warning: Citation `usuOverwatering' on page 6 undefined on input line 50.
+
+
+
+LaTeX Warning: Citation `pittLightAdaptation' on page 6 undefined on input line
+ 50.
+
+
+LaTeX Warning: Citation `blancaflor2025measuring' on page 6 undefined on input 
+line 50.
+
+) (Arun/sections/03_sensor_technologies.tex
+Overfull \hbox (1.73497pt too wide) in paragraph at lines 1--1
+|[]\T1/phv/b/n/17.28 Sensor Tech-nolo-gies and the Mea-sure-ment Pipeline| 
+[6]
+
+LaTeX Warning: Citation `chowdhuryCalibration2022' on page 7 undefined on input
+ line 11.
+
+
+LaTeX Warning: Citation `seeedCapacitive' on page 7 undefined on input line 13.
+
+
+
+LaTeX Warning: Citation `hacksterMoistureSensors' on page 7 undefined on input 
+line 20.
+
+
+LaTeX Warning: Citation `hacksterMoistureSensors' on page 7 undefined on input 
+line 20.
+
+
+LaTeX Warning: Citation `hacksterMoistureSensors' on page 7 undefined on input 
+line 26.
+
+
+LaTeX Warning: Citation `hacksterMoistureSensors' on page 7 undefined on input 
+line 26.
+
+
+LaTeX Warning: Citation `chowdhuryCalibration2022' on page 7 undefined on input
+ line 31.
+
+
+LaTeX Warning: Citation `seeedCapacitive' on page 7 undefined on input line 31.
+
+
+[7 <./images/sensor_resistive.png> <./images/sensor_capacitive.png>]
+
+LaTeX Warning: Citation `nxpI2C' on page 8 undefined on input line 37.
+
+
+LaTeX Warning: Citation `bipmPhotometry' on page 8 undefined on input line 41.
+
+
+LaTeX Warning: Citation `nasaPAR2' on page 8 undefined on input line 43.
+
+[8]
+
+LaTeX Warning: Citation `chowdhuryCalibration2022' on page 9 undefined on input
+ line 64.
+
+
+LaTeX Warning: Citation `seeedCapacitive' on page 9 undefined on input line 64.
+
+
+
+LaTeX Warning: Citation `seeedCapacitive' on page 9 undefined on input line 72.
+
+
+[9 <./images/moisture_distortion.png>]
+
+LaTeX Warning: Citation `espIdfDeepSleep' on page 10 undefined on input line 90
+.
+
+[10]
+
+LaTeX Warning: Citation `espIdfDeepSleep' on page 11 undefined on input line 92
+.
+
+
+LaTeX Warning: Citation `esp32Datasheet' on page 11 undefined on input line 98.
+
+
+
+LaTeX Warning: Citation `espIdfDeepSleep' on page 11 undefined on input line 98
+.
+
+
+LaTeX Warning: File `images/power_profile.pdf' not found on input line 102.
+
+
+! Package pdftex.def Error: File `images/power_profile.pdf' not found: using dr
+aft setting.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.102 ...=0.8\textwidth]{images/power_profile.pdf}
+                                                  
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\t1pcr.fd)
+
+LaTeX Warning: Citation `rfcJSON' on page 11 undefined on input line 115.
+
+(C:\Users\denni\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1phv.fd)
+[11{C:/Users/denni/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathit.e
+nc}] [12]
+
+LaTeX Warning: Citation `oasisMQTT' on page 13 undefined on input line 117.
+
+
+Overfull \hbox (17.75426pt too wide) in paragraph at lines 117--118
+[]\T1/phv/m/n/12 The pay-load is trans-mit-ted via Mes-sage Queu-ing Teleme-try
+ Trans-port (MQTT), a lightweight
+) (Arun/sections/04_decision_making.tex [13]
+
+LaTeX Warning: Citation `boniecki2023smartSensors' on page 14 undefined on inpu
+t line 18.
+
+
+Underfull \hbox (badness 1005) in paragraph at lines 21--22
+\T1/phv/m/n/12 natural-language hints based on the cur-rent
+
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 27.
+See the caption package documentation for explanation.
+
+
+LaTeX Warning: Citation `dssPlantProtection' on page 14 undefined on input line
+ 35.
+
+[14{C:/Users/denni/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathsy.e
+nc} <./images/LiveDataHealth.png>]
+
+LaTeX Warning: Citation `iso3864' on page 15 undefined on input line 48.
+
+[15 <./images/decision_flowchart.png (PNG copy)> <./images/GreatHealth.png> <./
+images/OkayHealth.png> <./images/CriticalHealth.png>]
+
+LaTeX Warning: Citation `jmirTimeSeries' on page 16 undefined on input line 73.
+
+
+
+Package caption Warning: The option `hypcap=true' will be ignored for this
+(caption)                particular \caption on input line 85.
+See the caption package documentation for explanation.
+
+) (Arun/sections/05_implementation.tex [16 <./images/1hourgraph.png>] [17]
+[18] [19]) (Arun/sections/06_conclusion.tex [20 <./images/moisturegraph.png> <.
+/images/lightgraph.png>])) [21] (Abudi/einfuehrung.tex
+Kapitel 3.
+
+Overfull \hbox (2.33836pt too wide) in paragraph at lines 1--1
+|[] \T1/phv/b/n/24.88 Ed-ge vs. Cloud Pro-ces-sing in Smart
+
+Overfull \hbox (1.16327pt too wide) in paragraph at lines 1--1
+\T1/phv/b/n/24.88 Gar-de-ning: A Com-pa-ra-ti-ve Stu-dy for
+(Abudi/sections/introduction.tex [22]) (Abudi/sections/state_of_the_art.tex
+[23]
+
+LaTeX Warning: Citation `iot_reference_model' on page 24 undefined on input lin
+e 6.
+
+
+LaTeX Warning: Citation `iot_reference_model' on page 24 undefined on input lin
+e 13.
+
+
+LaTeX Warning: Citation `iot_reference_model' on page 24 undefined on input lin
+e 13.
+
+[24 <./Abudi/figures/Iot_world_reference_model.png>]
+Overfull \hbox (12.37852pt too wide) in paragraph at lines 20--21
+\T1/phv/m/n/12 forms and spe-cia-li-zed da-ta-ba-se ex-ten-si-ons that sol-ve t
+his dual-workload pro-blem^^Ventirely
+
+LaTeX Warning: Citation `closefuture_supabase_firebase' on page 25 undefined on
+ input line 24.
+
+
+LaTeX Warning: Citation `supabase_alternatives' on page 25 undefined on input l
+ine 24.
+
+
+LaTeX Warning: Citation `blog_elest_supabase_self_host' on page 25 undefined on
+ input line 26.
+
+
+LaTeX Warning: Citation `realtime_architecture' on page 25 undefined on input l
+ine 31.
+
+
+LaTeX Warning: Citation `realtime_architecture' on page 25 undefined on input l
+ine 31.
+
+
+LaTeX Warning: Citation `closefuture_supabase_firebase' on page 25 undefined on
+ input line 35.
+
+
+LaTeX Warning: Citation `blog_elest_supabase_self_host' on page 25 undefined on
+ input line 35.
+
+
+LaTeX Warning: Citation `tigerdata_tsdb_vs_rdbms' on page 25 undefined on input
+ line 39.
+
+
+LaTeX Warning: Citation `milvus_rdbms_limitations' on page 25 undefined on inpu
+t line 41.
+
+[25] [26 <./Abudi/figures/realtime_architekture.png (PNG copy)>]
+
+LaTeX Warning: Citation `tigerdata_tsdb_compared' on page 27 undefined on input
+ line 46.
+
+
+LaTeX Warning: Citation `tigerdata_best_practices_hypertables' on page 27 undef
+ined on input line 46.
+
+
+LaTeX Warning: Citation `tigerdata_timescale_alternatives' on page 27 undefined
+ on input line 46.
+
+
+LaTeX Warning: Citation `tigerdata_caggs_retention' on page 27 undefined on inp
+ut line 46.
+
+
+LaTeX Warning: Citation `tigerdata_best_practices_hypertables' on page 27 undef
+ined on input line 50.
+
+
+LaTeX Warning: Citation `tigerdata_timescale_alternatives' on page 27 undefined
+ on input line 50.
+
+
+LaTeX Warning: Citation `tigerdata_caggs_retention' on page 27 undefined on inp
+ut line 50.
+
+
+LaTeX Warning: Citation `tigerdata_tsdb_compared' on page 27 undefined on input
+ line 50.
+
+
+LaTeX Warning: Citation `tigerdata_caggs_retention' on page 27 undefined on inp
+ut line 54.
+
+
+LaTeX Warning: Citation `tigerdata_tsdb_compared' on page 27 undefined on input
+ line 54.
+
+
+LaTeX Warning: Citation `tigerdata_best_practices_hypertables' on page 27 undef
+ined on input line 54.
+
+[27]
+
+LaTeX Warning: Citation `microservices_io_gateway' on page 28 undefined on inpu
+t line 61.
+
+
+LaTeX Warning: Citation `microservices_io_gateway' on page 28 undefined on inpu
+t line 65.
+
+
+LaTeX Warning: Citation `microservices_io_patterns' on page 28 undefined on inp
+ut line 65.
+
+
+LaTeX Warning: Citation `microservices_io_apigateway' on page 28 undefined on i
+nput line 65.
+
+
+LaTeX Warning: Citation `microservices_io_apigateway' on page 28 undefined on i
+nput line 69.
+
+
+LaTeX Warning: Citation `digitalapi_gateway_pattern' on page 28 undefined on in
+put line 71.
+
+
+LaTeX Warning: Citation `microservices_io_apigateway' on page 28 undefined on i
+nput line 71.
+
+
+LaTeX Warning: Citation `microservices_io_apigateway' on page 28 undefined on i
+nput line 73.
+
+[28]
+
+LaTeX Warning: Citation `gfg_microservices_communication' on page 29 undefined 
+on input line 77.
+
+
+LaTeX Warning: Citation `gfg_sync_vs_async_system_design' on page 29 undefined 
+on input line 79.
+
+
+LaTeX Warning: Citation `cerbos_inter_service_communication' on page 29 undefin
+ed on input line 79.
+
+
+LaTeX Warning: Citation `digitalocean_edge_vs_cloud' on page 29 undefined on in
+put line 87.
+
+
+LaTeX Warning: Citation `blog_elest_supabase_self_host' on page 29 undefined on
+ input line 87.
+
+
+LaTeX Warning: Citation `nsf_par_10184999' on page 29 undefined on input line 8
+9.
+
+
+LaTeX Warning: Citation `gfg_cloud_computing' on page 29 undefined on input lin
+e 89.
+
+
+LaTeX Warning: Citation `digitalocean_edge_vs_cloud' on page 29 undefined on in
+put line 89.
+
+
+LaTeX Warning: Citation `blog_elest_supabase_self_host' on page 29 undefined on
+ input line 89.
+
+[29]
+
+LaTeX Warning: Citation `scalecomputing_edge_vs_cloud' on page 30 undefined on 
+input line 93.
+
+
+LaTeX Warning: Citation `scalecomputing_edge_devices' on page 30 undefined on i
+nput line 93.
+
+
+LaTeX Warning: Citation `blog_elest_supabase_self_host' on page 30 undefined on
+ input line 93.
+
+
+LaTeX Warning: Citation `digitalocean_edge_vs_cloud' on page 30 undefined on in
+put line 95.
+
+
+LaTeX Warning: Citation `scalecomputing_edge_vs_cloud' on page 30 undefined on 
+input line 95.
+
+
+LaTeX Warning: Citation `blog_elest_supabase_self_host' on page 30 undefined on
+ input line 95.
+
+
+LaTeX Warning: Citation `scalecomputing_edge_devices' on page 30 undefined on i
+nput line 95.
+
+
+LaTeX Warning: Citation `digitalocean_edge_vs_cloud' on page 30 undefined on in
+put line 108.
+
+
+LaTeX Warning: Citation `scalecomputing_edge_vs_cloud' on page 30 undefined on 
+input line 108.
+
+
+LaTeX Warning: Citation `scalecomputing_edge_devices' on page 30 undefined on i
+nput line 108.
+
+[30]
+
+LaTeX Warning: Citation `blog_elest_supabase_self_host' on page 31 undefined on
+ input line 110.
+
+
+LaTeX Warning: Citation `iotclass_edge_fog_cloud' on page 31 undefined on input
+ line 110.
+
+) (Abudi/sections/architecture.tex [31 <./Abudi/figures/cloud vs edge.png>]
+[32] [33 <./Abudi/figures/high_level_architecture.png>]
+
+LaTeX Warning: Citation `broadwaySupabase' on page 34 undefined on input line 4
+6.
+
+
+LaTeX Warning: Citation `supabaseReactNative' on page 34 undefined on input lin
+e 46.
+
+
+LaTeX Warning: Citation `tigerdataRelational' on page 34 undefined on input lin
+e 46.
+
+[34] [35]) (Abudi/sections/methodology.tex [36]
+Overfull \hbox (2.92365pt too wide) in paragraph at lines 21--22
+[]\T1/phv/b/n/12 Payload Ana-to-my: \T1/phv/m/n/12 Both va-ri-ants se-ria-li-ze
+ their da-ta in-to ri-gid-ly stan-dar-di-zed JSON
+[37]
+Overfull \hbox (3.20256pt too wide) in paragraph at lines 33--34
+\T1/phv/m/n/12 stan-dard HTTP round-trip bounds. This ex-clu-si-on is man-da-to
+-ry be-cau-se the en-ti-re MQTT
+[38]) (Abudi/sections/results.tex [39]
+Overfull \hbox (111.63956pt too wide) in paragraph at lines 9--10
+[]\T1/phv/m/n/12 Source: []$\T1/pcr/m/n/12 https : / / ifactoryapp . com / blog
+ / real-[]time-[]ai-[]cloud-[]latency-[]manufacturing$[] 
+
+Overfull \hbox (148.13954pt too wide) in paragraph at lines 24--26
+[]\T1/phv/m/n/12 Source: []$\T1/pcr/m/n/12 https : / / metadeskglobal . com / f
+rom-[]raw-[]sensor-[]data-[]to-[]intelligent-[]automation/$[] 
+
+Overfull \hbox (52.84169pt too wide) in paragraph at lines 24--26
+[]$\T1/pcr/m/n/12 https : / / stonefly . com / blog / iot-[]data-[]storage-[]ar
+chitectures-[]databases/$[] 
+[40]
+Overfull \hbox (293.13948pt too wide) in paragraph at lines 34--35
+[]\T1/phv/m/n/12 Source: []$\T1/pcr/m/n/12 https : / / www . opal-[]rt . com / 
+blog / 5-[]essential-[]computer-[]simulation-[]techniques-[]for-[]systems-[]eng
+ineers/$[] 
+) (Abudi/sections/discussion.tex
+Overfull \hbox (2.88638pt too wide) in paragraph at lines 3--4
+\T1/phv/m/n/12 The ex-pe-ri-men-tal stress tests and mas-si-ve load eva-lua-ti-
+ons con-duc-ted throug-hout Chap-
+[41]
+
+LaTeX Warning: Citation `zeetimThickThin' on page 42 undefined on input line 29
+.
+
+
+LaTeX Warning: Citation `outsourceThinThick' on page 42 undefined on input line
+ 29.
+
+
+LaTeX Warning: Citation `deepwikiSupabase' on page 42 undefined on input line 2
+9.
+
+[42]) (Abudi/sections/conclusion.tex [43])) [44] (Richard/einfuehrung.tex
+Kapitel 4.
+
+Overfull \hbox (3.00337pt too wide) in paragraph at lines 1--1
+|[]\T1/phv/b/n/24.88 IoT Da-ta Sync in Mi-cro-ser-vices: Eva-
+(Richard/sections/introduction.tex
+
+LaTeX Warning: Citation `leherAg40' on page 45 undefined on input line 5.
+
+
+LaTeX Warning: Citation `streetsolverSmartGarden' on page 45 undefined on input
+ line 7.
+
+
+LaTeX Warning: Citation `growdirectorUrbanAg' on page 45 undefined on input lin
+e 9.
+
+
+LaTeX Warning: Citation `bpbSiot' on page 45 undefined on input line 9.
+
+
+LaTeX Warning: Citation `jungWeon2025' on page 45 undefined on input line 9.
+
+
+LaTeX Warning: Citation `kaaiotChallenges' on page 45 undefined on input line 1
+3.
+
+
+LaTeX Warning: Citation `emnifyChallenges' on page 45 undefined on input line 1
+3.
+
+[45]
+
+LaTeX Warning: Citation `smarticoGamification' on page 46 undefined on input li
+ne 17.
+
+
+LaTeX Warning: Citation `cheThreeTier' on page 46 undefined on input line 19.
+
+
+LaTeX Warning: Citation `spinifyGamification' on page 46 undefined on input lin
+e 25.
+
+
+LaTeX Warning: Citation `progElecDeepSleep' on page 46 undefined on input line 
+27.
+
+
+LaTeX Warning: Citation `redditEsp32Wake' on page 46 undefined on input line 27
+.
+
+
+LaTeX Warning: Citation `redditEsp32Wake' on page 46 undefined on input line 29
+.
+
+
+LaTeX Warning: Citation `psiborg2024mqtt' on page 46 undefined on input line 29
+.
+
+[46]
+
+LaTeX Warning: Citation `designGurusCAP' on page 47 undefined on input line 31.
+
+
+
+LaTeX Warning: Citation `diplomarbeitSelf' undefined on input line 39.
+
+) (Richard/sections/theoretical_background.tex
+
+LaTeX Warning: Citation `awsMicroservices' on page 47 undefined on input line 6
+.
+
+
+LaTeX Warning: Citation `fowlerMicroservices' on page 47 undefined on input lin
+e 6.
+
+[47]
+
+LaTeX Warning: Citation `newmanBuilding' on page 48 undefined on input line 8.
+
+
+Overfull \hbox (9.22607pt too wide) in paragraph at lines 13--14
+[]\T1/pcr/m/n/12 social_media_schema\T1/phv/m/n/12 : Re-spon-si-ble for com-mu-
+ni-ty fea-tu-res, in-clu-ding user posts
+[48 <./images/controllers_table.png>]
+
+LaTeX Warning: Citation `richardsonDbPerService' on page 49 undefined on input 
+line 33.
+
+
+LaTeX Warning: Citation `esp32s3Datasheet' on page 49 undefined on input line 4
+6.
+
+[49 <./images/gamification_stats.png>]
+
+LaTeX Warning: Citation `lastMinuteActive' on page 50 undefined on input line 5
+1.
+
+
+LaTeX Warning: Citation `lastMinuteActive' on page 50 undefined on input line 5
+2.
+
+
+LaTeX Warning: Citation `esp32s3Datasheet' on page 50 undefined on input line 5
+3.
+
+
+LaTeX Warning: Citation `adafruitWake' on page 50 undefined on input line 57.
+
+
+LaTeX Warning: Citation `psiborg2024mqtt' on page 50 undefined on input line 63
+.
+
+
+Overfull \hbox (20.60083pt too wide) in paragraph at lines 65--67
+\T1/phv/m/n/12 sor, ac-ting as the pu-blis-her, sends da-ta to a de-si-gna-ted 
+to-pic such as \T1/pcr/m/n/12 plantup/sensor/01
+[50]
+
+LaTeX Warning: Citation `psiborg2024mqtt' on page 51 undefined on input line 71
+.
+
+
+LaTeX Warning: Citation `psiborg2024mqtt' on page 51 undefined on input line 71
+.
+
+
+LaTeX Warning: Citation `oasisMqtt31' on page 51 undefined on input line 76.
+
+
+LaTeX Warning: Citation `rfc7230Http' on page 51 undefined on input line 76.
+
+
+LaTeX Warning: Citation `oasisMqtt31' on page 51 undefined on input line 79.
+
+
+LaTeX Warning: Citation `rfc7230Http' on page 51 undefined on input line 87.
+
+[51 <./images/mqtt_converted.png (PNG copy)>]
+
+LaTeX Warning: Citation `dreamfactory2024rest' on page 52 undefined on input li
+ne 95.
+
+
+LaTeX Warning: Citation `dreamfactory2024rest' on page 52 undefined on input li
+ne 95.
+
+
+LaTeX Warning: Citation `brewerCap' on page 52 undefined on input line 103.
+
+
+LaTeX Warning: Citation `designGurusCAP' on page 52 undefined on input line 103
+.
+
+
+LaTeX Warning: Citation `jaiswalCAP' on page 52 undefined on input line 103.
+
+[52 <./images/rest_converted.png>]) (Richard/sections/system_architecture.tex
+Overfull \hbox (0.6332pt too wide) in paragraph at lines 12--13
+[]\T1/phv/m/n/12 Distributed con-sis-ten-cy: Be-cau-se da-ta is dis-tri-bu-ted 
+across User, So-ci-al, and Hard-
+[53] [54] [55 <./images/Sensor payload structure.png>]
+
+LaTeX Warning: Citation `fowlerMicroservices' on page 56 undefined on input lin
+e 69.
+
+
+Overfull \hbox (8.92592pt too wide) in paragraph at lines 72--73
+[]\T1/pcr/m/n/12 social_media_schema\T1/phv/m/n/12 : Re-spon-si-ble for com-mu-
+ni-ty con-tent, in-clu-ding user posts,
+[56] [57 <./images/Plants table.png>] [58 <./images/Insert example for sensor r
+eadings.png> <./images/quests_table.png>])
+(Richard/sections/experimental_evaluation.tex [59 <./images/user_quest.png> <./
+images/awarding_xp.png>] [60{C:/Users/denni/AppData/Local/Programs/MiKTeX/fonts
+/enc/dvips/lm/lm-rm.enc} <./images/payload_mqtt_rest.png>] [61 <./images/verifi
+cation_packets.png>]
+
+LaTeX Warning: Citation `rfc8446Tls' on page 62 undefined on input line 64.
+
+
+LaTeX Warning: Citation `emqxMqttVsHttp' on page 62 undefined on input line 64.
+
+
+
+LaTeX Warning: Citation `iotForAllMqttHttp' on page 62 undefined on input line 
+66.
+
+
+Overfull \hbox (43.91852pt too wide) in paragraph at lines 66--67
+\T1/phv/m/n/12 se text-based hea-der in-for-ma-ti-on ty-pi-cal of HTTP, such as
+ \T1/pcr/m/n/12 User-Agent \T1/phv/m/n/12 and \T1/pcr/m/n/12 Content-Type \T1/p
+hv/m/n/12 [[]].
+
+LaTeX Warning: Citation `emqxMqttVsHttp' on page 62 undefined on input line 70.
+
+
+
+LaTeX Warning: Citation `iotForAllMqttHttp' on page 62 undefined on input line 
+70.
+
+
+LaTeX Warning: Citation `comeStarMqttHttp' on page 62 undefined on input line 7
+0.
+
+[62 <./images/markdown-table.png>]
+
+LaTeX Warning: Citation `awsApiLimits' on page 63 undefined on input line 72.
+
+
+LaTeX Warning: Citation `nginxWorkerLimits' on page 63 undefined on input line 
+72.
+
+
+LaTeX Warning: Citation `dreamFactoryEdgeMqtt' on page 63 undefined on input li
+ne 72.
+
+
+LaTeX Warning: Citation `emqxBenchmark' on page 63 undefined on input line 72.
+
+
+LaTeX Warning: Citation `hivemqPubSub' on page 63 undefined on input line 72.
+
+
+LaTeX Warning: Citation `oasisMqtt5' on page 63 undefined on input line 72.
+
+
+Overfull \hbox (16.5476pt too wide) in paragraph at lines 76--77
+\T1/phv/m/n/12 con-di-ti-ons. When the Wi-Fi en-vi-ron-ment be-ca-me tem-po-ra-
+ri-ly un-sta-ble, the time-constrained
+
+LaTeX Warning: Citation `lastMinuteActive' on page 63 undefined on input line 8
+1.
+
+
+LaTeX Warning: Citation `esp32s3Datasheet2026' on page 63 undefined on input li
+ne 81.
+
+
+LaTeX Warning: Citation `esp32s3Datasheet2026' on page 63 undefined on input li
+ne 81.
+
+[63]
+
+LaTeX Warning: Citation `jara2023mqtt' on page 64 undefined on input line 103.
+
+)) [64] [65] (Dennis/einfuehrung.tex
+Kapitel 5.
+
+Overfull \hbox (22.19234pt too wide) in paragraph at lines 2--2
+|[]\T1/phv/b/n/24.88 Gamification. Ga-ming de-sign pat-terns
+(Dennis/sections/introduction.tex
+
+LaTeX Warning: Citation `businessOfAppsRetention' on page 66 undefined on input
+ line 4.
+
+
+LaTeX Warning: Citation `ethoraRetention' on page 66 undefined on input line 4.
+
+
+
+LaTeX Warning: Citation `localyticsRetention' on page 66 undefined on input lin
+e 6.
+
+
+LaTeX Warning: Citation `barariGamification2024' on page 66 undefined on input 
+line 8.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 66 undefined on input line 10.
+
+
+
+LaTeX Warning: Citation `diplomarbeitSelfDennis' undefined on input line 17.
+
+) (Dennis/sections/theoretical_background.tex
+
+LaTeX Warning: Citation `gablerGamification' on page 66 undefined on input line
+ 5.
+
+
+LaTeX Warning: Citation `grendelGamification' on page 66 undefined on input lin
+e 5.
+
+
+LaTeX Warning: Citation `MDPI' on page 66 undefined on input line 8.
+
+[66]
+
+LaTeX Warning: Citation `salesscreenOlderGenerations' on page 67 undefined on i
+nput line 14.
+
+
+LaTeX Warning: Citation `haufeGamification' on page 67 undefined on input line 
+16.
+
+
+LaTeX Warning: Citation `haufeGamification' on page 67 undefined on input line 
+20.
+
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 67 undefined on input li
+ne 28.
+
+[67]
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 68 undefined on input li
+ne 33.
+
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 68 undefined on input li
+ne 33.
+
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 68 undefined on input li
+ne 44.
+
+
+LaTeX Warning: Citation `sdtOrgTheory' on page 68 undefined on input line 44.
+
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 68 undefined on input li
+ne 47.
+
+
+LaTeX Warning: Citation `sdtOrgTheory' on page 68 undefined on input line 48.
+
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 68 undefined on input li
+ne 49.
+
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 68 undefined on input li
+ne 54.
+
+[68 <./images/bandhu_motivation_model.png>]
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 69 undefined on input li
+ne 62.
+
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 69 undefined on input li
+ne 69.
+
+
+LaTeX Warning: Citation `gamifyMotivation' on page 69 undefined on input line 7
+8.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 69 undefined on input line 79.
+
+
+
+LaTeX Warning: Citation `gamifyMotivation' on page 69 undefined on input line 7
+9.
+
+[69]
+
+LaTeX Warning: Citation `gamifyMotivation' on page 70 undefined on input line 9
+2.
+
+
+LaTeX Warning: Citation `gamifyMotivation' on page 70 undefined on input line 9
+4.
+
+
+LaTeX Warning: Citation `duolingoStreak' on page 70 undefined on input line 94.
+
+
+
+LaTeX Warning: Citation `duolingoStreak' on page 70 undefined on input line 99.
+
+
+
+LaTeX Warning: Citation `duolingoStreak' on page 70 undefined on input line 99.
+
+
+[70 <./images/plantup_level_rewards.png>]
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 71 undefined on input li
+ne 106.
+
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 71 undefined on input li
+ne 108.
+
+
+Overfull \hbox (8.94768pt too wide) in paragraph at lines 108--109
+[]\T1/phv/b/n/12 Controlling Ex-trin-sic Mo-ti-va-ti-on: \T1/phv/m/n/12 When re
+-wards feel ob-li-ga-to-ry or pressure-driven,
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 71 undefined on input li
+ne 109.
+
+
+LaTeX Warning: Citation `haufeGamification' on page 71 undefined on input line 
+112.
+
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 71 undefined on input li
+ne 112.
+
+
+LaTeX Warning: Citation `gamifyMotivation' on page 71 undefined on input line 1
+13.
+
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 71 undefined on input li
+ne 113.
+
+[71 <./images/duolingo_streak.png>]
+
+LaTeX Warning: Citation `redwhiteAttribution' on page 72 undefined on input lin
+e 122.
+
+
+LaTeX Warning: Citation `tamAttribution' on page 72 undefined on input line 127
+.
+
+
+LaTeX Warning: Citation `tamAttribution' on page 72 undefined on input line 127
+.
+
+[72 <./images/attribution_theory_2.png>]
+
+LaTeX Warning: Citation `scienceDirectExpectancy' on page 73 undefined on input
+ line 146.
+
+
+LaTeX Warning: Citation `scienceDirectExpectancy' on page 73 undefined on input
+ line 151.
+
+
+LaTeX Warning: Citation `feedbackLoop' on page 73 undefined on input line 163.
+
+
+LaTeX Warning: Citation `feedbackLoop' on page 73 undefined on input line 163.
+
+[73 <./images/feedback_loop.png>]
+
+LaTeX Warning: Citation `feedbackLoop2' on page 74 undefined on input line 170.
+
+
+) (Dennis/sections/designpattern.tex
+
+LaTeX Warning: Citation `chouGamification2015' on page 74 undefined on input li
+ne 8.
+
+
+LaTeX Warning: Citation `chouGamification2015' on page 74 undefined on input li
+ne 14.
+
+[74]
+
+LaTeX Warning: Citation `chouGamification2015' on page 75 undefined on input li
+ne 16.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 75 undefined on input line 18.
+
+
+[75 <./images/plantup_shop.png (PNG copy)>]
+
+LaTeX Warning: Citation `chouGamification2015' on page 76 undefined on input li
+ne 33.
+
+
+LaTeX Warning: Citation `chouGamification2015' on page 76 undefined on input li
+ne 39.
+
+
+LaTeX Warning: Citation `chouGamification2015' on page 76 undefined on input li
+ne 45.
+
+[76]
+
+LaTeX Warning: Citation `chouGamification2015' on page 77 undefined on input li
+ne 47.
+
+
+LaTeX Warning: Citation `chouGamification2015' on page 77 undefined on input li
+ne 54.
+
+
+LaTeX Warning: Citation `chouGamification2015' on page 77 undefined on input li
+ne 58.
+
+) [77] (Dennis/sections/whyitworks.tex
+
+LaTeX Warning: Citation `rewardzGamification' on page 78 undefined on input lin
+e 3.
+
+
+LaTeX Warning: Citation `deterding2011' on page 78 undefined on input line 11.
+
+
+LaTeX Warning: Citation `gorillaPlantGrowth' on page 78 undefined on input line
+ 15.
+
+
+LaTeX Warning: Citation `ukcoachingSDT' on page 78 undefined on input line 15.
+
+[78]
+
+LaTeX Warning: Citation `decisionLabFogg' on page 79 undefined on input line 17
+.
+
+[79 <./images/Fogg-Behavior-Model.png>]
+
+LaTeX Warning: Citation `gorillaPlantGrowth' on page 80 undefined on input line
+ 33.
+
+
+LaTeX Warning: Citation `simplyPsychologyOperant' on page 80 undefined on input
+ line 35.
+
+
+LaTeX Warning: Citation `oamkGamification' on page 80 undefined on input line 3
+7.
+
+
+LaTeX Warning: Citation `mediumMeaningfulGamification' on page 80 undefined on 
+input line 37.
+
+[80]
+
+LaTeX Warning: Citation `decisionLabIkea' on page 81 undefined on input line 44
+.
+
+
+LaTeX Warning: Citation `amplitudeHookModel' on page 81 undefined on input line
+ 48.
+
+
+LaTeX Warning: Citation `mediumHookFramework' on page 81 undefined on input lin
+e 48.
+
+
+LaTeX Warning: Citation `Zimmer2022Personalized' on page 81 undefined on input 
+line 50.
+
+) [81] (Dennis/sections/plantup.tex
+
+LaTeX Warning: Citation `plantUpProject' on page 82 undefined on input line 3.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 82 undefined on input line 5.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 82 undefined on input line 8.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 82 undefined on input line 12.
+
+
+
+LaTeX Warning: Citation `ukcoachingSDT' on page 82 undefined on input line 13.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 82 undefined on input line 18.
+
+
+
+LaTeX Warning: Citation `plantUpProject' on page 82 undefined on input line 24.
+
+
+
+LaTeX Warning: Citation `plantUpProject' on page 82 undefined on input line 24.
+
+
+[82]
+
+LaTeX Warning: Citation `ukcoachingSDT' on page 83 undefined on input line 37.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 83 undefined on input line 41.
+
+
+[83 <./images/sprig.png (PNG copy)>]
+
+LaTeX Warning: Citation `plantUpProject' on page 84 undefined on input line 46.
+
+
+
+LaTeX Warning: Citation `plantUpProject' on page 84 undefined on input line 50.
+
+
+) (Dennis/sections/evaluation.tex [84])) [85] (Diplomarbeit.lof
+
+LaTeX Warning: Citation `hacksterMoistureSensors' on page 86 undefined on input
+ line 5.
+
+
+LaTeX Warning: Citation `hacksterMoistureSensors' on page 86 undefined on input
+ line 6.
+
+
+LaTeX Warning: Citation `iot_reference_model' on page 86 undefined on input lin
+e 17.
+
+
+LaTeX Warning: Citation `realtime_architecture' on page 86 undefined on input l
+ine 18.
+
+
+LaTeX Warning: Citation `psiborg2024mqtt' on page 86 undefined on input line 24
+.
+
+[86]
+
+LaTeX Warning: Citation `dreamfactory2024rest' on page 87 undefined on input li
+ne 25.
+
+
+LaTeX Warning: Citation `bandhuMotivation2024' on page 87 undefined on input li
+ne 37.
+
+
+LaTeX Warning: Citation `duolingoStreak' on page 87 undefined on input line 39.
+
+
+
+LaTeX Warning: Citation `tamAttribution' on page 87 undefined on input line 40.
+
+
+
+LaTeX Warning: Citation `feedbackLoop' on page 87 undefined on input line 41.
+
+
+LaTeX Warning: Citation `plantUpProject' on page 87 undefined on input line 44.
+
+
+) [87] (Diplomarbeit.lot) [88] [89] (Diplomarbeit.bbl
+Underfull \hbox (badness 10000) in paragraph at lines 30--34
+[]\T1/phv/m/n/12 KUNR Pu-blic Ra-dio, ``Hou-se-plants boo-med du-ring the pan-
+
+Underfull \hbox (badness 10000) in paragraph at lines 30--34
+\T1/phv/m/n/12 de-mic. gen z, mill-en-ni-als say the po-pu-la-ri-ty is he-re to
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 30--34
+\T1/phv/m/n/12 stay,'' []$https : / / www . kunr . org / business-[]and-[]econo
+my / 2022-[]12-[]28 /
+
+Overfull \hbox (21.71681pt too wide) in paragraph at lines 30--34
+\T1/phv/m/n/12 houseplants-[]boomed-[]during-[]pandemic-[]gen-[]z-[]millennials
+-[]say-[]popularity-[]stays-[]tiktok$[],
+
+Overfull \hbox (98.02388pt too wide) in paragraph at lines 41--45
+\T1/phv/m/n/12 americans-[]kill-[]nearly-[]half-[]their-[]houseplants-[]so-[]wh
+y-[]do-[]we-[]still-[]spend-[]billions-[]on-[]them-[]each-[]year/$[],
+
+Underfull \hbox (badness 10000) in paragraph at lines 57--60
+[]\T1/phv/m/n/12 LSU Ag-Cen-ter, ``Wa-ter wi-se-ly,'' []$https : / / www . lsua
+gcenter . com / articles /
+
+Underfull \hbox (badness 3646) in paragraph at lines 62--66
+[]\T1/phv/m/n/12 Wisconsin Hor-ti-cul-ture, Uni-ver-si-ty of Wisconsin--Madison
+ Di-vi-si-on of Ex-
+
+Underfull \hbox (badness 3965) in paragraph at lines 62--66
+\T1/phv/m/n/12 ten-si-on, ``Root rots in the gar-den,'' []$https : / / hort . e
+xtension . wisc . edu / articles /
+
+Underfull \hbox (badness 10000) in paragraph at lines 73--76
+\T1/phv/m/n/12 / / www . marketsandmarkets . com / ResearchInsight / smart-[]ho
+me-[]market-[]research .
+
+Underfull \hbox (badness 2680) in paragraph at lines 83--87
+[]\T1/phv/m/n/12 Food and Agri-cul-ture Or-ga-ni-za-ti-on of the Uni-ted Na-ti-
+ons (FAO), ``Wa-ter
+
+Underfull \hbox (badness 10000) in paragraph at lines 89--92
+\T1/phv/m/n/12 blogs . worldbank . org / en / opendata / chart-[]globally-[]70-
+[]freshwater-[]used-[]agriculture$[],
+[90]
+Underfull \hbox (badness 2600) in paragraph at lines 94--98
+[]\T1/phv/m/n/12 NC State Ex-ten-si-on, ``Soils & plant nu-tri-ents (ex-ten-si-
+on gar-de-ner hand-
+
+Underfull \hbox (badness 1755) in paragraph at lines 94--98
+\T1/phv/m/n/12 book, chap-ter 1),'' []$https : / / content . ces . ncsu . edu /
+ extension-[]gardener-[]handbook /
+
+Underfull \hbox (badness 1231) in paragraph at lines 111--115
+[]\T1/phv/m/n/12 METER Group, ``Plant availa-ble wa-ter: How do i de-ter-mi-ne 
+field ca-pa-ci-ty
+
+Underfull \hbox (badness 1412) in paragraph at lines 111--115
+\T1/phv/m/n/12 and per-ma-nent wil-ting point?'' []$https : / / metergroup . co
+m / measurement-[]insights /
+
+Overfull \hbox (28.53644pt too wide) in paragraph at lines 111--115
+\T1/phv/m/n/12 plant-[]available-[]water-[]how-[]do-[]i-[]determine-[]^^\eld-[]
+capacity-[]and-[]permanent-[]wilting-[]point/$[],
+
+Underfull \hbox (badness 5726) in paragraph at lines 117--120
+[]\T1/phv/m/n/12 NASA Ear-th-da-ta, ``Pho-to-syn-the-ti-cal-ly ac-ti-ve ra-dia-
+ti-on (par),'' []$https : / / www .
+
+Underfull \hbox (badness 1515) in paragraph at lines 127--130
+[]\T1/phv/m/n/12 Encyclopaedia Bri-tan-ni-ca, ``Tran-spi-ra-ti-on,'' []$https :
+ / / www . britannica . com / science /
+
+Underfull \hbox (badness 2689) in paragraph at lines 142--145
+[]\T1/phv/m/n/12 University of Ma-ry-land Ex-ten-si-on, ``Sun-burn da-ma-ge on 
+flo-wers,'' []$https : / /
+
+Underfull \hbox (badness 3568) in paragraph at lines 147--151
+[]\T1/phv/m/n/12 University of New Hamps-hi-re Ex-ten-si-on, ``How can i in-cre
+-a-se the hu-
+
+Underfull \hbox (badness 1902) in paragraph at lines 147--151
+\T1/phv/m/n/12 mi-di-ty in-doors for my hou-se-plants?'' []$https : / / extensi
+on . unh . edu / blog / 2025 / 01 /
+
+Underfull \hbox (badness 3417) in paragraph at lines 153--156
+[]\T1/phv/m/n/12 Utah State Uni-ver-si-ty Ex-ten-si-on, ``Over-wa-te-ring,'' []
+$https : / / extension . usu . edu /
+
+Underfull \hbox (badness 4353) in paragraph at lines 153--156
+\T1/phv/m/n/12 planthealth / ipm / ornamental-[]pest-[]guide / abiotic / overwa
+tering . php$[], 2026, ac-ces-
+
+Underfull \hbox (badness 10000) in paragraph at lines 158--161
+[]\T1/phv/m/n/12 University of Pitts-bur-gh, Web-vi-si-on, ``Light and dark ad-
+ap-ta-ti-on,''
+
+Underfull \hbox (badness 10000) in paragraph at lines 158--161
+[]$\T1/phv/m/n/12 https : / / www . webvision . pitt . edu / book / part-[]viii
+-[]psychophysics-[]of-[]vision /
+[91]
+Underfull \hbox (badness 10000) in paragraph at lines 168--171
+\T1/phv/m/n/12 wiki . seeedstudio . com / Grove-[]Capacitive _ Moisture _ Senso
+r-[]Corrosion-[]Resistant/$[],
+
+Underfull \hbox (badness 5741) in paragraph at lines 183--187
+[]\T1/phv/m/n/12 Bureau In-ter-na-tio-nal des Po-ids et Me-s-u-res (BIPM), ``Pr
+in-cip-les go-ver-
+
+Underfull \hbox (badness 3009) in paragraph at lines 194--197
+[]\T1/phv/m/n/12 ------, \T1/phv/m/sl/12 ESP32 Se-ries Da-tas-heet\T1/phv/m/n/1
+2 , []$https : / / www . espressif . com / sites / default / ^^\les /
+[92]
+Underfull \hbox (badness 10000) in paragraph at lines 307--311
+[]\T1/phv/m/n/12 DreamFactory, ``Rest vs gra-ph-ql: Which api de-sign sty-
+
+Underfull \hbox (badness 10000) in paragraph at lines 307--311
+\T1/phv/m/n/12 le is right for your or-ga-ni-za-ti-on?'' []$https : / / blog . 
+dreamfactory . com /
+
+Underfull \hbox (badness 10000) in paragraph at lines 307--311
+\T1/phv/m/n/12 rest-[]vs-[]graphql-[]which-[]api-[]design-[]style-[]is-[]right-
+[]for-[]your-[]organization$[], 2024,
+[93]
+Underfull \hbox (badness 6252) in paragraph at lines 313--316
+[]\T1/phv/m/n/12 PsiBorg, ``Ad-van-ta-ges of using mqtt for iot de-vi-ces,'' []
+$https : / / psiborg . in /
+
+Underfull \hbox (badness 7203) in paragraph at lines 323--327
+[]\T1/phv/m/n/12 StreetSolver, ``The smart ur-ban gar-den: Top tech & ai hel-pi
+ng you
+
+Underfull \hbox (badness 10000) in paragraph at lines 323--327
+\T1/phv/m/n/12 grow mo-re food at ho-me in 2026,'' []$https : / / streetsolver 
+. com / blogs /
+
+Overfull \hbox (16.16454pt too wide) in paragraph at lines 323--327
+\T1/phv/m/n/12 the-[]smart-[]urban-[]garden-[]top-[]tech-[]ai-[]helping-[]you-[
+]grow-[]more-[]food-[]at-[]home-[]in-[]2026$[],
+
+Underfull \hbox (badness 10000) in paragraph at lines 329--332
+\T1/phv/m/n/12 / / growdirector . com / urban-[]agriculture-[]in-[]2025-[]a-[]g
+rowing-[]trend-[]with-[]deep-[]roots$[],
+
+Underfull \hbox (badness 10000) in paragraph at lines 347--350
+\T1/phv/m/n/12 com / iot-[]knowledge-[]base / how-[]does-[]wi-[]^^\-[]technolog
+y-[]link-[]to-[]the-[]iot-[]industry$[],
+
+Underfull \hbox (badness 10000) in paragraph at lines 356--360
+[]\T1/phv/m/n/12 Smartico, ``Gro-wing green: How ga-mi-fi-ca-ti-on is re-vo-lu-
+tio-
+
+Underfull \hbox (badness 10000) in paragraph at lines 356--360
+\T1/phv/m/n/12 ni-zing su-staina-ble agri-cul-ture,'' []$https : / / smartico .
+ ai / blog-[]post /
+
+Underfull \hbox (badness 10000) in paragraph at lines 356--360
+\T1/phv/m/n/12 gami^^\cation-[]revolutionizing-[]sustainable-[]agriculture$[], 
+2025, ac-ces-sed: 2025-
+
+Underfull \hbox (badness 10000) in paragraph at lines 362--365
+[]\T1/phv/m/n/12 B. Che, ``Im-ple-men-ting iot with a three-tier ar-chi-tec-tur
+e,'' []$https :
+
+Underfull \hbox (badness 10000) in paragraph at lines 362--365
+\T1/phv/m/n/12 / / enterprisersproject . com / article / 2016 / 1 / implementin
+g-[]iot-[]three-[]tier-[]architecture$[],
+
+Underfull \hbox (badness 3942) in paragraph at lines 367--370
+[]\T1/phv/m/n/12 Spinify, ``The cri-ti-cal ro-le of real-time feed-back in ga-m
+i-fi-ca-ti-on,'' []$https : / /
+
+Underfull \hbox (badness 10000) in paragraph at lines 377--380
+\T1/phv/m/n/12 esp32 / comments / gfroev / time _ to _ wake _ up _ and _ connec
+t _ to _ wi^^\ _ from _ deep/$[],
+[94]
+Underfull \hbox (badness 1067) in paragraph at lines 382--385
+[]\T1/phv/m/n/12 DesignGurus, ``Cap theo-rem ex-plai-ned,'' []$https : / / desi
+gngurus . io / answers / detail /
+
+Underfull \hbox (badness 10000) in paragraph at lines 391--394
+\T1/phv/m/n/12 whitepapers / latest / monolith-[]to-[]microservices / microserv
+ices-[]architecture . html$[],
+
+Underfull \hbox (badness 4518) in paragraph at lines 396--399
+[]\T1/phv/m/n/12 M. Fow-ler, ``Mo-no-li-thic vs. mi-cro-ser-vices,'' []$https :
+ / / martinfowler . com / articles /
+
+Underfull \hbox (badness 10000) in paragraph at lines 410--413
+[]\T1/phv/m/n/12 E. Bre-wer, ``Bre-wer's cap theo-rem,'' []$https : / / intervi
+ewnoodle . com /
+
+Overfull \hbox (188.21805pt too wide) in paragraph at lines 410--413
+\T1/phv/m/n/12 understanding-[]the-[]cap-[]theorem-[]a-[]deep-[]dive-[]into-[]t
+he-[]fundamental-[]trade-[]o^^[s-[]of-[]distributed-[]systems-[]16b919fb0b6a$[]
+,
+
+Underfull \hbox (badness 4686) in paragraph at lines 422--425
+[]\T1/phv/m/n/12 LastMinuteEngineers, ``Esp32 power con-sump-ti-on - ac-ti-ve m
+o-de,'' []$https :
+
+Underfull \hbox (badness 1342) in paragraph at lines 422--425
+\T1/phv/m/n/12 / / lastminuteengineers . com / esp32-[]sleep-[]modes-[]power-[]
+consumption/$[], 2024, ac-
+
+Underfull \hbox (badness 10000) in paragraph at lines 432--435
+[]\T1/phv/m/n/12 S. Jais-wal, ``The im-pos-si-ble tri-an-gle of dis-tri-bu-ted 
+sys-
+
+Underfull \hbox (badness 10000) in paragraph at lines 432--435
+\T1/phv/m/n/12 tems: Cap theo-rem,'' []$https : / / www . linkedin . com / puls
+e /
+
+Underfull \hbox (badness 7133) in paragraph at lines 432--435
+\T1/phv/m/n/12 impossible-[]triangle-[]distributed-[]systems-[]cap-[]theorem-[]
+sejal-[]jaiswal-[]atbzc$[], 2023,
+
+Underfull \hbox (badness 10000) in paragraph at lines 445--449
+[]\T1/phv/m/n/12 G. Burtt, ``Ga-mi-fi-ca-ti-on, game-based lear-ning and se-rio
+us
+
+Underfull \hbox (badness 10000) in paragraph at lines 445--449
+\T1/phv/m/n/12 ga-mes ^^U what's the dif-fe-rence?'' []$https : / / grendelgame
+s . com /
+[95]
+Underfull \hbox (badness 10000) in paragraph at lines 471--474
+[]\T1/phv/m/n/12 Gamify, ``Ex-trin-sic vs. in-t-rin-sic mo-ti-va-ti-on in ga-mi
+-fi-ca-
+
+Underfull \hbox (badness 10000) in paragraph at lines 471--474
+\T1/phv/m/n/12 ti-on mar-ke-ting,'' []$https : / / www . gamify . com / gami^^\
+cation-[]blog /
+
+Underfull \hbox (badness 10000) in paragraph at lines 471--474
+\T1/phv/m/n/12 extrinsic-[]vs-[]intrinsic-[]motivation-[]in-[]gami^^\cation-[]m
+arketing$[], 2024, ac-ces-sed:
+
+Underfull \hbox (badness 3333) in paragraph at lines 476--479
+[]\T1/phv/m/n/12 FutureLearn, ``The psy-cho-lo-gy of ga-mes,'' []$https : / / w
+ww . futurelearn . com / info /
+
+Underfull \hbox (badness 10000) in paragraph at lines 486--489
+[]\T1/phv/m/n/12 F. Tam, ``Un-der-stan-ding mo-ti-va-ti-on in ga-mes:
+
+Underfull \hbox (badness 10000) in paragraph at lines 486--489
+\T1/phv/m/n/12 At-tri-bu-ti-on theo-ry,'' []$https : / / www . linkedin . com /
+ pulse /
+
+Underfull \hbox (badness 10000) in paragraph at lines 486--489
+\T1/phv/m/n/12 understanding-[]motivation-[]games-[]attribution-[]theory-[]fran
+kie-[]tam$[], n.d., ac-ces-
+
+Underfull \hbox (badness 10000) in paragraph at lines 504--507
+[]\T1/phv/m/n/12 A. Mar-c-zew-ski, ``Feed-back loops, ga-mi-fi-ca-ti-on and em-
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 504--507
+\T1/phv/m/n/12 ploy-ee mo-ti-va-ti-on,'' []$https : / / www . gami^^\ed . uk / 
+2013 / 03 / 25 /
+
+Underfull \hbox (badness 10000) in paragraph at lines 509--513
+[]\T1/phv/m/n/12 Motivacraft, ``Feed-back loops in ga-mi-fi-ca-ti-on: The key t
+o
+
+Underfull \hbox (badness 10000) in paragraph at lines 509--513
+\T1/phv/m/n/12 en-ga-ging user ex-pe-ri-ences,'' []$https : / / www . motivacra
+ft . com /
+
+Underfull \hbox (badness 10000) in paragraph at lines 509--513
+\T1/phv/m/n/12 feedback-[]loops-[]in-[]gami^^\cation-[]the-[]key-[]to-[]engagin
+g-[]user-[]experiences/$[], n.d.,
+[96]
+Underfull \hbox (badness 10000) in paragraph at lines 536--539
+[]\T1/phv/m/n/12 U.S. Geo-lo-gi-cal Sur-vey (US-GS), ``Eva-potran-spi-ra-ti-on 
+and the
+
+Underfull \hbox (badness 10000) in paragraph at lines 536--539
+\T1/phv/m/n/12 wa-ter cy-cle,'' []$https : / / www . usgs . gov / water-[]scien
+ce-[]school / science /
+
+Underfull \hbox (badness 1629) in paragraph at lines 541--543
+[]\T1/phv/m/n/12 Encyclopaedia Bri-tan-ni-ca, ``Tur-gor,'' []$https : / / www .
+ britannica . com / science / turgor$[],
+
+Underfull \hbox (badness 1077) in paragraph at lines 545--549
+[]\T1/phv/m/n/12 Bosch Sen-sor-tec, ``Bme280: Com-bi-ned hu-mi-di-ty and pres-s
+u-re sen-sor (da-
+
+Underfull \hbox (badness 6910) in paragraph at lines 545--549
+\T1/phv/m/n/12 tas-heet),'' []$https : / / www . bosch-[]sensortec . com / medi
+a / boschsensortec / downloads /
+[97]
+Underfull \hbox (badness 6300) in paragraph at lines 636--640
+[]\T1/phv/m/n/12 Cisco Sys-tems, ``Un-der-stand si-te sur-vey gui-de-li-nes
+
+Underfull \hbox (badness 6461) in paragraph at lines 636--640
+\T1/phv/m/n/12 for wlan de-ploy-ment,'' Tech. Rep., 2023. [On-
+
+Underfull \hbox (badness 6236) in paragraph at lines 636--640
+\T1/phv/m/n/12 li-ne]. Availa-ble: []$https : / / www . cisco . com / c / en / 
+us / support / docs / wireless /
+
+Underfull \hbox (badness 10000) in paragraph at lines 663--666
+\T1/phv/m/n/12 / / ethora . com / blog / customer-[]retention-[]rate-[]insights
+-[]by-[]industry-[]in-[]mobile-[]apps/$[],
+
+Underfull \hbox (badness 10000) in paragraph at lines 668--671
+\T1/phv/m/n/12 @Localytics _ 58363 / mobile-[]apps-[]whats-[]a-[]good-[]retenti
+on-[]rate-[]528381a1af0d$[],
+
+Underfull \hbox (badness 4479) in paragraph at lines 674--679
+\T1/phv/m/n/12 ble: []$https : / / www . researchgate . net / publication / 381
+789135 _ How _ and _ when _
+
+Underfull \hbox (badness 10000) in paragraph at lines 681--685
+[]\T1/phv/m/n/12 S. Haa-land, ``You think ol-der ge-ne-ra-ti-ons don't re-spond
+ to ga-mi-fi-
+
+Underfull \hbox (badness 10000) in paragraph at lines 681--685
+\T1/phv/m/n/12 ca-ti-on? the da-ta says dif-ferent-ly.'' []$https : / / www . s
+alesscreen . com / blog /
+[98]
+Underfull \hbox (badness 1803) in paragraph at lines 701--704
+[]\T1/phv/m/n/12 OAMK Jour-nal, ``Ga-mi-fi-ca-ti-on in lear-ning: Tur-ning work
+ in-to play,'' []$https : / /
+
+Underfull \hbox (badness 1062) in paragraph at lines 706--709
+[]\T1/phv/m/n/12 B. Buld-an-li, ``Hook fra-me-work in pro-duct ma-na-ge-ment,''
+ []$https : / / berkbuldanli .
+
+Underfull \hbox (badness 10000) in paragraph at lines 711--714
+\T1/phv/m/n/12 com / design-[]bootcamp / the-[]story-[]behind-[]meaningful-[]ga
+mi^^\cation-[]2f0432f77162$[],
+
+Underfull \hbox (badness 2020) in paragraph at lines 731--734
+[]\T1/phv/m/n/12 Gorilla Grow Tent, ``How long does a plant ta-ke to grow?'' []
+$https : / / www .
+
+Underfull \hbox (badness 10000) in paragraph at lines 741--744
+[]\T1/phv/m/n/12 The De-ci-si-on Lab, ``Fogg be-ha-vi-or mo-del,'' []$https : /
+ / thedecisionlab . com /
+
+Underfull \hbox (badness 10000) in paragraph at lines 741--744
+\T1/phv/m/n/12 reference-[]guide / psychology / fogg-[]behavior-[]model$[], n.d
+., ac-ces-sed: 2026-03-
+
+Underfull \hbox (badness 4531) in paragraph at lines 750--753
+[]\T1/phv/m/n/12 HiveMQ, ``Mqtt vs. http for iot and ii-ot,'' []$https : / / ww
+w . hivemq . com / article /
+
+Underfull \hbox (badness 10000) in paragraph at lines 770--773
+[]\T1/phv/m/n/12 OASIS, ``Mqtt ver-si-on 3.1.1,'' []$https : / / docs . oasis-[
+]open . org / mqtt / mqtt / v3 . 1 . 1 /
+[99]
+Underfull \hbox (badness 1281) in paragraph at lines 775--778
+[]\T1/phv/m/n/12 Espressif Sys-tems, \T1/phv/m/sl/12 ESP32-S3 Se-ries Da-tas-he
+et\T1/phv/m/n/12 , []$https : / / www . espressif . com /
+
+Underfull \hbox (badness 2285) in paragraph at lines 775--778
+\T1/phv/m/n/12 sites / default / ^^\les / documentation / esp32-[]s3 _ datashee
+t _ en . pdf$[], 2026, ac-ces-sed:
+
+Underfull \hbox (badness 10000) in paragraph at lines 785--789
+[]\T1/phv/m/n/12 Come-Star, ``Mqtt vs http: Key dif-fe-rences, per-for-man-ce i
+n
+
+Underfull \hbox (badness 10000) in paragraph at lines 785--789
+\T1/phv/m/n/12 iot, and how to choo-se,'' []$https : / / www . come-[]star . co
+m / blog /
+
+Underfull \hbox (badness 10000) in paragraph at lines 785--789
+\T1/phv/m/n/12 mqtt-[]vs-[]http-[]key-[]di^^[erences-[]performance-[]in-[]iot-[
+]and-[]how-[]to-[]choose/$[], 2026,
+[100]
+Underfull \hbox (badness 4242) in paragraph at lines 881--885
+[]\T1/phv/m/n/12 T. S. Si-de, ``Syn-chro-nous vs asyn-chro-nous mi-cro-
+
+Underfull \hbox (badness 2884) in paragraph at lines 881--885
+\T1/phv/m/n/12 ser-vices com-mu-ni-ca-ti-on pat-terns,'' 2024, ac-ces-sed: 2026
+-
+
+Underfull \hbox (badness 3907) in paragraph at lines 881--885
+\T1/phv/m/n/12 03-01. [On-li-ne]. Availa-ble: []$https : / / www . theserversid
+e . com / answer /
+
+Underfull \hbox (badness 4341) in paragraph at lines 915--919
+[]\T1/phv/m/n/12 GeeksforGeeks, ``Dif-fe-rent ways to esta-blish com-mu-ni-
+
+Underfull \hbox (badness 4132) in paragraph at lines 915--919
+\T1/phv/m/n/12 ca-ti-on bet-ween spring mi-cro-ser-vices,'' 2024, ac-ces-sed:
+
+Underfull \hbox (badness 2197) in paragraph at lines 915--919
+\T1/phv/m/n/12 2026-03-01. [On-li-ne]. Availa-ble: []$https : / / www . geeksfo
+rgeeks . org / java /
+
+Underfull \hbox (badness 2343) in paragraph at lines 922--926
+[]\T1/phv/m/n/12 M. Learn, ``Di-rect client-to-microservice com-mu-ni-ca-ti-on 
+ver-
+
+Underfull \hbox (badness 1377) in paragraph at lines 922--926
+\T1/phv/m/n/12 sus the api ga-te-way pat-tern,'' 2024, ac-ces-sed: 2026-03-
+
+Underfull \hbox (badness 5504) in paragraph at lines 922--926
+\T1/phv/m/n/12 01. [On-li-ne]. Availa-ble: []$https : / / learn . microsoft . c
+om / en-[]us / dotnet /
+
+Underfull \hbox (badness 10000) in paragraph at lines 922--926
+\T1/phv/m/n/12 architecture / microservices / architect-[]microservice-[]contai
+ner-[]applications /
+
+Overfull \hbox (36.37321pt too wide) in paragraph at lines 929--934
+\T1/phv/m/n/12 supabase-[]vs-[]^^\rebase-[]when-[]to-[]choose-[]open-[]source-[
+]postgres-[]for-[]your-[]apps-[]scalability/$[] 
+[101] [102]
+Underfull \hbox (badness 1622) in paragraph at lines 1042--1046
+[]\T1/phv/m/n/12 Scale Com-pu-ting, ``What is the dif-fe-rence bet-ween ed-
+
+Underfull \hbox (badness 1231) in paragraph at lines 1042--1046
+\T1/phv/m/n/12 03-01. [On-li-ne]. Availa-ble: []$https : / / www . scalecomputi
+ng . com / resources /
+
+Underfull \hbox (badness 1009) in paragraph at lines 1049--1053
+[]\T1/phv/m/n/12 ------, ``What ed-ge de-vi-ces do i need?'' 2024, ac-ces-sed:
+
+Underfull \hbox (badness 10000) in paragraph at lines 1055--1059
+[]\T1/phv/m/n/12 Elestio, ``Su-pa-ba-se on eles-tio: Self-host your ba-ckend wi
+th auth,
+
+Underfull \hbox (badness 10000) in paragraph at lines 1055--1059
+\T1/phv/m/n/12 re-al-ti-me sub-s-crip-ti-ons, and ed-ge func-ti-ons,'' []$https
+ : / / blog . elest . io /
+
+Overfull \hbox (98.41966pt too wide) in paragraph at lines 1055--1059
+\T1/phv/m/n/12 supabase-[]on-[]elestio-[]self-[]host-[]your-[]backend-[]with-[]
+auth-[]realtime-[]subscriptions-[]and-[]edge-[]functions/$[],
+
+Underfull \hbox (badness 10000) in paragraph at lines 1061--1065
+[]\T1/phv/m/n/12 TigerData, ``Time-series da-ta: Why and how to use a re-la-tio
+-
+
+Underfull \hbox (badness 10000) in paragraph at lines 1061--1065
+\T1/phv/m/n/12 nal da-ta-ba-se in-s-tead of nos-ql,'' []$https : / / www . tige
+rdata . com / blog /
+
+Overfull \hbox (69.10002pt too wide) in paragraph at lines 1061--1065
+\T1/phv/m/n/12 time-[]series-[]data-[]why-[]and-[]how-[]to-[]use-[]a-[]relation
+al-[]database-[]instead-[]of-[]nosql-[]d0cd6975e87c$[],
+
+Underfull \hbox (badness 10000) in paragraph at lines 1067--1070
+[]\T1/phv/m/n/12 ------, ``Da-ta re-ten-ti-on with con-ti-nuous ag-gre-ga-tes,'
+' []$https :
+
+Underfull \hbox (badness 10000) in paragraph at lines 1067--1070
+\T1/phv/m/n/12 / / www . tigerdata . com / docs / use-[]timescale / latest / da
+ta-[]retention /
+
+Underfull \hbox (badness 10000) in paragraph at lines 1072--1075
+[]\T1/phv/m/n/12 DeepWiki, ``3.2 co-re ba-ckend ser-vices,'' []$https : / / dee
+pwiki . com / supabase /
+
+Underfull \hbox (badness 10000) in paragraph at lines 1089--1092
+[]\T1/phv/m/n/12 B. In-fo-sys, ``Re-act na-ti-ve su-pa-ba-se auth: Your ul-
+
+Underfull \hbox (badness 10000) in paragraph at lines 1089--1092
+\T1/phv/m/n/12 ti-ma-te gui-de,'' []$https : / / ftp . broadwayinfosys . com / 
+blog /
+
+Underfull \hbox (badness 10000) in paragraph at lines 1089--1092
+\T1/phv/m/n/12 react-[]native-[]supabase-[]auth-[]your-[]ultimate-[]guide-[]176
+4800567$[], 2024, ac-ces-
+
+Underfull \hbox (badness 2035) in paragraph at lines 1094--1097
+[]\T1/phv/m/n/12 Supabase, ``Re-act na-ti-ve quick-start,'' []$https : / / supa
+base . com / docs / guides / auth /
+
+Underfull \hbox (badness 5924) in paragraph at lines 1099--1102
+[]\T1/phv/m/n/12 R. Com-mu-ni-ty, ``Fi-re-sto-re, su-pa-ba-se, ba-ckend auth an
+d ai for re-act,''
+
+Underfull \hbox (badness 10000) in paragraph at lines 1099--1102
+[]$\T1/phv/m/n/12 https : / / www . reddit . com / r / reactnative / comments /
+ 1ot9v80 / ^^\restore _ supabase _
+
+Overfull \hbox (81.50827pt too wide) in paragraph at lines 1104--1107
+\T1/phv/m/n/12 com / blog / timescaledb-[]vs-[]in^^]uxdb-[]for-[]time-[]series-
+[]data-[]timescale-[]in^^]ux-[]sql-[]nosql-[]36489299877$[],
+[103]
+Underfull \hbox (badness 10000) in paragraph at lines 1109--1112
+[]\T1/phv/m/n/12 Tinybird, ``Click-hou-se vs ti-mes-ca-ledb,'' []$https : / / w
+ww . tinybird . co / blog /
+
+Overfull \hbox (73.99211pt too wide) in paragraph at lines 1114--1117
+\T1/phv/m/n/12 com / redis-[]vs-[]timescaledb-[]for-[]realtime-[]data-[]perform
+ance-[]architecture-[]and-[]when-[]to-[]use-[]each/$[],
+) [104] 
+AED: lastpage setting LastPage
+Der Befehl "latexminted" ist entweder falsch geschrieben oder
+konnte nicht gefunden werden.
+(Diplomarbeit.aux)
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
+Package rerunfilecheck Warning: File `Diplomarbeit.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+ )
+(see the transcript file for additional information)<C:/Users/denni/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/lm/lmbx10.pfb><C:/Users/denni/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/Users/denni/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/lm/lmbx8.pfb><C:/Users/denni/AppData/Loca
+l/Programs/MiKTeX/fonts/type1/public/lm/lmmi12.pfb><C:/Users/denni/AppData/Loca
+l/Programs/MiKTeX/fonts/type1/public/lm/lmmi8.pfb><C:/Users/denni/AppData/Local
+/Programs/MiKTeX/fonts/type1/public/lm/lmr12.pfb><C:/Users/denni/AppData/Local/
+Programs/MiKTeX/fonts/type1/public/lm/lmr8.pfb><C:/Users/denni/AppData/Local/Pr
+ograms/MiKTeX/fonts/type1/public/lm/lmro10.pfb><C:/Users/denni/AppData/Local/Pr
+ograms/MiKTeX/fonts/type1/public/lm/lmro12.pfb><C:/Users/denni/AppData/Local/Pr
+ograms/MiKTeX/fonts/type1/public/lm/lmsy10.pfb><C:/Users/denni/AppData/Local/Pr
+ograms/MiKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Users/denni/AppData/Local/
+Programs/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Users/denni/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Users/denni/AppData/
+Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvro8a.pfb>
+Output written on Diplomarbeit.pdf (114 pages, 7400901 bytes).
+Transcript written on Diplomarbeit.log.
+Latexmk: Getting log file 'Diplomarbeit.log'
+Latexmk: Examining 'Diplomarbeit.fls'
+Latexmk: Examining 'Diplomarbeit.log'
+Latexmk: Missing input file 'images/power_profile.pdf' message in .log file:
+  LaTeX Warning: File `images/power_profile.pdf' not found on input line 102.
+Latexmk: Found input bbl file 'Diplomarbeit.bbl'
+Latexmk: References changed.
+Latexmk: References changed.
+Latexmk: Log file says output to 'Diplomarbeit.pdf'
+Latexmk: Using bibtex to make bibliography file(s).
+  ===Source file 'Diplomarbeit.bbl' for 'pdflatex'
+Latexmk: Found bibliography file(s):
+  ./references.bib
+Latexmk: Summary of warnings from last run of *latex:
+Latexmk: ====Undefined refs and citations with line #s in .tex file:
+  Citation `floristsReviewTrends' on page 1 undefined on input line 6
+  Citation `kunrHouseplants2022' on page 1 undefined on input line 7
+  Citation `mordorIndoorPlants' on page 1 undefined on input line 9
+  Latex failed to resolve 291 citation(s)
+Latexmk: Errors, so I did not complete making targets
+  Citation `floralDailyKillPlants' on page 1 undefined on input line 9
+  Citation `plantUpProject' on page 1 undefined on input line 15
+  Citation `plantUpProject' on page 1 undefined on input line 20
+  Citation `terrariumTribeStats2024' on page 2 undefined on input line 3
+ And 284 more --- see log file 'Diplomarbeit.log'
+Collected error summary (may duplicate other messages):
+  pdflatex: Command for 'pdflatex' gave return code 1
+      Refer to 'Diplomarbeit.log' and/or above output for details
+
+Latexmk: Sometimes, the -f option can be used to get latexmk
+  to try to force complete processing.
+  But normally, you will need to correct the file(s) that caused the
+  error, and then rerun latexmk.
+  In some cases, it is best to clean out generated files before rerunning
+  latexmk after you've corrected the files.
+Reverting Windows console CPs to (in,out) = (850,65001)
