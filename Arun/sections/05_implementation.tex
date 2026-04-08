@@ -12,7 +12,7 @@ Connecting the selected components to the ESP32 requires bridging the physical h
 
 The Plant Up! sensor station uses three different communication protocols. Knowing how these protocols work explains why some sensors can cleanly share the same pins, while others demand their own separate connections. In electronics, a shared connection is often called a ``bus''. A bus acts like a single communication channel that multiple devices can connect to simultaneously, drastically reducing the number of pins required on the microcontroller. 
 
-The BH1750 light sensor and the MLX90614 infrared air temperature sensor both communicate over I\textsuperscript{2}C, the two-wire protocol introduced in Section 2.3.1. This protocol uses exactly two wires: a serial data line (SDA) and a serial clock line (SCL). Because the I\textsuperscript{2}C architecture allows multiple devices to sit safely on this shared bus, both sensors are wired in parallel to the exact same two GPIO pins: GPIO\,8 for SDA and GPIO\,9 for SCL. 
+The BH1750 light sensor and the MLX90614 infrared temperature module both communicate over I\textsuperscript{2}C, the two-wire protocol introduced in Section 2.3.1. This protocol uses exactly two wires: a serial data line (SDA) and a serial clock line (SCL). Because the I\textsuperscript{2}C architecture allows multiple devices to sit safely on this shared bus, both sensors are wired in parallel to the exact same two GPIO pins: GPIO\,8 for SDA and GPIO\,9 for SCL. 
 
 The DS18B20 soil temperature probe uses the 1-Wire protocol. Because the timing signal is combined directly into the data line itself, it only needs a single communication pin. To prevent any timing collisions with the continuous I\textsuperscript{2}C traffic, this single data line is routed safely to its own isolated pin, GPIO\,5.
 
@@ -62,7 +62,41 @@ With the electronics wired and powered, the final hardware step is a protective 
 
 Designing an enclosure for plant sensors comes with specific physical challenges. Most importantly, the main board and battery must be kept safe from wet soil and accidental water spills during watering. Therefore, all delicate electronics are elevated inside the upper part of the case, while only the waterproof cables for the soil probes exit through the bottom to be inserted into the dirt. Additionally, the case features necessary ventilation cutouts near the top so the infrared sensor measures actual room temperature rather than trapped heat radiating from the ESP32 board. 
 
-While the physical components are now active, some sensors output raw continuous voltages rather than standard units. These analog signals must be calibrated before the backend can interpret them.
+With the hardware architecture now defined physically, the remaining implementation question is economic rather than electrical: does the selected component set still support the project's low-cost claim?
+
+\subsection{Prototype Cost Evaluation}
+
+A low-cost concept is only convincing if the bill of materials stays within a range that remains realistic for a student or hobby user. Table~\ref{tab:bom_costs} therefore summarizes the approximate prototype cost based on current retail list prices for the exact component classes used in Plant Up!.
+
+\begin{table}[htbp]
+\centering
+\caption{Bill of materials and approximate prototype cost of the Plant Up! sensor station (list prices including VAT, excluding shipping, accessed on April 8, 2026).}
+\label{tab:bom_costs}
+\begin{tabular}{l r}
+\toprule
+\textbf{Component} & \textbf{Price [EUR]} \\
+\midrule
+ESP32-S3-DevKitC-1 \cite{costEsp32S3DevKit} & 19.90 \\
+Capacitive soil moisture sensor \cite{costCapacitiveMoisture} & 2.60 \\
+BH1750 light sensor \cite{costBh1750} & 2.40 \\
+MLX90614 infrared temperature module \cite{costMlx90614} & 16.63 \\
+DS18B20 waterproof temperature probe \cite{costDs18b20} & 2.70 \\
+TDS / conductivity sensor kit \cite{costTdsSensor} & 12.90 \\
+Micro SD SPI module \cite{costMicroSdModule} & 1.40 \\
+TP4056 charging module \cite{costTp4056} & 3.99 \\
+18650 Li-Ion battery \cite{cost18650Battery} & 5.90 \\
+18650 battery holder \cite{cost18650Holder} & 1.70 \\
+\midrule
+\textbf{Total} & \textbf{70.12} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+This result is still affordable compared to closed commercial smart-gardening products, but it also shows a relevant design trade-off. The prototype is not ``cheap'' in the sense of a 20-Euro hobby build. Most of the cost is concentrated in three parts: the ESP32-S3 board, the MLX90614 infrared temperature module, and the conductivity measurement kit. In other words, the system remains accessible, but the richer sensor set clearly pushes the station beyond the price of a minimal moisture-only monitor.
+
+The custom 3D-printed enclosure is not included in the table, because its material cost depends on the final print mass, infill, and wall thickness. In practice, however, the raw PLA cost stays low compared to the electronics and does not materially change the overall result. This cost breakdown therefore supports a more precise conclusion: Plant Up! is not the cheapest possible plant monitor, but it still achieves a broad sensing range without entering the cost level of proprietary commercial ecosystems.
+
+With the hardware design and cost structure defined, the remaining implementation step is calibration.
 
 
 

@@ -34,7 +34,7 @@ As shown in Figures~\ref{fig:sensor_resistive} and~\ref{fig:sensor_capacitive}, 
 
 Indoor monitoring often relies on digital temperature sensors to avoid the noise inherent in analog readings. A digital sensor converts the measured value internally and sends a numerical result directly to the microcontroller.
 
-For example, the MLX90614 measures ambient or surface temperature without physical contact using infrared, while the DS18B20 is a rugged, contact-based probe commonly used to measure root-zone soil temperature. The MLX90614 communicates via I\textsuperscript{2}C, a two-wire protocol that uses one data line and one clock line. Multiple I\textsuperscript{2}C sensors can share the same two wires, which simplifies wiring considerably. \cite{nxpI2C}
+For example, the MLX90614 module measures ambient or surface temperature without physical contact using infrared, while the DS18B20 is a rugged, contact-based probe commonly used to measure root-zone soil temperature. The MLX90614 communicates via I\textsuperscript{2}C, a two-wire protocol that uses one data line and one clock line. Multiple I\textsuperscript{2}C sensors can share the same two wires, which simplifies wiring considerably. \cite{nxpI2C}
 
 \subsubsection*{Light sensors}
 
@@ -77,7 +77,7 @@ In this project, cost and durability outweigh the need for absolute calibration 
 
 Digital sensors further simplify the hardware design. By communicating over standardized buses like I\textsuperscript{2}C, they reduce analog noise issues and minimize the number of required microcontroller pins.
 
-Based on these criteria, the implemented hardware setup of Plant Up! consists of an ESP32 microcontroller and a comprehensive suite of sensors: a capacitive soil moisture probe, a BH1750 digital light sensor, an MLX90614 infrared air temperature sensor, a DS18B20 soil temperature probe, and an electrical conductivity (EC) sensor for nutrient monitoring. Additionally, an SD card module is included for local storage of configuration data, such as Wi-Fi credentials. 
+Based on these criteria, the implemented hardware setup of Plant Up! consists of an ESP32 microcontroller and a comprehensive suite of sensors: a capacitive soil moisture probe, a BH1750 digital light sensor, an MLX90614 infrared temperature module, a DS18B20 soil temperature probe, and an electrical conductivity (EC) sensor for nutrient monitoring. Additionally, an SD card module is included for local storage of configuration data, such as Wi-Fi credentials. 
 
 The ESP32 serves as the central processing unit and provides integrated Wi-Fi connectivity as well as 12-bit ADC channels for the analog moisture and EC sensors. Its 3.3\,V logic level defines the voltage compatibility requirements, and all selected components natively support this voltage, meaning no external level shifters are needed. A detailed component list and wiring schema is provided in the implementation chapter.
 

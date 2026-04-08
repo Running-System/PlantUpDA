@@ -34,9 +34,15 @@
 \usepackage{setspace}					%Größerer Zeilenabstand
 \usepackage{graphicx}					%Grafiken einbinden
 \usepackage{titlesec}
-% Remove 'Chapter X' prefix, show only the number and title, reduce top spacing
-\titleformat{\chapter}[hang]{\sffamily\huge\bfseries}{\thechapter\quad}{0pt}{}
-\titlespacing*{\chapter}{0pt}{-20pt}{20pt}
+% Chapter opening style similar to the reference layout.
+\titleformat{\chapter}[block]{\sffamily\LARGE\bfseries\raggedright}{\thechapter}{0.6em}{}
+\titlespacing*{\chapter}{0pt}{-12pt}{16pt}
+\providecommand{\currentauthor}{}
+\newcommand{\chapterauthorsline}[1]{%
+  \vspace{-0.45cm}%
+  {\noindent\sffamily\normalsize\bfseries #1\par}%
+  \vspace{0.35cm}%
+}
 \titleformat*{\section}{\sffamily\Large\bfseries}
 \titleformat*{\subsection}{\sffamily\large\bfseries}
 \titleformat*{\subsubsection}{\sffamily\normalsize\bfseries}
@@ -50,7 +56,9 @@
 \usepackage[font={scriptsize}]{caption}
 \usepackage{emptypage}
 \usepackage{verbatim}                   %verbatim Jae
-\usepackage{minted}                     %minted Jae
+% `minted` currently fails in this environment because the required
+% `latexminted` helper is unavailable. The document does not use any
+% minted environments at the moment, so keep lightweight fallbacks.
 % \usepackage[final]{pdfpages}            %add pdfpages
 
 \usepackage{booktabs}                  
@@ -205,64 +213,69 @@
 % Vuecode minting Syntax highlighting
 %--------------------------------------------------------------------------
 
-\newminted[vuecode]{javascript}{
-frame=lines,
-framesep=2mm,
-baselinestretch=1.2,
-breaklines,
-fontsize=\footnotesize,
-linenos,
-rulecolor=blue, %red
-label=Code Example
-}
+\lstnewenvironment{vuecode}[1][]{
+  \lstset{
+    language=JavaScript,
+    frame=lines,
+    breaklines=true,
+    basicstyle=\footnotesize\ttfamily,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    #1
+  }
+}{}
 
 %--------------------------------------------------------------------------
 % HTMLcode minting Syntax highlighting
 %--------------------------------------------------------------------------
 
-\newminted[htmlcode]{javascript}{
-frame=lines,
-framesep=2mm,
-baselinestretch=1.2,
-breaklines,
-fontsize=\footnotesize,
-linenos,
-rulecolor=blue, %red
-label=Code Example
-}
+\lstnewenvironment{htmlcode}[1][]{
+  \lstset{
+    language=HTML,
+    frame=lines,
+    breaklines=true,
+    basicstyle=\footnotesize\ttfamily,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    #1
+  }
+}{}
 
-\newminted[javascriptcode]{javascript}{
-frame=lines,
-framesep=2mm,
-baselinestretch=1.2,
-breaklines,
-fontsize=\footnotesize,
-linenos,
-rulecolor=blue, %red
-label=Code Example
-}
+\lstnewenvironment{javascriptcode}[1][]{
+  \lstset{
+    language=JavaScript,
+    frame=lines,
+    breaklines=true,
+    basicstyle=\footnotesize\ttfamily,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    #1
+  }
+}{}
 
-\newminted[csscode]{javascript}{
-frame=lines,
-framesep=2mm,
-baselinestretch=1.2,
-breaklines,
-fontsize=\footnotesize,
-linenos,
-rulecolor=blue, %red
-label=Code Example
-}
+\lstnewenvironment{csscode}[1][]{
+  \lstset{
+    language={},
+    frame=lines,
+    breaklines=true,
+    basicstyle=\footnotesize\ttfamily,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    #1
+  }
+}{}
 
-\newminted[bashcode]{javascript}{
-frame=lines,
-framesep=2mm,
-baselinestretch=1.2,
-breaklines,
-fontsize=\footnotesize,
-linenos,
-rulecolor=blue, %red
-label=Code Example
-}
+\lstnewenvironment{bashcode}[1][]{
+  \lstset{
+    language={},
+    frame=lines,
+    breaklines=true,
+    basicstyle=\footnotesize\ttfamily,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    #1
+  }
+}{}
 
 %--------------------------------------------------------------------------
 % Beginn Dokument
@@ -273,12 +286,43 @@ label=Code Example
 	\sffamily						                        %Schriftart setzen
 	\let\cleardoublepage\clearpage                          %Keine leeren Seiten bei twoside/openright
 
+    \newcommand{\allauthors}{Sherzai, Behari, Onuoha, Jin}
+    \newcommand{\projecttitle}{Plant Up!}
+
+    \pagestyle{fancy}
+    \fancyhf{}  % Alles zurücksetzen
+    \renewcommand{\headrulewidth}{0.4pt}
+    \renewcommand{\footrulewidth}{0.4pt}
+    \renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+    \renewcommand{\chaptermark}[1]{\markboth{\thechapter\ #1}{}}
+
+    % Default header for shared sections; chapter files overwrite the header text where needed.
+    \renewcommand{\currentauthor}{}
+    \newcommand{\setauthorheader}[1]{%
+      \renewcommand{\currentauthor}{#1}%
+      \rhead{\sffamily\sl\footnotesize #1}%
+    }
+    \lhead{\sffamily\sl \projecttitle}
+    \lfoot{\sffamily\footnotesize 22IF2609}
+    \cfoot{\sffamily\footnotesize Page \thepage\ of \pageref{LastPage}}
+    \rfoot{\sffamily\footnotesize \today}
+    \setauthorheader{\allauthors}
+
+    % Apply the same header/footer to chapter-opening pages.
+    \makeatletter
+    \let\ps@plain\ps@fancy
+    \makeatother
+
+    \pagenumbering{arabic}
+    \setcounter{page}{1}
 
 
     %\includepdf[pages=-]{pdf/druckensiebzig.pdf}
     %\phantomsection
     %\cleardoublepage
 	\input{Allgemein/titel}									%Externe .tex Datei für Titel einbinden
+    \thispagestyle{empty}
+    \pagestyle{fancy}
     \clearpage
     %Neue Seite beginnen
 
@@ -289,10 +333,6 @@ label=Code Example
 
     \clearpage
  
-	\pagestyle{plain}					    %Nur Fußzeile mit Seitennummer anzeigen lassen
-	\pagenumbering{roman}					%Römische Nummerierung vor der eigentlichen Diplomarbeit
-	\setcounter{page}{1}					%Bei 1 mit Nummerierung beginnen
-
     \clearpage
     %\addcontentsline{toc}{chapter}{Vorwort}
     \clearpage
@@ -302,12 +342,6 @@ label=Code Example
     \addcontentsline{toc1}{section}{Erklärung}	%Erklärung händisch ins Inhaltsverzeichnis einfügen
 	\clearpage									%Neue Seite beginnen
 
-	\phantomsection
-	%\addcontentsline{toc}{section}{Danksagungen}
-	\input{Allgemein/danksagungen}
-	\clearpage
-	\phantomsection
-	
 	%\addcontentsline{toc}{section}{Abstract}
 	\input{Allgemein/abstract}
 	\clearpage
@@ -324,54 +358,32 @@ label=Code Example
 	\tableofcontents
 	\clearpage
 	
-%-----------------------------------------------------------------
-% Kopfzeilen definieren
-%-----------------------------------------------------------------
-	\pagestyle{fancy}
-	\fancyhf{}  % Alles zurücksetzen
-
-	\renewcommand{\headrulewidth}{0.4pt}   % Linie unter Kopfzeile
-	\renewcommand{\footrulewidth}{0.4pt}   % Linie über Fußzeile
-
-	\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
-	\renewcommand{\chaptermark}[1]{\markboth{\thechapter\ #1}{}}
-
-	% Kopfzeile: Seitenzahl links, Autor rechts (wechselt pro Kapitel)
-	\newcommand{\currentauthor}{}
-	\lhead{\sffamily\sl\thepage}
-	\rhead{\sffamily\sl\footnotesize \currentauthor}
-
-	% Fußzeile: Klasse links, Seite X von Y Mitte, Datum rechts
-	\lfoot{\sffamily\footnotesize 22IF2609}
-	\cfoot{\sffamily\footnotesize Page \thepage\ of \pageref{LastPage}}
-	\rfoot{\sffamily\footnotesize \today}
-
 %--------------------------------------------------------------------------
 % Kapitel einfügen / Sections einfügen
 %--------------------------------------------------------------------------
 \selectlanguage{english}
-\pagenumbering{arabic}
-\setcounter{page}{1}
 
-\renewcommand{\currentauthor}{A. Sherzai, D. Jin, R. Onuoha, A. Behari}
+\setauthorheader{\allauthors}
 \input{Allgemein/einleitung}
+\clearpage
 
-\renewcommand{\currentauthor}{Arun Sherzai}
+\setauthorheader{Arun Sherzai}
 \input{Arun/einfuehrung.tex}
 \clearpage
-\renewcommand{\currentauthor}{Abd-Ulrahman Behari}
+\setauthorheader{Abd-Ulrahman Behari}
 \input{Abudi/einfuehrung.tex}
 \clearpage
-\renewcommand{\currentauthor}{Richard Onuoha}
+\setauthorheader{Richard Onuoha}
 \input{Richard/einfuehrung.tex}
 \clearpage
-\renewcommand{\currentauthor}{Dennis Jin}
+\setauthorheader{Dennis Jin}
 \input{Dennis/einfuehrung.tex}
+\clearpage
 
 %--------------------------------------------------------------------------
 % Anhang
 %--------------------------------------------------------------------------
-   
+  \setauthorheader{\allauthors}
  
   \addcontentsline{toc}{chapter}{Appendix}
     \phantomsection
