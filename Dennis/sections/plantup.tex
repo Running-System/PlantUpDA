@@ -1,50 +1,72 @@
 %!TEX root = ../../Diplomarbeit.tex
-\section{Case Study: Gamification in Plant Up!}
-``Plant Up!'' \cite{plantUpProject} is a gamified smart gardening system that combines IoT sensors with a mobile application to provide users with an engaging way to monitor 
-and care for their plants.
-How does the gamification concept in ``Plant Up!'' \cite{plantUpProject} work in practice? 
+\section{Specific Characteristics of Plant Up!}
 
-\subsection{Evaluation and Discussion}
-The core goal of integrating gamified mechanics into Plant Up! \cite{plantUpProject} is to bridge the gap between dry, technical plant monitoring and sustained, long-term user engagement. 
+The previous sections already covered the conceptual background. This section therefore focuses on how gamification was applied in Plant Up! as a concrete app feature. The important difference is that the digital layer is not isolated from the plant: every relevant interaction has to remain connected to a real plant, real sensor data, and a real care situation \cite{plantUpProject}.
 
-\subsubsection{Meaningful Habit Formation}
-Examining core mechanics like XP, daily streaks, and the in-game ``XP Booster'' reveals that the system leverages classical behavioral psychology to foster sustainable habit formation. 
-What distinguishes Plant Up! \cite{plantUpProject} is that these rewards are not arbitrary digital tasks. Because they are directly tied to real-time data from smart IoT sensors, the rewards are grounded in the actual biological needs of the plants. 
-This creates a framework of meaningful gamification: by providing structured extrinsic rewards (XP and coins) during the slow biological latency phases (the waiting periods before visible plant growth occurs), the system bridges the motivation gap until the intrinsic reward, such as a healthy, blooming plant, is achieved. This effectively puts the core concepts of Self-Determination Theory (SDT) \cite{ukcoachingSDT} into practical application.
+For this reason, Chapter 5.5 is not another theory chapter. Its purpose is to describe the implementation logic behind the app's gamification layer and the boundaries that follow from the technical and biological context of Plant Up!.
 
-This smooth transition from extrinsic nudges to intrinsic satisfaction leads naturally into how the system supports beginners who have yet to develop those intrinsic connections.
+\subsection{Gamification Flow in the App}
 
-\subsubsection{Lowering the Entry Barrier}
-One of the primary strengths of the Plant Up! \cite{plantUpProject} approach is how effectively it lowers the barrier to entry for complete beginners. This is a significant structural advantage because it directly mitigates the steep learning curve often associated with botany, actively supporting the ``Competence'' pillar of SDT. 
-Through ``Sprig,'' the friendly NPC guide, and a system of structured quests, the application translates complex botanical sensor data into simple, actionable feedback (see Figure \ref{fig:plantup_sprig_tutorial}). 
+In the implemented app, gamification is placed after the care interpretation layer, not before it. The user first receives information about the plant's condition, such as whether moisture, light, or temperature are inside the desired range. Only after this care context is known does the app translate the situation into gamified progress. This prevents the system from rewarding interaction for its own sake \cite{plantUpProject,spinifyGamification}.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.45\textwidth]{images/sprig.png}
-    \caption{The Plant Up! NPC guide ``Sprig'' providing tutorials and easily understandable feedback to help new users \cite{plantUpProject}.}
-    \label{fig:plantup_sprig_tutorial}
-\end{figure}
+The practical flow can be summarized as follows: the sensor station records the plant environment, the backend stores and interprets the readings, the app presents the required care action, and the gamification state is updated when the action is consistent with the plant's condition. This connects the visible app mechanics, such as level progress, quest completion, and unlockable rewards, to the physical plant instead of treating them as separate digital goals. The reward and shop screens shown earlier in Figures~\ref{fig:plantup_rewards} and~\ref{fig:plantup_shop} are therefore not standalone entertainment screens; they are the user-facing result of this care loop.
 
-These elements directly address a common pain point in gardening: the feeling of being overwhelmed by plant care demands. 
-Furthermore, items like the ``Freeze Streak'' and ``XP Boosters'' in the shop demonstrate a sophisticated understanding of long-term retention. 
-These features actively mitigate loss aversion (the psychological tendency to feel losses more strongly than equivalent gains), which intensifies when a user inevitably misses a day of care. 
-By offering a safety net, the system prevents the devastating loss of progress that typically causes users to abandon an app out of frustration.
+\subsection{Verified Physical Actions}
 
-While these mechanics effectively address beginner anxiety and build early engagement, they introduce a separate set of risks that must be managed as the user matures.
+The first special requirement is verification. In many apps, a completed action can be accepted as soon as the user confirms it. In Plant Up!, this would be unreliable, because the actual outcome matters more than the declaration. A user may believe that a plant has been watered correctly, but the relevant question is whether the soil moisture reading confirms an improvement.
 
-\subsubsection{Potential Long-Term Challenges}
-Relying heavily on extrinsic motivators such as virtual coins and titles does present potential long-term challenges.
-This represents a structural disadvantage because it can condition users to engage only when an external reward is present, rather than developing genuine, self-sustained interest in the activity \cite{ukcoachingSDT}. 
-While these mechanics are effective for building initial habits, there is a risk of the ``over-justification effect'' (the phenomenon where excessive external rewards gradually erode a person's intrinsic interest in a task). 
-Users may eventually start prioritizing digital rewards and leaderboards over the actual health of their physical plants. 
-If the gamification layer becomes too dominant, the primary utility of the IoT sensor data, ensuring plant survival, could be overshadowed by the pursuit of online status. 
-Additionally, designers must guard against ``statistical anxiety,'' the stress that can arise from public social features when users feel intense pressure to maintain perfect streaks. This risks turning what should be a relaxing hobby into a source of digital stress \cite{plantUpProject}.
+This makes the sensor station a central part of the gamification logic as well. The ESP32-based edge node records environmental values and sends them to the backend, where the data can be compared with the expected plant state. The app should therefore treat sensor changes as stronger evidence than manual confirmation alone. This is especially relevant for watering, light exposure, and temperature-related recommendations, where a user-facing message should be based on measured conditions rather than assumptions \cite{boniecki2023smartSensors,plantUpProject}.
 
-To counteract these effects, the system relies on communal features that foster the ``Relatedness'' aspect of SDT, requiring a robust technological foundation.
+In practice, this means that a quest should be completed because the system can connect the user's action to a measured improvement, not simply because the user opened the app. The database flow shown in Figures~\ref{fig:user_quest_progression} and~\ref{fig:xp_award} supports exactly this kind of connection: care-related events can update the user's progress and then award experience points through the gamification schema.
 
-\subsubsection{Technical Architecture \& Community}
-From a technical perspective, the architecture of Plant Up! \cite{plantUpProject} efficiently handles the constant stream of sensor data and user-generated content, such as shared plant-care videos and social posts, by utilizing an ASP.NET API coupled with Supabase. 
-This social dimension is crucial for long-term viability because it elevates the app from a solo monitoring tool into a knowledge-sharing community, thereby fulfilling the human need for social connection and actively supporting the third pillar of SDT (Relatedness).
+\subsection{Care-Safe Interpretation}
 
-Looking ahead, future technical enhancements will likely need to focus on Android animation normalization. 
-Ensuring that the gamification UI remains fluid across a wide variety of mobile hardware is essential, as any technical friction or lag in the animations can instantly break the ``flow'' state (the mental state of complete, effortless immersion in an activity) required for an engaging user experience \cite{plantUpProject}.
+The second requirement is safety in interpretation. A change in a sensor value is not automatically positive. More water can be helpful for a dry plant, but harmful for a plant that is already close to saturation. More light can help one species while stressing another. Because of this, Plant Up! must evaluate measurements against plant-specific ranges before presenting them as successful care.
+
+This is where the decision-making logic from the earlier Plant Up! chapters becomes important. The system already distinguishes between safe, warning, and critical zones for values such as moisture, light, temperature, humidity, and conductivity. Chapter 5.5 builds on that existing interpretation layer rather than redefining it. The practical conclusion is that user-facing actions should only be treated as correct when the resulting plant state moves toward the configured safe range \cite{dssPlantProtection,boniecki2023smartSensors}.
+
+This also affects how streaks should be implemented. A streak should not mean that the user waters a plant every day. That would be harmful for many species. In Plant Up!, the safer interpretation is a care-awareness streak: the user regularly checks the plant state, reacts when action is needed, and avoids unnecessary intervention when the plant is already healthy. This keeps the gamified habit aligned with plant care instead of encouraging artificial activity \cite{usuOverwatering,rootRotsWisc}.
+
+\subsection{Species and Season Dependency}
+
+Plant Up! also cannot rely on one universal definition of good care. A cactus, a fern, and a herb plant can require very different moisture levels, light exposure, and care intervals. The same plant may also need different conditions in summer and winter. A central challenge for Plant Up! is therefore not only collecting data, but applying the correct context to that data \cite{ncStateSoils,lsuWaterWisely,unhHumidity}.
+
+This has a direct consequence for the app design. The system should avoid presenting care instructions as absolute rules. A message such as ``water now'' is only meaningful when it is tied to the selected plant profile, the current threshold configuration, and the most recent measurement cycle. Without this context, the app would risk encouraging actions that look correct in a general gardening sense but are wrong for the specific plant.
+
+The same dependency also shapes the design of quests. A generic quest such as ``water three times this week'' may be suitable for one plant but inappropriate for another. The better Plant Up! approach is to generate or validate tasks against the plant profile. This keeps gamification flexible enough to support different plant types without forcing every user into the same care rhythm.
+
+\subsection{Balancing Rewards and Progress}
+
+Another important part of the Plant Up! implementation is balancing. A gamified system only works well when the user feels that progress is achievable, but not meaningless. If rewards are given too easily, the app becomes shallow and users may stop caring about the actual plant. If rewards are too difficult to reach, beginners may feel that the system is punishing them even though they are still learning. For Plant Up!, the balance has to sit between these two extremes \cite{gamifyMotivation,chouGamification2015}.
+
+The first balancing rule is that rewards should follow useful care behavior. Opening the app, checking the plant status, and reacting to a real recommendation can be rewarded because these actions support the goal of keeping the plant alive. Random repeated actions should not be rewarded in the same way. For example, watering a plant that is already in a healthy moisture range should not create the same progress as watering a plant that actually needs it. Otherwise, the app would teach the wrong behavior.
+
+The second balancing rule concerns pacing. Plant growth is slow, so Plant Up! needs small digital progress steps between visible biological changes. However, these steps should still feel connected to the plant. A level-up or reward is most meaningful when it follows a period of consistent care, not a single random interaction. This makes the app feel active while the plant itself is still growing slowly.
+
+The shop and unlockable elements also need careful balancing. Items such as streak protection or temporary boosts can make the app more forgiving, but they should not become the main reason to use the system. In Plant Up!, these items work best as support tools: they reduce frustration, give users small goals, and make progress visible. They should not allow users to bypass the actual care logic or ignore sensor-based recommendations. In this way, the reward system remains connected to the plant rather than becoming a separate game economy.
+
+\subsection{Separation from the Sensor Pipeline}
+
+Another Plant Up!-specific requirement is architectural separation. The sensor pipeline should remain stable even if the gamification layer changes. The hardware is responsible for measuring and transmitting environmental data; the backend is responsible for storing and interpreting it; the application layer is responsible for presenting the result to the user. Keeping these responsibilities separate prevents interface decisions from interfering with the reliability of the measurement system \cite{fowlerMicroservices,oasisMQTT}.
+
+This separation is especially important because the deployed sensor station is harder to change than the backend or the mobile app. If the team wants to adjust thresholds, wording, quest values, level progression, or user-facing flows, those changes should not require a firmware update. The physical device should continue to perform the same core task: wake up, measure, transmit, and return to its low-power state \cite{espIdfDeepSleep,plantUpProject}.
+
+\subsection{Community and Progress Sharing}
+
+Plant Up! also includes social functionality, but Chapter 5.5 should treat it as support for plant care rather than as a separate competitive system. The social part is strongest when users can share progress, compare care experiences, and learn from other plant owners. This fits the overall app concept better than ranking users only by points, because plant care difficulty depends heavily on the species, the environment, and the user's available hardware \cite{chouGamification2015,plantUpProject}.
+
+For that reason, the practical role of community features is to make progress visible and discussable. A user can show a plant's improvement, ask why a sensor value keeps dropping, or share a successful care routine. In this form, the social layer strengthens the gamified experience without turning plant care into a simple scoreboard.
+
+\subsection{Ethical Design Boundaries}
+
+Because Plant Up! uses gamification to influence user behavior, the app also needs clear ethical boundaries. The goal is not to pressure users into opening the app as often as possible, but to support better plant care. This distinction is important because the system deals with a real living object. If the app creates the wrong incentive, the plant can suffer from unnecessary or incorrect care actions \cite{gamifyMotivation,chouGamification2015}.
+
+One boundary is avoiding fake urgency. A notification should only create urgency when the plant data justifies it. If every small change is presented as a problem, users may start to feel stressed or stop trusting the app. A healthy plant should be allowed to stay healthy without forcing the user into constant action. In this sense, silence can also be good feedback: if no care action is needed, the app should communicate stability rather than inventing a task.
+
+Another boundary is avoiding unfair pressure through comparison. Users do not all start with the same plants, rooms, sensors, or experience level. Ranking them only by points would ignore these differences. A user caring for a difficult plant in a dry room should not be treated as worse than a user caring for an easy plant in ideal conditions. For Plant Up!, comparison should therefore focus on personal improvement and shared learning rather than pure competition.
+
+The final boundary is transparency. Users should understand why they received a recommendation or why progress was counted. If the app awards progress after a care action, the reason should be traceable to the plant state or the completed task. This keeps the system understandable and prevents the gamification layer from feeling arbitrary. Ethical gamification in Plant Up! therefore means that the digital layer stays honest: it motivates users, but it does not manipulate them away from the real goal of caring for their plants.
+
+\subsection{Resulting Design Focus}
+
+The resulting focus of Plant Up! is clear: the app should not merely create interaction, but guide users toward care decisions that are supported by sensor data and plant-specific context. Gamification is still central to this experience, but it has to serve the plant-care process. This makes Chapter 5.5 a practical implementation chapter. It explains how the digital layer is connected to the actual Plant Up! system so that the app remains engaging without losing sight of the biological goal: keeping the plant healthy \cite{plantUpProject,smarticoGamification,deterding2011}.
