@@ -1,80 +1,60 @@
-\section{The Plant Up! Architecture}
+\section{The Plant Up! Architecture}\label{sec:architecture}
 
-The architectural implementation of Plant Up! builds upon the theoretical concepts established in Chapter 3 to create a functional IoT ecosystem. The design adheres to the IoT World Forum reference model and utilizes a Gateway pattern to manage hardware communication securely. A defining feature of the Plant Up! system is the implementation of a "Thin Edge" paradigm, which centralizes the majority of the processing logic in the cloud. This design choice prioritizes computational scalability and advanced analytical capabilities over localized offline autonomy.
+The architectural implementation of Plant Up! builds upon the theoretical concepts established in Chapter \ref{ch:theory} to create a functional, scalable IoT ecosystem. A defining feature of the Plant Up! system is the implementation of a "Thin Edge" paradigm, which centralizes all complex processing logic in the cloud. This design choice prioritizes computational scalability and advanced analytical capabilities over localized offline autonomy, significantly reducing hardware costs and complexity.
 
-While the architecture is inspired by microservice isolation principles, the backend is deployed as a \textit{modular monolith} using the Supabase Backend-as-a-Service (BaaS) platform. This strategy maintains logical service separation while utilizing a unified database environment for simplified deployment and management.
+While the architecture is inspired by microservice isolation principles, the backend is deployed as a \textit{modular monolith} utilizing the Supabase Backend-as-a-Service (BaaS) platform. This strategy maintains logical service separation while leveraging a unified database environment for simplified deployment and management.
 
-\subsection{System Overview}
+\subsection{System Overview and Data Pipeline}
 
-The architecture connects physically deployed edge devices to a scalable cloud backend, which provides processed data to a React Native mobile application. This pipeline ensures consistent remote access and synchronized data across the platform. The physical layer utilizes an ESP32 microcontroller deployed within the plant's environment. The ESP32 interfaces with analog and digital sensors to measure environmental metrics including soil moisture, temperature, humidity, and light intensity. These measurements are periodically structured into standardized JSON payloads for transmission. Within the 7-Layer IoT model, these components represent Layer 1 (Physical Devices) and Layer 3 (Edge Computing). 
+The architecture is designed strictly around the flow of telemetry: physical edge devices measure environmental data, transmit it to a scalable cloud backend, and the structured data is immediately made available to a React Native mobile application. 
 
-The initial pipeline relies on Wi-Fi and MQTT for device-to-cloud communication (Layer 2 - Connectivity). Direct device-to-smartphone technologies, such as Bluetooth Low Energy (BLE), were excluded as they limit real-time remote accessibility and can increase user friction. The Wi-Fi-to-Cloud pipeline supports a seamless onboarding experience and allows users to monitor environmental health globally. A quantitative performance benchmark of the MQTT protocol for this pipeline is presented in Chapter 5.
+At the start of the pipeline is the physical layer, utilizing an ESP32 microcontroller deployed within the plant's environment. Acting as a pure "Thin Edge" component, the ESP32 performs no local computational analysis. Instead, it interfaces with analog and digital sensors to measure environmental metrics---including soil moisture, temperature, humidity, and light intensity---structures them into standardized JSON payloads, and transmits them for remote processing. 
 
-The core infrastructure uses the Supabase cloud backend, serving as Layer 4 (Data Accumulation) and Layer 5 (Data Abstraction). To accommodate varying data requirements, the database is partitioned into two distinct logical schemas. The \textit{Social} schema manages relational data including user profiles and community features. The \textit{Micro} (telemetry) schema is dedicated specifically to high-velocity time-series sensor data and device states. 
+The initial connectivity relies on Wi-Fi and MQTT for device-to-cloud communication. Direct device-to-smartphone technologies, such as Bluetooth Low Energy (BLE), were deliberately excluded because they limit real-time remote accessibility and can increase user friction. This Wi-Fi-to-Cloud pipeline supports a seamless global onboarding and monitoring experience. A quantitative performance benchmark of the MQTT protocol for this pipeline is evaluated in Chapter \ref{ch:results}.
 
-This schema-level separation reduces query complexity for the mobile frontend application (Layers 6 and 7). For example, retrieving user profile data from the Social schema does not require processing telemetry records. This pipeline ensures that sensor measurements generated by the ESP32 traverse the MQTT gateway securely, are partitioned within the PostgreSQL database, and are immediately available for consumption.
+In relation to the Cisco 7-Layer IoT reference model, the architecture cleanly partitions its concerns: the ESP32 acts strictly as Layer 1 (Physical Devices) communicating over Layer 2 (Connectivity), bypassing traditional Layer 3 Edge Computing entirely. The Supabase cloud environment manages Layer 4 (Data Accumulation) and Layer 5 (Data Abstraction), while the business logic and user collaboration occur within the application and client systems (Layers 6 and 7).
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{Abudi/figures/plantup_fig1_master_v2.png}
-    \caption{Master Architecture illustrating the end-to-end pipeline: sensors, ESP32, Wi-Fi/MQTT, Device Management Service, unified PostgreSQL database, Edge Functions/AI, and the React Native app.}
+    \includegraphics[width=0.9\textwidth,height=0.45\textheight,keepaspectratio]{Abudi/figures/plantup_fig1_master_v2.png}
+    \caption{Master Architecture illustrating the chronological data pipeline: sensors, ESP32, Wi-Fi/MQTT, Cloud Ingestion, unified PostgreSQL database, Edge Functions/AI, and the React Native app.}
     \label{fig:plantup_fig1_master}
 \end{figure}
 
-The high-level diagram visualizes the data flow from sensors to the mobile application, highlighting the modular separation between telemetry ingestion and application logic.
+\subsection{Device Management and Ingestion}
 
-\subsection{The Application and Gateway Layers (Cloud)}
+Following the data flow, the incoming telemetry structured by the ESP32 must be securely received and translated into the persistence layer. To manage this safely without exposing internal database structures, the system incorporates a Device Management Service.
 
-The Plant Up! cloud backend utilizes modular design principles to separate hardware ingestion from user-facing social features. Each component is designed around a specific domain, such as gamification or AI-driven insights, which allows for independent development and focused testing.
+Positioned across the cloud boundary, this service acts as a logical ingestion gateway, rather than relying on a physical local gateway hub (such as a Raspberry Pi). It operates independently of user-facing services and serves as the strict security protocol barrier between the external hardware ecosystem and the protected backend environment. 
 
-\begin{figure}[htbp]
+By absorbing high-velocity MQTT payloads, this service translates hardware telemetry---including connectivity states, registration data, and sensor measurements---into consistent database entries. This abstraction protects the frontend application from underlying protocol complexities and isolates any hardware-level network issues from impacting user-facing application layers.
+
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{Abudi/figures/plantup_fig2_cloud_v2.png}
-    \caption{Cloud and Gateway view focusing on the backend boundary. The internal services, including authentication, Row-Level Security, and payload normalization, are expanded within the Supabase cloud boundary.}
+    \includegraphics[width=0.9\textwidth,height=0.45\textheight,keepaspectratio]{Abudi/figures/plantup_fig2_cloud_v2.png}
+    \caption{Cloud ingestion boundary focusing on internal services, including authentication, Row-Level Security, and payload normalization within the Supabase environment.}
     \label{fig:plantup_fig2_cloud}
 \end{figure}
 
-\subsubsection{Application Layer Services: Execution and Communication}
-
-The application layer utilizes services integrated within the Supabase ecosystem, which avoids the need for standalone server infrastructure. The mobile application communicates with the backend via REST APIs and WebSocket subscriptions for real-time updates.
-
-Application logic is closely integrated with the persistence layer to optimize execution speed. The gamification engine utilizes native PostgreSQL triggers for low-latency processing. The AI-driven components utilize serverless Supabase Edge Functions. When triggered, an ephemeral container evaluates recent telemetry data from TimescaleDB and interacts with external APIs to generate insights before completing the task. 
-
-Utilizing Edge Functions and database triggers keeps these features decoupled from core IoT data ingestion. If external APIs experience latency, the impact is confined to the specific Edge Function, ensuring that real-time sensor telemetry remains accessible to the user.
-
-\subsubsection{Direct-to-Database Client Architecture and Security}
-
-By utilizing the official Supabase SDK, the mobile application maintains a secure communication channel with the PostgreSQL database, minimizing the requirement for custom intermediary middleware. 
-
-Security is maintained through Supabase Authentication and JSON Web Tokens (JWT). Access control is enforced via Row-Level Security (RLS) policies within PostgreSQL, ensuring that users interact only with authorized social and telemetry data \cite{broadwaySupabase, supabaseReactNative, tigerdataRelational}.
-
-\subsubsection{Device Management Service (Gateway)}
-
-The Device Management Service operates independently of user-facing services and serves as the physical implementation of the Gateway pattern. It acts as the security and protocol boundary between external hardware and the protected backend environment.
-
-This service maintains a boundary between high-velocity telemetry data and relational social data. The mobile application does not execute queries directly against individual sensor tables. Instead, the Device Management Service ingest and normalizes hardware states, including connectivity, registration, and sensor calibration.
-
-By absorbing MQTT payloads, this service translates hardware telemetry into consistent database entries and exposes a simplified, read-only interface for the mobile application. This abstraction protects the frontend from protocol complexities and database management tasks. This isolation ensures that hardware-level issues do not impact the application layer.
-
 \subsection{The Data Persistence Layer (Supabase)}
 
-To manage relational application states, high-velocity telemetry, and user-generated objects, Plant Up! utilizes a consolidated PostgreSQL environment through Supabase. This infrastructure supports both relational modeling and time-series extensions within a unified, managed instance.
+Once telemetry passes the ingestion boundary, raw, unstructured data streams must be converted into durable, queryable formats. To manage relational application states, continuous telemetry, and user-generated social objects simultaneously, Plant Up! utilizes a consolidated PostgreSQL environment provided exclusively through Supabase.
 
-\begin{figure}[htbp]
+To prevent disparate data domains from conflating, the database fundamentally partitions data into two distinct logical schemas. The \textit{Social} schema securely manages user accounts, gamification progression, and interaction metrics. The \textit{Micro} schema serves purely as a telemetry repository, strictly dedicated to environmental sensor logs and historical analysis. 
+
+While schema isolation effectively organizes relational data, processing the sheer volume of continuous telemetry generated by numerous physical devices requires structural optimization. To achieve this, telemetry measurements are ingested into TimescaleDB hypertables. TimescaleDB transparently partitions raw data into temporal chunks (e.g., grouping the last 24 hours of data), drastically reducing the indexing burden on the server. By querying only the active temporal chunks, the backend maintains consistently high retrieval speeds for the mobile application, even as the global database volume scales.
+
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{Abudi/figures/plantup_fig3_persistence_v3.png}
-    \caption{Persistence Layer illustrating database schemas. TimescaleDB is used for telemetry management, while relational data is handled by the Social schema.}
+    \includegraphics[width=0.9\textwidth,height=0.45\textheight,keepaspectratio]{Abudi/figures/plantup_fig3_persistence_v3.png}
+    \caption{Persistence Layer illustrating database schemas. TimescaleDB is used for scalable telemetry management in the Micro schema, while relational application states reside in the Social schema.}
     \label{fig:plantup_fig3_persistence}
 \end{figure}
 
-\subsubsection{Unified Infrastructure with Schema-Level Isolation}
+\subsection{Application Layer Services and Client Integration}
 
-A unified infrastructural environment simplifies deployment and cross-schema query execution. To maintain data organization, the database is partitioned into distinct logical schemas. The Social schema manages user accounts and interaction metrics, while the Micro (telemetry) schema is dedicated to environmental sensor logs.
+With the persistence layer firmly established, the final stage in the architecture focuses on business logic execution and mobile client connectivity. Instead of deploying a standalone intermediate web server, the application layer utilizes serverless functions and native database mechanisms structurally integrated within the Supabase ecosystem.
 
-This isolation provides organizational clarity and security benefits, supporting Row-Level Security (RLS) policies that manage access to private and public data. Utilizing a single database instance also enables efficient cross-schema queries, allowing the system to join moisture metrics with user-defined thresholds without significant network latency.
+To optimize state changes, the gamification engine utilizes native PostgreSQL triggers. Rather than requiring an active middle-tier polling service to constantly monitor user points, these triggers automate state progressions directly within the persistence layer upon predefined events, guaranteeing immediate data reconciliation and reducing architectural overhead. Similarly, AI-driven insights utilize serverless Supabase Edge Functions. When an insight is requested or triggered on a schedule, an ephemeral environment wakes up, queries recent telemetry from TimescaleDB, and interacts with external artificial intelligence APIs without clogging the primary database threads.
 
-\subsubsection{Time-Series Performance Optimization via TimescaleDB}
-
-A requirement of the Plant Up! application is the efficient retrieval of environmental data. While standard relational tables are effective for managing discrete entities, they can experience performance degradation under the high-frequency insertion rates required for sensor telemetry.
-
-To address this, measurements are ingested into TimescaleDB hypertables. TimescaleDB partitions data into temporal chunks, which reduces the indexing burden on the server. By indexing only active temporal chunks (e.g., the last 24 hours of data), the system maintains high retrieval speeds even as database volume increases. This optimization is essential for displaying historical trends and generating AI-driven insights, ensuring a balance between high-velocity ingestion and mobile application performance.
+To seamlessly deliver this analyzed data to the user, the React Native mobile application adopts a direct-to-database architectural paradigm. Using the official Supabase SDK, the app establishes secure REST and WebSocket connections directly to the respective PostgreSQL schemas. Comprehensive security is maintained through Supabase Authentication combined with JSON Web Tokens (JWT). Most crucially, access control is enforced natively via Row-Level Security (RLS) policies within PostgreSQL, ensuring that the client application can only ever query or modify data explicitly tied to the authenticated user's ID \cite{broadwaySupabase, supabaseReactNative, tigerdataRelational}.

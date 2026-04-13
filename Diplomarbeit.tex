@@ -27,7 +27,7 @@
 \usepackage{helvet}						%Helvetic als Schriftart
 \usepackage{courier}					%Courier als Schriftart für Listings
 \usepackage{fancyhdr}					%Kopf- und Fußzeilen ändern
-\usepackage{a4}							%A4 Randeinstellungen
+% \usepackage{a4}							% DISABLED: conflicts with geometry package for twoside layout
 \usepackage{makeidx}					%Indexkommandos
 \usepackage{listings}					%Für zeilennummerierte Listings mit Hintergrund
 \usepackage{color}					    %Für grauen Hintergrund in Listings
@@ -64,7 +64,15 @@
 \usepackage{booktabs}                  
 \usepackage{caption}                   
 \usepackage{geometry}
-\geometry{top=2.5cm, bottom=2.5cm, headheight=15pt, headsep=1cm, footskip=1cm}
+\geometry{
+  top=2.5cm,
+  bottom=2.5cm,
+  inner=3cm,
+  outer=2.5cm,
+  headheight=15pt,
+  headsep=1cm,
+  footskip=1.2cm
+}
 \usepackage{lastpage}                   %Für 'Seite X von Y' in der Fußzeile
 
 \setcounter{secnumdepth}{4}
@@ -204,9 +212,10 @@
 \doublespacing 	        %Doppelter Zeilenabstand
 \onehalfspacing	        %Eineinhalbfacher Zeilenabstand
 
-\setlength{\headheight}{15pt}		%Kopfzeile vergrößern (wegen 12pt Schriftgröße)	
-\addtolength{\textwidth}{1.5cm}	%Rechten Rand verkleinern
-\addtolength{\evensidemargin}{-1.5cm}
+\setlength{\headheight}{15pt}		%Kopfzeile vergrößern (wegen 12pt Schriftgröße)
+% Manual margin hacks disabled — geometry handles twoside margins
+% \addtolength{\textwidth}{1.5cm}
+% \addtolength{\evensidemargin}{-1.5cm}
 
 
 %--------------------------------------------------------------------------
@@ -284,7 +293,7 @@
 
 \begin{document}
 	\sffamily						                        %Schriftart setzen
-	\let\cleardoublepage\clearpage                          %Keine leeren Seiten bei twoside/openright
+	% \let\cleardoublepage\clearpage                       % REMOVED: allow chapters to start on right pages
 
     \newcommand{\allauthors}{Sherzai, Behari, Onuoha, Jin}
     \newcommand{\projecttitle}{Plant Up!}
@@ -323,28 +332,22 @@
 	\input{Allgemein/titel}									%Externe .tex Datei für Titel einbinden
     \thispagestyle{empty}
     \pagestyle{fancy}
-    \clearpage
-    %Neue Seite beginnen
+    \cleardoublepage
 
 	
 %-----------------------------------------------------------------
 % Vorwort
 %-----------------------------------------------------------------
 
-    \clearpage
- 
-    \clearpage
-    %\addcontentsline{toc}{chapter}{Vorwort}
-    \clearpage
+    \cleardoublepage
     
 	\input{Allgemein/erklaerung}
-    \clearpage
-    \addcontentsline{toc1}{section}{Erklärung}	%Erklärung händisch ins Inhaltsverzeichnis einfügen
-	\clearpage									%Neue Seite beginnen
+    \addcontentsline{toc1}{section}{Erklärung}
+	\cleardoublepage
 
 	%\addcontentsline{toc}{section}{Abstract}
 	\input{Allgemein/abstract}
-	\clearpage
+	\cleardoublepage
 
     %gendererklärung
     %\addcontentsline{toc}{section}{Gendererklärung}
@@ -356,7 +359,7 @@
 	\markright{INHALTSVERZEICHNIS}
 	%\addcontentsline{toc}{chapter}{Inhaltsverzeichnis}
 	\tableofcontents
-	\clearpage
+	\cleardoublepage
 	
 %--------------------------------------------------------------------------
 % Kapitel einfügen / Sections einfügen
@@ -365,20 +368,20 @@
 
 \setauthorheader{\allauthors}
 \input{Allgemein/einleitung}
-\clearpage
+\cleardoublepage
 
 \setauthorheader{Arun Sherzai}
 \input{Arun/einfuehrung.tex}
-\clearpage
+\cleardoublepage
 \setauthorheader{Abd-Ulrahman Behari}
 \input{Abudi/einfuehrung.tex}
-\clearpage
+\cleardoublepage
 \setauthorheader{Richard Onuoha}
 \input{Richard/einfuehrung.tex}
-\clearpage
+\cleardoublepage
 \setauthorheader{Dennis Jin}
 \input{Dennis/einfuehrung.tex}
-\clearpage
+\cleardoublepage
 
 %--------------------------------------------------------------------------
 % Anhang
