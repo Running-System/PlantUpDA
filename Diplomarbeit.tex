@@ -179,6 +179,81 @@
       {]}{{{\color{black}{]}}}}{1},
 }
 
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows, positioning, shadows}
+
+%--------------------------------------------------------------------------
+% IoT Navigator Command
+% Highlights the current layer in the Cisco 7-Layer IoT Model
+% Arguments: 
+%   #1 = Highlighted Layer Number (1,2,3,4,5,6,7, or 0 for none)
+%   #2 = Mode (0 = Project Bypassed View, 1 = Standard Reference Model)
+%--------------------------------------------------------------------------
+\newcommand{\IoTNavigator}[2]{
+    \begin{tikzpicture}[
+        node distance=0cm,
+        layer/.style={
+            rectangle, 
+            draw=gray!30, 
+            ultra thin,
+            minimum width=3.2cm, 
+            minimum height=0.55cm, 
+            font=\sffamily\fontsize{6}{7}\selectfont,
+            align=center,
+            fill=gray!5,
+            rounded corners=0.5pt
+        },
+        active/.style={
+            fill=green!60!black,
+            text=white,
+            draw=green!40!black,
+            thick,
+            font=\sffamily\fontsize{6}{7}\selectfont\bfseries,
+            drop shadow={opacity=.3, shadow xshift=1pt, shadow yshift=-1pt}
+        },
+        skipped/.style={
+            fill=gray!15,
+            text=gray!40,
+            draw=gray!25,
+            font=\sffamily\tiny\itshape,
+            path picture={
+                \draw[gray!30] (path picture bounding box.south west) -- (path picture bounding box.north east);
+                \draw[gray!30] (path picture bounding box.north west) -- (path picture bounding box.south east);
+            }
+        }
+    ]
+        % Layer Nodes Setup
+        \node[layer] (L7) {7. Collaboration \& Processes};
+        \node[layer, below=of L7] (L6) {6. Application};
+        \node[layer, below=of L6] (L5) {5. Data Abstraction};
+        \node[layer, below=of L5] (L4) {4. Data Accumulation};
+        
+        % Layer 3 Toggle
+        \ifnum#2=1
+             \node[layer, below=of L4] (L3) {3. Edge Computing};
+        \else
+             \node[layer, skipped, below=of L4] (L3) {3. Edge Computing (Bypassed)};
+        \fi
+
+        \node[layer, below=of L3] (L2) {2. Connectivity};
+        \node[layer, below=of L2] (L1) {1. Physical Devices};
+
+        % Activation Logic (Overlays)
+        \ifnum#1=7 \node[layer, active] at (L7) {7. Collaboration \& Processes}; \fi
+        \ifnum#1=6 \node[layer, active] at (L6) {6. Application}; \fi
+        \ifnum#1=5 \node[layer, active] at (L5) {5. Data Abstraction}; \fi
+        \ifnum#1=4 \node[layer, active] at (L4) {4. Data Accumulation}; \fi
+        \ifnum#1=3 \node[layer, active] at (L3) {3. Edge Computing}; \fi
+        \ifnum#1=2 \node[layer, active] at (L2) {2. Connectivity}; \fi
+        \ifnum#1=1 \node[layer, active] at (L1) {1. Physical Devices}; \fi
+
+        % Data Flow Arrow
+        \draw[->, >=stealth, gray!50, rounded corners] 
+            ([xshift=2mm]L1.east) -- ([xshift=2mm]L7.east) 
+            node[midway, right, font=\fontsize{4}{5}\selectfont\sffamily, rotate=-90] {DATA PIPELINE};
+            
+    \end{tikzpicture}
+}
 
 %Eigene Kommandos
 \newcommand{\zb}{z.B.\ }				              %z.B.

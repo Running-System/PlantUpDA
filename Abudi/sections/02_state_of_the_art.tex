@@ -9,8 +9,8 @@ The model categorizes the ecosystem into seven layers. Layers 1 and 2 (Physical 
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.8\textwidth]{Abudi/figures/Iot_world_reference_model.png}
-    \caption{The 7-Layer IoT World Forum Reference Model \cite{iot_reference_model}}
+    \scalebox{1.3}{\IoTNavigator{0}{1}}
+    \caption{The 7-Layer IoT World Forum Reference Model (Unified Visual Representation)}
     \label{fig:iot_reference_model}
 \end{figure}
 
@@ -41,17 +41,14 @@ Traditional relational databases, while effective for standard transactional wor
 Standard B-tree indexes can become resource-intensive to maintain as table sizes increase with continuous telemetry data. High ingestion rates can lead to significant RAM consumption by the index, potentially impacting read query performance and server stability. To address this, specialized time-series extensions are implemented to replace standard indexing with time-based partitioning \cite{milvus_rdbms_limitations}.
 
 \subsubsection{The TimescaleDB Extension: Hypertables and Chunking}
-TimescaleDB is an extension for PostgreSQL designed to optimize the handling of time-series data while maintaining a standard SQL interface. This allows developers to utilize native SQL queries while benefiting from time-series optimizations.
+Standard relational databases often struggle with the sheer volume of incoming sensor data, but the TimescaleDB extension solves this by transforming PostgreSQL into a dedicated time-series engine while keeping the standard SQL interface. The core of this optimization is the use of "hypertables," which appear as normal tables to the developer but are actually partitioned into smaller physical "chunks" sorted by time intervals, such as days or weeks \cite{tigerdata_tsdb_compared, tigerdata_best_practices_hypertables, tigerdata_timescale_alternatives, tigerdata_caggs_retention}. This approach exploits the fact that most IoT queries target recent data; by directing inserts into only the active chunk, the system avoids scanning through massive amounts of historical logs, which keeps ingestion fast and range queries responsive even as the dataset grows. To further reduce the load, TimescaleDB supports continuous aggregates that precompute summaries like hourly averages in the background, alongside retention policies that automatically compress or purge old data to save space \cite{tigerdata_best_practices_hypertables, tigerdata_timescale_alternatives, tigerdata_caggs_retention, tigerdata_tsdb_compared}. Ultimately, this chunked architecture reduces the I/O and indexing pressure that usually bogs down standard tables, as shown in Figure \ref{fig:hypertable_vs_normal}, providing a high-performance solution that doesn't sacrifice SQL compatibility.
 
-TimescaleDB manages data through \textit{hypertables}, which appear as standard tables to the application but are partitioned into smaller physical "chunks" based on time intervals (e.g., daily or weekly) \cite{tigerdata_tsdb_compared, tigerdata_best_practices_hypertables, tigerdata_timescale_alternatives, tigerdata_caggs_retention}.
-
-This partitioning exploits temporal locality, as most queries and inserts in sensor monitoring target recent data. By directing new inserts to the active chunk, the system avoids scanning historical data, enabling efficient ingestion and rapid range queries even for large datasets.
-
-Additionally, these extensions support continuous aggregates, which precompute data summaries (e.g., daily temperature averages) in the background. Data retention policies can also be configured to compress or remove historical data, managing storage requirements while ensuring that recent data remains accessible \cite{tigerdata_best_practices_hypertables, tigerdata_timescale_alternatives, tigerdata_caggs_retention, tigerdata_tsdb_compared}.
-
-\textbf{[Figure 3.3: Hypertable vs. Normal Table Storage]}
-
-In summary, a hypertable's chunked layout reduces the I/O and indexing burden on the server compared to standard relational tables, providing both standard SQL compatibility and time-series performance \cite{tigerdata_caggs_retention, tigerdata_tsdb_compared, tigerdata_best_practices_hypertables}.
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth,keepaspectratio]{Abudi/figures/HyperTableVSNormal.png}
+    \caption{Architectural comparison between a standard PostgreSQL table and a TimescaleDB hypertable with chunked storage.}
+    \label{fig:hypertable_vs_normal}
+\end{figure}
 
 
 \subsection{Microservices in IoT}
@@ -61,53 +58,18 @@ As IoT systems expand, monolithic architectures, where all features are integrat
 To ensure stability and development efficiency, modern scalable architectures often utilize microservices. This approach partitions system functionality into focused, independent services. Adopting microservices allows for the separation of external device communication, including MQTT brokers, from user-facing features, facilitating clearly defined interfaces and modularity \cite{microservices_io_gateway}.
 
 \subsubsection{The Gateway Pattern: Bridging Edge and Core Services}
-
-The Gateway pattern (often implemented as an API Gateway) serves as a security and protocol boundary between external clients and protected backend services. It provides a controlled entry point between edge hardware, such as ESP32 microcontrollers, and the internal database \cite{microservices_io_gateway, microservices_io_patterns, microservices_io_apigateway}.
-
-A dedicated Gateway is essential for IoT security. Direct database access from edge devices would require embedding API keys in firmware, which presents a significant security risk if the hardware is compromised. 
-
-Instead, a Gateway serves as a buffer. Edge sensors publish telemetry to a message broker, and the Gateway service, positioned within a secure cloud network, subscribes to these messages, translates the payloads, and formats them for database operations \cite{microservices_io_apigateway}. 
-
-This decoupling also provides structural flexibility, allowing for backend updates without requiring firmware changes on deployed devices. Furthermore, it supports geographical scalability by allowing multiple MQTT brokers and local Gateways to funnel data to a central instance \cite{digitalapi_gateway_pattern, microservices_io_apigateway}. 
-
-Ultimately, the Gateway pattern ensures that device traffic is validated and structured before interacting with the database, enhancing overall security and modularity \cite{microservices_io_apigateway}.
+Connecting an ESP32 directly to a database presents a significant security risk, as hardcoding API keys into firmware makes them vulnerable if a device is ever compromised. The Gateway pattern addresses this by acting as a secure boundary and protocol translator between the physical hardware and the core backend \cite{microservices_io_gateway, microservices_io_patterns, microservices_io_apigateway}. In this architecture, sensors push data to a message broker, and the Gateway service—housed within a secure cloud network—processes these messages for database insertion \cite{microservices_io_apigateway}. This separation maintains security while allowing backend logic updates without modifying firmware on deployed devices. It also facilitates scaling by regional brokers to funnel data into a central instance without causing bottlenecks \cite{digitalapi_gateway_pattern, microservices_io_apigateway}. By validating and structuring all incoming traffic, the Gateway ensures the core system remains modular and protected from the intricacies of edge communication \cite{microservices_io_apigateway}.
 
 \subsubsection{Service Inter-communication: Synchronous vs. Asynchronous Patterns}
-
-Microservices rely on specific data exchange mechanisms that influence system reliability. Synchronous communication (e.g., HTTP REST) requires the requesting service to wait for a response, which can lead to cascading delays in high-traffic sensor networks \cite{gfg_microservices_communication}.
-
-To manage traffic volatility, scalable architectures frequently utilize asynchronous communication. In an event-driven model, a service publishes a message to a broker and continues its tasks without waiting for a reply \cite{gfg_sync_vs_async_system_design}. This approach facilitates system resilience; for example, if many devices reconnect simultaneously, an asynchronous Gateway can queue the traffic, allowing the database to process data at a sustainable rate \cite{cerbos_inter_service_communication}.
+Inter-service communication is fundamental to system reliability, particularly in high-volume sensor networks. Synchronous configurations, such as standard HTTP requests, require services to wait for responses, which often leads to cascading delays when network traffic increases \cite{gfg_microservices_communication}. To mitigate this risk, scalable IoT architectures frequently utilize asynchronous, event-driven communication. In this model, a service publishes a message to a broker and continues processing without waiting for a reply \cite{gfg_sync_vs_async_system_design}. This approach enhances architectural resilience; for instance, if a large number of devices reconnect simultaneously, an asynchronous Gateway can queue the incoming traffic, allowing the database to process data at a sustainable rate \cite{cerbos_inter_service_communication}.
 
 \subsection{Edge vs. Cloud}
-
-IoT architectural design is fundamentally influenced by the location of computational execution. The decision to place logic in the cloud or on the edge microcontroller impacts latency, reliability, and power consumption.
-
-\subsubsection{Defining the Cloud-Centric Model}
-
-A cloud-centric architecture centralizes processing, storage, and decision-making algorithms within remote data centers. Physical devices at the edge serve as "thin" components, recording environmental data and transmitting it to the cloud for interpretation and action \cite{digitalocean_edge_vs_cloud, blog_elest_supabase_self_host}.
-
-The primary advantage of this model is the availability of centralized computational power, allowing for complex time-series aggregations and the integration of advanced features without being limited by edge hardware constraints. However, cloud-centric models are dependent on reliable network connectivity and are subject to network latency. While a delay of several seconds may be acceptable for periodic data logging, real-time control loops may require lower response times \cite{nsf_par_10184999, gfg_cloud_computing, digitalocean_edge_vs_cloud, blog_elest_supabase_self_host}.
-
-\subsubsection{Defining the Edge-Centric Model}
-
-An edge-centric architecture emphasizes localized computation and autonomous decision-making on the edge device itself. The microcontroller interprets local readings and triggers actions (e.g., sensor alerts or pump activation) without requiring a server response \cite{scalecomputing_edge_vs_cloud, scalecomputing_edge_devices, blog_elest_supabase_self_host}.
-
-By performing logic locally, this model provides offline fault tolerance and low latency. It also minimizes bandwidth consumption by transmitting only summarized data to the cloud. However, implementing complex logic on edge devices can increase development and maintenance complexity. Firmware updates and remote debugging can be more challenging compared to centralized cloud deployments. Additionally, developers must work within the CPU and RAM constraints of embedded hardware \cite{digitalocean_edge_vs_cloud, scalecomputing_edge_vs_cloud, blog_elest_supabase_self_host, scalecomputing_edge_devices}.
+The allocation of computational logic is a critical design choice in IoT engineering, typically falling on a spectrum between the cloud and the edge. In a cloud-centric model, edge hardware acts as a "thin" component that exclusively transmits data to remote servers for processing \cite{digitalocean_edge_vs_cloud, blog_elest_supabase_self_host}. While this centralizes computing power for tasks like complex time-series aggregations, it creates a dependency on stable network connectivity and introduces potential latency \cite{nsf_par_10184999, gfg_cloud_computing}. Conversely, an edge-centric approach places decision-making logic directly on the microcontroller, providing localized autonomy and low latency as shown in Figure \ref{fig:cloud_vs_edge}. This model enables rapid responses and offline fault tolerance, though it is constrained by limited hardware resources and increased maintenance complexity \cite{scalecomputing_edge_vs_cloud, scalecomputing_edge_devices, blog_elest_supabase_self_host}. Balancing these factors through "Thick" or "Thin" edge strategies is essential for ensuring that systems like Plant Up! remain both analytically capable and operationally resilient.
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.8\textwidth]{Abudi/figures/cloud vs edge.png}
-    \caption{Visual Comparison of Cloud vs. Edge Architectures (Source: Self-made)}
+    \caption{Visual Comparison of Cloud vs. Edge Architectures.}
     \label{fig:cloud_vs_edge}
 \end{figure}
-
-\subsubsection{The Spectrum of Logic Distribution: ``Thick Edge'' vs. ``Thin Edge''}
-
-In systems engineering, the choice is often not a binary one between Edge and Cloud, but rather a point on a spectrum of logical allocation. 
-
-A \textbf{``Thick Edge''} architecture delegates significant processing and control to the edge device, enhancing localized resilience and minimizing latency. However, this often requires more capable hardware and can increase the complexity of over-the-air (OTA) updates and long-term maintenance \cite{digitalocean_edge_vs_cloud, scalecomputing_edge_vs_cloud, scalecomputing_edge_devices}.
-
-In contrast, a \textbf{``Thin Edge''} strategy centralizes logic in the cloud. Edge hardware is utilized primarily for data acquisition and transmission, with minimal localized processing. This approach relies on continuous connectivity but allows for simpler edge hardware and easier central updates to application logic. It enables development teams to iterate on algorithms and features without requiring direct hardware modifications \cite{blog_elest_supabase_self_host, iotclass_edge_fog_cloud}.
-
-The choice between these models depends on the specific requirements of the application, balancing factors such as localized autonomy (Thick Edge) and developmental scalability (Thin Edge). This theoretical framework serves as the context for evaluating the structural decisions made in the Plant Up! implementation.
 are evaluated.
