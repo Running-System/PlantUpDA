@@ -310,12 +310,13 @@
     \renewcommand{\currentauthor}{}
     \newcommand{\setauthorheader}[1]{%
       \renewcommand{\currentauthor}{#1}%
-      \rhead{\sffamily\sl\footnotesize #1}%
+      \fancyhead[RO]{\sffamily\sl\footnotesize #1}%
+      \fancyhead[LE]{\sffamily\sl\footnotesize #1}%
     }
-    \lhead{\sffamily\sl \projecttitle}
+    \fancyhead[LO]{\sffamily\sl \projecttitle}
+    \fancyhead[RE]{\sffamily\sl \projecttitle}
     \lfoot{\sffamily\footnotesize 22IF2609}
     \cfoot{\sffamily\footnotesize Page \thepage\ of \pageref{LastPage}}
-    \rfoot{\sffamily\footnotesize \today}
     \setauthorheader{\allauthors}
 
     % Apply the same header/footer to chapter-opening pages.
