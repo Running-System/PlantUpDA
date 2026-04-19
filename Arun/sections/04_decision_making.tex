@@ -1,4 +1,4 @@
-\section{Data-Driven Decision Making in Plant Care}
+﻿\section{Data-Driven Decision Making in Plant Care}
 
 After the measurement cycle described in Section 2.3, Plant Up! receives structured sensor data at the backend: timestamped values for moisture, climate, and light. This chapter explains how those incoming values are interpreted and transformed into feedback that a user can act on without needing to read raw numbers.
 
@@ -45,8 +45,7 @@ Figure~\ref{fig:decision_flowchart} summarizes this logic visually: incoming mea
 
 \subsection{Visualization and Interpretation}
 
-Interpretation is not only logic. It is also presentation. Plant Up! uses a traffic-light visualization with color-coded indicators (green, yellow, red) and an animated mascot (``Sprig'') that mirrors the current plant state. The purpose is speed: users should recognize ``all good'' versus ``act now'' in one glance, even without understanding the sensor units. Using color as a semantic status channel follows the principle that red signals danger, yellow signals caution, and green signals a safe condition, a convention standardized in ISO~3864. \cite{iso3864}
-
+Interpretation is not only logic. It is also presentation. Plant Up! uses a traffic-light visualization with color-coded indicators (green, yellow, red) and an animated mascot (``Sprig'') that mirrors the current plant state. The purpose is speed: users should recognize ``all good'' versus ``act now'' in one glance, even without understanding the sensor units. Using color as a semantic status channel follows the principle that red signals danger, yellow signals caution, and green signals a safe condition, a convention standardized in ISO~3864 \cite{iso3864}.
 \begin{figure}[H]
     \centering
     \begin{minipage}{0.3\textwidth}
@@ -70,8 +69,7 @@ Figure~\ref{fig:health_traffic_light} illustrates these three primary health sta
 \noindent
 \begin{minipage}[t]{0.55\textwidth}
     \vspace{0pt}
-    Single values are useful, but trends are where the ``why'' becomes visible. Plant Up! therefore shows historical data as bar charts with selectable time ranges (1 hour, 24 hours, 7 days, all time). Time-oriented visualizations make it easier to detect patterns and anomalies than isolated snapshots, because humans can quickly see slopes, cycles, and sudden jumps across a timeline. \cite{jmirTimeSeries}
-
+    Single values are useful, but trends are where the ``why'' becomes visible. Plant Up! therefore shows historical data as bar charts with selectable time ranges (1 hour, 24 hours, 7 days, all time). Time-oriented visualizations make it easier to detect patterns and anomalies than isolated snapshots, because humans can quickly see slopes, cycles, and sudden jumps across a timeline \cite{jmirTimeSeries}.
     \vspace{1em}
     As illustrated in Figure~\ref{fig:trend_chart}, a 1-hour chart focuses on immediate short-term variations, providing live insight into sudden environmental shifts. These patterns support quick reactions and help users confirm if their immediate physical actions, like watering the plant, register correctly within the system.
 

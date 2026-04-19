@@ -1,26 +1,19 @@
-\section{Environmental Factors in Plant Growth}
+﻿\section{Environmental Factors in Plant Growth}
 
-Plants are living systems, but they can be treated as measurable input-output systems in engineering practice. Light, water, temperature, and humidity are not ``nice-to-have'' background conditions. They are measurable variables with operating ranges and failure limits. When a variable stays outside its range, stress is not a surprise. It is the expected outcome. This chapter focuses on what can be measured and controlled, because Plant Up! must convert plant needs into sensor values and thresholds. \cite{ncStateSoils}
-
+Plants are living systems, but they can be treated as measurable input-output systems in engineering practice. Light, water, temperature, and humidity are not ``nice-to-have'' background conditions. They are measurable variables with operating ranges and failure limits. When a variable stays outside its range, stress is not a surprise. It is the expected outcome. This chapter focuses on what can be measured and controlled, because Plant Up! must convert plant needs into sensor values and thresholds \cite{ncStateSoils}.
 \subsection{Importance of Soil Moisture, Temperature, Light, and Humidity}
 
 \subsubsection*{Soil moisture}
 Soil is a porous material made of solids plus pore space filled with air and water. An ideal soil for plant growth is often described as 50\,\% solids and 50\,\% pore space, ideally split into equal parts air and water so roots get both oxygen and moisture. This is the physical reason why ``slightly moist'' often performs better than ``always wet.'' \cite{ncStateSoils}
 
-When pore spaces stay waterlogged, air is displaced and the oxygen supply to roots drops. Root function declines and nutrient uptake suffers, even while the pot appears wet. This oxygen deficit is the primary mechanism behind overwatering damage and explains why soggy soil is more dangerous than dry soil for most indoor plants. \cite{ucIpmAeration}
-
-The opposite end of the spectrum is the \textit{permanent wilting point}: the threshold where remaining soil moisture is physically unavailable to roots. Below this point the plant cannot recover through normal watering, because the accessible water reserve is fully depleted. For monitoring, volumetric water content (VWC) expresses soil water as a percentage of total soil volume, which provides a consistent, loggable metric. \cite{cornellWiltingPoint, meterGroupWater}
-
+When pore spaces stay waterlogged, air is displaced and the oxygen supply to roots drops. Root function declines and nutrient uptake suffers, even while the pot appears wet. This oxygen deficit is the primary mechanism behind overwatering damage and explains why soggy soil is more dangerous than dry soil for most indoor plants \cite{ucIpmAeration}.
+The opposite end of the spectrum is the \textit{permanent wilting point}: the threshold where remaining soil moisture is physically unavailable to roots. Below this point the plant cannot recover through normal watering, because the accessible water reserve is fully depleted. For monitoring, volumetric water content (VWC) expresses soil water as a percentage of total soil volume, which provides a consistent, loggable metric \cite{cornellWiltingPoint, meterGroupWater}.
 \subsubsection*{Light}
-Light is the energy input that drives photosynthesis. Plants do not use all wavelengths equally, so the relevant band is Photosynthetically Active Radiation (PAR), typically defined as the 400\,--\,700 nanometer (nm) range. This distinction matters because ``bright to humans'' and ``usable for plants'' are not the same thing. \cite{nasaPAR2}
-
-The plant-focused intensity metric is Photosynthetic Photon Flux Density (PPFD), which counts photons in the PAR range arriving per area per second. Many low-cost systems instead measure illuminance in lux, which is weighted for human vision and therefore does not map cleanly to PPFD. Lux is still practical for relative comparisons within one setup, such as comparing a dark corner to a bright window. \cite{apogeePpfdLux}
-
+Light is the energy input that drives photosynthesis. Plants do not use all wavelengths equally, so the relevant band is Photosynthetically Active Radiation (PAR), typically defined as the 400\,--\,700 nanometer (nm) range. This distinction matters because ``bright to humans'' and ``usable for plants'' are not the same thing \cite{nasaPAR2}.
+The plant-focused intensity metric is Photosynthetic Photon Flux Density (PPFD), which counts photons in the PAR range arriving per area per second. Many low-cost systems instead measure illuminance in lux, which is weighted for human vision and therefore does not map cleanly to PPFD. Lux is still practical for relative comparisons within one setup, such as comparing a dark corner to a bright window \cite{apogeePpfdLux}.
 \subsubsection*{Temperature and humidity}
-Temperature controls how fast plant processes run. When it is too low, growth slows as biochemical reactions become sluggish. When it is too high, regulation mechanisms lose efficiency and heat damage risk increases. For indoor monitoring, temperature is a core variable because it directly affects water demand and interacts with humidity. \cite{ncStateSoils}
-
-Humidity links to transpiration, the process where water evaporates from leaf surfaces and creates an upward flow that transports dissolved minerals. When humidity is low, transpiration accelerates and the plant loses water faster, potentially outpacing root uptake even if the soil is moist. Because temperature changes the air's water-holding capacity, humidity must always be interpreted together with temperature to correctly assess the atmospheric demand on the plant. \cite{britannicaTranspiration, blancaflor2025measuring}
-
+Temperature controls how fast plant processes run. When it is too low, growth slows as biochemical reactions become sluggish. When it is too high, regulation mechanisms lose efficiency and heat damage risk increases. For indoor monitoring, temperature is a core variable because it directly affects water demand and interacts with humidity \cite{ncStateSoils}.
+Humidity links to transpiration, the process where water evaporates from leaf surfaces and creates an upward flow that transports dissolved minerals. When humidity is low, transpiration accelerates and the plant loses water faster, potentially outpacing root uptake even if the soil is moist. Because temperature changes the air's water-holding capacity, humidity must always be interpreted together with temperature to correctly assess the atmospheric demand on the plant \cite{britannicaTranspiration, blancaflor2025measuring}.
 \subsubsection*{Technical link: translating needs into metrics}
 The described processes depend on physical quantities, not on perception. Roots react to oxygen availability and water content, not to how soil feels. Leaves respond to photon availability and atmospheric drying power, not to how bright or warm a room seems.
 
@@ -29,26 +22,19 @@ For control, these processes must be expressed as measurable variables. Soil moi
 \subsection{Effects of Environmental Factors on Plant Growth}
 
 \subsubsection*{Deficiency: when values are too low}
-Low soil moisture reduces water availability until the permanent wilting point is reached. Monitoring must warn before the plant approaches this boundary, because recovery becomes unreliable once accessible water is depleted. \cite{cornellWiltingPoint}
-
-Low light creates a different stress pattern. The plant tends to grow taller and thinner as it stretches toward available light, often producing weaker stems and paler leaves. This gradual change indicates chronic under-lighting and is not resolved by a single bright day. \cite{openstaxSensory}
-
-Low temperature slows growth by reducing reaction rates. Low humidity increases transpiration demand, which means the plant can become water-stressed even when the soil appears adequately moist. \cite{blancaflor2025measuring}
-
+Low soil moisture reduces water availability until the permanent wilting point is reached. Monitoring must warn before the plant approaches this boundary, because recovery becomes unreliable once accessible water is depleted \cite{cornellWiltingPoint}.
+Low light creates a different stress pattern. The plant tends to grow taller and thinner as it stretches toward available light, often producing weaker stems and paler leaves. This gradual change indicates chronic under-lighting and is not resolved by a single bright day \cite{openstaxSensory}.
+Low temperature slows growth by reducing reaction rates. Low humidity increases transpiration demand, which means the plant can become water-stressed even when the soil appears adequately moist \cite{blancaflor2025measuring}.
 \subsubsection*{Excess: when values are too high}
-Excess soil moisture displaces air in pores, starving roots of oxygen. The plant can then show wilting symptoms even in wet soil, because damaged roots cannot absorb water properly. This is why overwatering often looks like underwatering to the untrained eye. Prolonged wet conditions also favor root decay pathogens, accelerating damage further. For engineering control, the upper moisture limit is a safety boundary that must be enforced with alerts. \cite{ucIpmAeration, rootRotsWisc}
-
-Excess light and heat can cause leaf scorch, especially when a shade-adapted plant is suddenly exposed to strong sun. The damage occurs during short peak exposures rather than from long-term averages, which means monitoring must capture peaks, not only means. \cite{umdSunburn}
-
+Excess soil moisture displaces air in pores, starving roots of oxygen. The plant can then show wilting symptoms even in wet soil, because damaged roots cannot absorb water properly. This is why overwatering often looks like underwatering to the untrained eye. Prolonged wet conditions also favor root decay pathogens, accelerating damage further. For engineering control, the upper moisture limit is a safety boundary that must be enforced with alerts \cite{ucIpmAeration, rootRotsWisc}.
+Excess light and heat can cause leaf scorch, especially when a shade-adapted plant is suddenly exposed to strong sun. The damage occurs during short peak exposures rather than from long-term averages, which means monitoring must capture peaks, not only means \cite{umdSunburn}.
 \subsubsection*{Safe corridors and thresholds}
-A monitoring system needs a control model that prevents both deficiency and excess. The simplest model is a safe corridor: a defined acceptable range for each variable. Inside the corridor, stress risk is low. Near corridor edges, the system should warn before the plant enters a damage trajectory. These corridors are species-dependent, so they must be configurable rather than hard-coded. \cite{unhHumidity}
-
+A monitoring system needs a control model that prevents both deficiency and excess. The simplest model is a safe corridor: a defined acceptable range for each variable. Inside the corridor, stress risk is low. Near corridor edges, the system should warn before the plant enters a damage trajectory. These corridors are species-dependent, so they must be configurable rather than hard-coded \cite{unhHumidity}.
 A practical example: many houseplants prefer relative humidity around 40\,--\,60\,\%, while tropical species often prefer higher levels. This is exactly why a system should start with reasonable defaults and then refine them using observed trends. Data makes the corridor adaptive instead of theoretical.
 
 \subsection{Why Sensor-Based Logging Matters}
 
-Human perception is qualitative, biased, and slow compared to plant dynamics. Surface touch checks miss root-zone conditions, the eye adapts to darkness and overestimates available light, and weekly observation misses hourly stress peaks. \cite{usuOverwatering, pittLightAdaptation} Continuous logging at fixed intervals is not a luxury but a practical requirement, because it reveals patterns and variability that single observations cannot capture. \cite{blancaflor2025measuring}
-
+Human perception is qualitative, biased, and slow compared to plant dynamics. Surface touch checks miss root-zone conditions, the eye adapts to darkness and overestimates available light, and weekly observation misses hourly stress peaks. \cite{usuOverwatering, pittLightAdaptation} Continuous logging at fixed intervals is not a luxury but a practical requirement, because it reveals patterns and variability that single observations cannot capture \cite{blancaflor2025measuring}.
 Sensors convert hidden processes into objective numbers and timestamps. They enable threshold checks, trend detection, and early warnings before visible symptoms appear. This is the real value of Plant Up!: plant care becomes a monitored system, not a guessing game.
 
 With the biological variables defined and the necessity of objective measurement established, the next chapter evaluates the physical hardware required and describes how sensor signals are captured, filtered, and transmitted as structured data.

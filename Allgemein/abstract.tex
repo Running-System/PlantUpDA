@@ -1,12 +1,38 @@
-\begin{flushleft}
-	
-	\subsection*{Abstract}
+\sloppy
 
-    This diploma thesis presents Plant Up!, a smart gardening system developed to support everyday plant care through objective measurement rather than guesswork. The central objective was to reduce common care mistakes by replacing subjective judgement with measurable environmental data and understandable digital feedback.
+\subsection*{Abstract}
 
-    To achieve this, the project was structured into four connected areas: sensor-based data acquisition, edge and cloud communication, backend architecture, and user engagement through gamification. A prototype sensor station was implemented using affordable consumer-grade hardware to measure soil moisture, electrical conductivity, temperature, humidity, and light. These measurements are transmitted through the backend infrastructure and presented in a mobile application, where they are converted into practical care support for the user.
+This diploma thesis presents Plant Up!, a smart gardening system developed to support everyday indoor plant care through objective measurement rather than guesswork. Many plant owners rely on intuition when deciding whether a plant needs water, more light, or another form of care. This can lead to delayed reactions, unnecessary watering, or missed stress symptoms. The central objective of this work was therefore to design a system that measures relevant environmental conditions, processes the collected data reliably, and presents the results in a way that is understandable for non-expert users.
 
-    The work shows that a functional smart-gardening concept can be realized without laboratory equipment or a closed commercial ecosystem. The most important finding is that useful plant monitoring does not depend on expensive specialized hardware, but on a coherent combination of affordable sensors, reliable data processing, and clear presentation of the results. In this way, Plant Up! turns raw environmental measurements into support that can be used in everyday decision-making.
+The project was structured into four connected areas. First, a sensor-based monitoring approach was developed to measure soil moisture, electrical conductivity, temperature, humidity, and light with affordable consumer-grade hardware. Second, the communication between the edge device, cloud services, and backend infrastructure was examined, with particular focus on efficient and reliable transmission of sensor data. Third, the backend architecture was designed to store, synchronize, and provide plant-related data to the application layer. Finally, gamification concepts were integrated to support long-term user engagement, because plant care is not only a technical problem but also a question of routine and motivation.
 
-    In conclusion, the project provides a viable foundation for a complete plant-care assistance system that combines measurement, data processing, and user interaction in one solution. Future work could extend the system through broader plant-specific calibration, more advanced recommendation logic, and long-term field testing under real household conditions.
-\end{flushleft}
+The implemented system combines a prototype sensor station, backend services, and a mobile application into one smart-gardening concept. The sensor station collects environmental and nutrient-related values from the plant environment. These measurements are transmitted through the system infrastructure and converted into user-facing feedback, recommendations, visualizations, and interaction elements. The mobile application also provides a central place where users can view the current plant status, follow changes over time, and receive guidance without needing to interpret the raw values themselves. In this way, raw sensor values are not left as isolated technical data, but are turned into practical support for everyday decisions.
+
+The most important finding is that useful plant monitoring does not require laboratory equipment or a closed commercial ecosystem. A meaningful solution can be built from affordable sensors, a microcontroller-based data acquisition system, structured backend processing, and a clear user interface. At the same time, the work shows that technical measurement alone is not sufficient. The system only becomes useful when values are interpreted, simplified, and presented in a form that helps users act at the right time. This makes the project relevant not only as a technical prototype, but also as an example of how IoT systems can translate environmental data into understandable everyday assistance.
+
+In conclusion, Plant Up! provides a viable foundation for a plant-care assistance system that combines measurement, data processing, and user interaction in one solution. Future work could extend the system through broader plant-specific calibration, more advanced recommendation logic, improved long-term trend analysis, and field testing under real household conditions. Such extensions would allow the system to move from a functional prototype toward a more adaptive and reliable everyday smart-gardening product.
+
+\clearpage
+\null
+\thispagestyle{empty}
+\clearpage
+
+\selectlanguage{ngerman}
+\subsection*{Kurzfassung}
+
+Diese Diplomarbeit stellt Plant Up! vor, ein Smart-Gardening-System, das die allt\"agliche Pflege von Zimmerpflanzen durch objektive Messwerte statt durch blo{\ss}es Sch\"atzen unterst\"utzen soll. Viele Pflanzenbesitzer entscheiden nach Gef\"uhl, ob eine Pflanze Wasser, mehr Licht oder eine andere Form von Pflege ben\"otigt. Das kann zu versp\"ateten Reaktionen, unn\"otigem Gie{\ss}en oder \"ubersehenen Stresssymptomen f\"uhren. Ziel war daher, ein System zu entwickeln, das relevante Umgebungsbedingungen misst, Daten zuverl\"assig verarbeitet und Ergebnisse auch f\"ur Benutzer ohne Fachwissen verst\"andlich darstellt.
+
+Das Projekt wurde in vier zusammenh\"angende Bereiche gegliedert. Zuerst wurde ein sensorbasierter Monitoring-Ansatz entwickelt, um Bodenfeuchtigkeit, elektrische Leitf\"ahigkeit, Temperatur, Luftfeuchtigkeit und Licht mit leistbarer Consumer-Hardware zu messen. Danach wurde die Kommunikation zwischen Edge-Ger\"at, Cloud-Diensten und Backend-Infrastruktur mit Fokus auf effiziente und zuverl\"assige Daten\"ubertragung untersucht. Anschlie{\ss}end wurde die Backend-Architektur entworfen, um pflanzenbezogene Daten zu speichern, zu synchronisieren und der Anwendung bereitzustellen. Abschlie{\ss}end wurden Gamification-Konzepte integriert, um langfristige Benutzerbindung zu unterst\"utzen, weil Pflanzenpflege auch von Routine und Motivation abh\"angt.
+
+Das umgesetzte System verbindet eine Prototyp-Sensorstation, Backend-Dienste und eine mobile Anwendung zu einem Smart-Gardening-Konzept. Die Sensorstation erfasst umgebungs- und n\"ahrstoffbezogene Werte direkt an der Pflanze. Diese Messwerte werden \"uber die Systeminfrastruktur \"ubertragen und in Feedback, Empfehlungen, Visualisierungen und Interaktionselemente umgewandelt. Die mobile Anwendung bietet einen zentralen Ort, an dem Benutzer den aktuellen Pflanzenstatus sehen, Ver\"anderungen verfolgen und Hinweise erhalten, ohne die Rohwerte selbst interpretieren zu m\"ussen. Dadurch werden Sensordaten zu praktischer Unterst\"utzung f\"ur Entscheidungen im Alltag.
+
+Die wichtigste Erkenntnis ist, dass sinnvolles Pflanzenmonitoring weder Laborausr\"ustung noch ein geschlossenes kommerzielles \"Okosystem ben\"otigt. Eine brauchbare L\"osung kann aus leistbaren Sensoren, einem Mikrocontroller-basierten Datenerfassungssystem, strukturierter Backend-Verarbeitung und einer klaren Benutzeroberfl\"ache aufgebaut werden. Gleichzeitig reicht technische Messung allein nicht aus: Werte m\"ussen interpretiert, vereinfacht und so dargestellt werden, dass Benutzer zum richtigen Zeitpunkt handeln k\"onnen. Dadurch ist das Projekt nicht nur ein technischer Prototyp, sondern auch ein Beispiel daf\"ur, wie IoT-Systeme Umgebungsdaten in verst\"andliche Alltagshilfe \"ubersetzen k\"onnen.
+
+Zusammenfassend bietet Plant Up! eine tragf\"ahige Grundlage f\"ur ein Assistenzsystem zur Pflanzenpflege, das Messung, Datenverarbeitung und Benutzerinteraktion verbindet. Zuk\"unftige Erweiterungen k\"onnten pflanzenspezifische Kalibrierung, weiterentwickelte Empfehlungslogik, Langzeit-Trendanalyse und Feldtests unter realen Haushaltsbedingungen umfassen. Dadurch k\"onnte sich das System vom Prototyp zu einem adaptiveren und zuverl\"assigeren Smart-Gardening-Produkt weiterentwickeln.
+
+\fussy
+\selectlanguage{english}
+\clearpage
+\null
+\thispagestyle{empty}
+\clearpage
