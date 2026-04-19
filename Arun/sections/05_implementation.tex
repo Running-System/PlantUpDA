@@ -20,33 +20,14 @@ The SD card module handles continuous data logging and needs a much higher trans
 
 The final two components, the capacitive soil moisture probe and the EC sensor, do not use digital communication at all. They are analog devices that output a continuous electrical voltage. Because these raw voltage signals are sensitive to electrical noise, they cannot be shared on a common wire. As a result, each analog sensor gets its own dedicated ADC-capable pin (GPIO\,1 and GPIO\,4) to ensure the readings remain clean.
 
-Table~\ref{tab:pin_mapping} summarizes the complete pin assignment resulting from these combined hardware requirements.
+The resulting physical sensor setup is shown in Figure~\ref{fig:sensor_setup}, where the ESP32-S3 board is connected to the external probes, light measurement hardware, and power-related components used for the prototype.
 
-\begin{table}[htbp]
-\centering
-\caption{GPIO pin mapping of the Plant Up! sensor station.}
-\label{tab:pin_mapping}
-\begin{tabular}{l l l l}
-\toprule
-\textbf{Component} & \textbf{Protocol} & \textbf{Signal} & \textbf{ESP32 Pin} \\
-\midrule
-BH1750 (Light) & I\textsuperscript{2}C & SDA / SCL & GPIO\,8 / GPIO\,9 \\
-MLX90614 (Air Temp.) & I\textsuperscript{2}C & SDA / SCL & GPIO\,8 / GPIO\,9 \\
-DS18B20 (Soil Temp.) & 1-Wire & Data & GPIO\,5 \\
-\midrule
-SD Card Module & SPI & MISO & GPIO\,13 \\
- & & MOSI & GPIO\,11 \\
- & & SCK & GPIO\,12 \\
- & & CS & GPIO\,10 \\
-\midrule
-Soil Moisture Sensor & Analog & AOUT & GPIO\,1 \\
-EC Sensor (Conductivity) & Analog & A0 & GPIO\,4 \\
-\midrule
-\multicolumn{2}{l}{All sensors} & VCC & 3.3\,V \\
-\multicolumn{2}{l}{All sensors} & GND & GND \\
-\bottomrule
-\end{tabular}
-\end{table}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.82\textwidth]{images/sensorSetup.png}
+    \caption{Physical Plant Up! sensor setup with ESP32-S3 microcontroller, external plant sensors, cabling, and supporting hardware components.}
+    \label{fig:sensor_setup}
+\end{figure}
 
 All sensors operate at 3.3\,V, matching the ESP32's logic level requirements discussed in Section 2.3.3. No additional level shifters or voltage converters are needed on the sensor side.
 
@@ -70,26 +51,26 @@ A low-cost concept is only convincing if the bill of materials stays within a ra
 
 \begin{table}[htbp]
 \centering
-\caption{Bill of materials and approximate prototype cost of the Plant Up! sensor station (list prices including VAT, excluding shipping, accessed on April 8, 2026).}
-\label{tab:bom_costs}
 \begin{tabular}{l r}
 \toprule
 \textbf{Component} & \textbf{Price [EUR]} \\
 \midrule
-ESP32-S3-DevKitC-1 \cite{costEsp32S3DevKit} & 19.90 \\
-Capacitive soil moisture sensor \cite{costCapacitiveMoisture} & 2.60 \\
-BH1750 light sensor \cite{costBh1750} & 2.40 \\
-MLX90614 infrared temperature module \cite{costMlx90614} & 16.63 \\
-DS18B20 waterproof temperature probe \cite{costDs18b20} & 2.70 \\
-TDS / conductivity sensor kit \cite{costTdsSensor} & 12.90 \\
-Micro SD SPI module \cite{costMicroSdModule} & 1.40 \\
-TP4056 charging module \cite{costTp4056} & 3.99 \\
-18650 Li-Ion battery \cite{cost18650Battery} & 5.90 \\
-18650 battery holder \cite{cost18650Holder} & 1.70 \\
+ESP32-S3-DevKitC-1 \cite{costEsp32S3DevKit} & 19,90 \\
+Capacitive soil moisture sensor \cite{costCapacitiveMoisture} & 2,60 \\
+BH1750 light sensor \cite{costBh1750} & 2,40 \\
+MLX90614 infrared temperature module \cite{costMlx90614} & 16,63 \\
+DS18B20 waterproof temperature probe \cite{costDs18b20} & 2,70 \\
+TDS / conductivity sensor kit \cite{costTdsSensor} & 12,90 \\
+Micro SD SPI module \cite{costMicroSdModule} & 1,40 \\
+TP4056 charging module \cite{costTp4056} & 3,99 \\
+18650 Li-Ion battery \cite{cost18650Battery} & 5,90 \\
+18650 battery holder \cite{cost18650Holder} & 1,70 \\
 \midrule
-\textbf{Total} & \textbf{70.12} \\
+\textbf{Total} & \textbf{70,12} \\
 \bottomrule
 \end{tabular}
+\caption{Bill of materials and approximate prototype cost of the Plant Up! sensor station (list prices including VAT, excluding shipping, accessed on April 8, 2026).}
+\label{tab:bom_costs}
 \end{table}
 
 This result is still affordable compared to closed commercial smart-gardening products, but it also shows a relevant design trade-off. The prototype is not ``cheap'' in the sense of a 20-Euro hobby build. Most of the cost is concentrated in three parts: the ESP32-S3 board, the MLX90614 infrared temperature module, and the conductivity measurement kit. In other words, the system remains accessible, but the richer sensor set clearly pushes the station beyond the price of a minimal moisture-only monitor.
@@ -116,23 +97,23 @@ While this relative calibration is effective for everyday plant care, it depends
 
 \subsection{Practical Validation}
 
-To verify the functional correctness of the system, the Plant Up! station was tested in a standard indoor environment. The goal was to observe how the hardware and interpretation logic handle physical environmental changes, specifically watering events and natural daily light cycles.
+To verify the system, the Plant Up! station was tested in a standard indoor environment. The goal was to observe how the hardware and interpretation logic handle watering events and natural daily light cycles.
 
-Figure~\ref{fig:val_moisture} shows the system's reaction to a controlled watering event. Before watering, the soil moisture sensor transmitted a stable baseline of approximately 28\,\%. When water was added, the measured value immediately spiked, reaching a peak of over 85\,\% before gradually stabilizing as the water distributed throughout the soil. This confirms that the sensor reacts correctly to physical changes and that the calibration logic successfully translates the hardware signals into the expected percentage range.
+Figure~\ref{fig:val_moisture} shows the reaction to a controlled watering event. Before watering, the soil moisture sensor transmitted a stable baseline of approximately 28\,\%. After water was added, the value immediately spiked to over 85\,\% before gradually stabilizing as the water distributed throughout the soil. This confirms that the sensor reacts correctly and that the calibration logic translates the hardware signal into the expected percentage range.
 
-Figure~\ref{fig:val_light} illustrates how the station tracks continuous environmental shifts. During a one-hour afternoon window, the recorded light intensity declined steadily from approximately 600\,lux to 0\,lux. This matches the physical reality of a sunset, showing that the I\textsuperscript{2}C light sensor can reliably monitor daily cycles without significant signal noise.
+Figure~\ref{fig:val_light} illustrates how the station tracks continuous environmental shifts. During a one-hour afternoon window, the recorded light intensity declined from approximately 600\,lux to 0\,lux. This matches the physical reality of a sunset and shows that the I\textsuperscript{2}C light sensor can monitor daily cycles without significant signal noise.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \begin{minipage}[t]{0.45\textwidth}
         \centering
-        \includegraphics[height=11cm]{images/moisturegraph.png}
+        \includegraphics[height=10cm]{images/moisturegraph.png}
         \caption{Sensor data visualization confirming a sharp increase in soil moisture directly following a watering event.}
         \label{fig:val_moisture}
     \end{minipage}\hfill
     \begin{minipage}[t]{0.45\textwidth}
         \centering
-        \includegraphics[height=11cm]{images/lightgraph.png}
+        \includegraphics[height=10cm]{images/lightgraph.png}
         \caption{Ambient light tracking showing a smooth decline in lux values, reflecting fading afternoon sunlight.}
         \label{fig:val_light}
     \end{minipage}

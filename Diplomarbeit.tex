@@ -50,6 +50,8 @@
 \titleformat*{\paragraph}{\sffamily\normalsize\bfseries}
 \titleformat*{\subparagraph}{\sffamily\normalsize\bfseries}
 \usepackage{hyperref}
+\usepackage{xurl}
+\Urlmuskip=0mu plus 2mu
 \usepackage{float}
 \usepackage{wrapfig}
 \usepackage{amsmath}
@@ -202,6 +204,14 @@
 \renewcommand*\l@subsubsection{\@dottedtocline{3}{3em}{4em}}
 \renewcommand*\l@figure{\@dottedtocline{1}{1em}{2.5em}}
 \renewcommand*\l@lstlisting{\@dottedtocline{1}{1em}{2.5em}}
+\providecommand{\bstctlcite}[1]{%
+  \@bsphack
+  \@for\@citeb:=#1\do{%
+    \edef\@citeb{\expandafter\@firstofone\@citeb}%
+    \if@filesw\immediate\write\@auxout{\string\citation{\@citeb}}\fi
+  }%
+  \@esphack
+}
 \makeatother
 
 %Es soll ein Index für diese Diplomarbeit erzeugt werden
@@ -294,6 +304,7 @@
 
 \begin{document}
 	\sffamily						                        %Schriftart setzen
+	\bstctlcite{IEEEtranBSTCTL:noDash}
 	% \let\cleardoublepage\clearpage                       % REMOVED: allow chapters to start on right pages
 
     \newcommand{\allauthors}{Sherzai, Behari, Onuoha, Jin}
@@ -315,8 +326,9 @@
     }
     \fancyhead[LO]{\sffamily\sl \projecttitle}
     \fancyhead[RE]{\sffamily\sl \projecttitle}
-    \lfoot{\sffamily\footnotesize 22IF2609}
+    \fancyfoot[LO,RE]{\sffamily\footnotesize 22IF2609}
     \cfoot{\sffamily\footnotesize Page \thepage\ of \pageref{LastPage}}
+    \fancyfoot[RO,LE]{\sffamily\footnotesize 19 April 2026}
     \setauthorheader{\allauthors}
 
     % Apply the same header/footer to chapter-opening pages.
@@ -391,18 +403,21 @@
   \setauthorheader{\allauthors}
  
   \addcontentsline{toc}{chapter}{Appendix}
+  {
+    \makeatletter
     \phantomsection
 	\addcontentsline{toc}{section}{List of Figures}
-	\listoffigures
+	\section*{List of Figures}
+	\@starttoc{lof}
 
-	\vspace{1cm}
 	\phantomsection
 	\addcontentsline{toc}{section}{List of Tables}
-	\listoftables
+	\section*{List of Tables}
+	\@starttoc{lot}
 
 	\phantomsection
 	\addcontentsline{toc}{section}{AI-Generated Figures}
-	\chapter*{AI-Generated Figures}
+	\section*{AI-Generated Figures}
 	The following figures were generated using ChatGPT 5.4 by OpenAI. The prompts used are listed below for transparency.
 
 	\begin{small}
@@ -412,17 +427,23 @@
 		\item[Figure~\ref{fig:decision_flowchart}] \textit{Professional flowchart for an academic thesis on white background with minimal style. Starting node: Sensor Data Received. Process box: Read Values (Soil Moisture, Temperature, Humidity, Light). Diamond decision: Compare against Thresholds. Three output paths: Green Zone (optimal, no action required), Yellow Zone (suboptimal, attention recommended), Red Zone (critical, immediate action required). All paths merge into: Generate Care Recommendation, then Display to User via App. Standard flowchart shapes, sans-serif font, colored zone boxes (green, yellow, red).}
 	\end{description}
 	\end{small}
+    \makeatother
+  }
 
 	\clearpage
+	\null
+	\thispagestyle{empty}
+	\clearpage
 	
+	\phantomsection
 	\addcontentsline{toc}{section}{References}
+	\begingroup
+	\sloppy
 	\bibliographystyle{IEEEtran}
 	\bibliography{references}
+	\endgroup
 	
 	\cleardoublepage
 	\phantomsection
-
-    \cleardoublepage
-    \phantomsection
  
 \end{document}
