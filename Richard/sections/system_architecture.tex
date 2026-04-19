@@ -9,7 +9,7 @@ To realize this vision, the architecture had to address three critical requireme
 \begin{itemize}
     \item Low-latency sensor synchronization: When a plant requires attention, the user is expected to be notified promptly. The feedback loop between biological need and human action should therefore be closed as quickly as possible.
     \item Energy-efficient operation: IoT devices intended for casual home use must be designed for long-term deployment. This requires conserving battery power through deep sleep cycles and minimizing radio usage \cite{espIdfS3SleepModes, esp32s3Datasheet2026}.
-    \item Distributed consistency: Because data is distributed across User, Social, and Hardware domains, the system must maintain a coherent state even during periods of localized network instability \cite{richardsonDbPerService, designGurusCAP}.
+    \item Distributed consistency: Because data is distributed across User, Social, and Hardware domains, the system must maintain a coherent state even during periods of localized network instability \cite{richardsonDbPerService, gilbertLynchCap2002}.
 \end{itemize}
 
 These requirements informed the main architectural decisions, ranging from the hardware design to the structure of the microservices. As a result, the system follows a clearly separated multi-layered approach consisting of the Edge Node, the Cloud Layer, and the Application Layer \cite{nistNoT2016, cheThreeTier}.
@@ -90,13 +90,13 @@ One of the central challenges in the ``Plant Up!'' architecture is balancing rea
 
 During the planning phase, two primary approaches were evaluated for handling sensor-to-cloud communication:
 \begin{itemize}
-    \item REST (HTTPS): The standard approach of the modern web. It is highly structured and universally supported, which makes it well-suited for traditional user-facing API interactions \cite{fieldingRest2000, rfc7230Http}. When it is used to transmit small, frequent sensor packets, however, the required connection overhead becomes substantial \cite{jara2023mqtt}.
-    \item MQTT: A protocol designed specifically for constrained IoT scenarios. It is lightweight and operates on a publish/subscribe model, a structure that aligns well with the constraints of battery-powered microcontrollers such as the ESP32 \cite{oasisMqtt5, hivemqPubSub}.
+    \item REST (HTTPS): The standard approach of the modern web. It is highly structured and universally supported, which makes it well-suited for traditional user-facing API interactions \cite{fieldingRest2000, rfc7230Http}. When it is used to transmit small, frequent sensor packets, however, the required connection and TLS overhead becomes substantial \cite{rfc8446Tls, jara2023mqtt}.
+    \item MQTT: A protocol designed specifically for constrained IoT scenarios. It is lightweight and operates on a publish/subscribe model, a structure that aligns well with the constraints of battery-powered microcontrollers such as the ESP32 \cite{oasisMQTT, yokotaniSasaki2016MqttHttp, thangavel2014mqttCoap, seoane2021CoapMqttSecurity, yamin2018MqttCoap}.
 \end{itemize}
 
-Ultimately, a hybrid approach was adopted in order to leverage the strengths of both protocols. MQTT is used exclusively for the uplink sensor-to-cloud communication path because its lightweight binary format and broker-based communication model help minimize the energy expenditure required for each transmission cycle \cite{oasisMqtt5, jara2023mqtt}. By contrast, the user-facing mobile application continues to communicate with the backend via standard REST APIs because smartphones do not face the same energy constraints and benefit from the request-response semantics of HTTP when loading complex user profiles or social feeds \cite{fieldingRest2000, rfc7230Http}.
+Ultimately, a hybrid approach was adopted in order to leverage the strengths of both protocols. MQTT is used exclusively for the uplink sensor-to-cloud communication path because its lightweight binary format and broker-based communication model help minimize the energy expenditure required for each transmission cycle \cite{oasisMQTT, yokotaniSasaki2016MqttHttp, jara2023mqtt, thangavel2014mqttCoap, seoane2021CoapMqttSecurity}. By contrast, the user-facing mobile application continues to communicate with the backend via standard REST APIs because smartphones do not face the same energy constraints and benefit from the request-response semantics of HTTP when loading complex user profiles or social feeds \cite{fieldingRest2000, rfc7230Http}.
 
-Following this architecture, the deployed IoT devices publish their sensor data via MQTT to a central broker. A dedicated backend service subscribes to the relevant topics and persists the incoming data stream into the database. The mobile application then retrieves this processed data through standard RESTful endpoints \cite{hivemqPubSub, supabase_postgresdb_2026}.
+Following this architecture, the deployed IoT devices publish their sensor data via MQTT to a central broker. A dedicated backend service subscribes to the relevant topics and persists the incoming data stream into the database. The mobile application then retrieves this processed data through standard RESTful endpoints \cite{oasisMQTT, supabase_postgresdb_2026}.
 
 A typical data ingestion flow under this model is illustrated below:
 
