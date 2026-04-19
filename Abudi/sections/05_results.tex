@@ -18,7 +18,7 @@ The results, as summarized in Table \ref{tab:end_to_end_latency}, indicate that 
         Supabase Real-time to Database & 100\,ms & [VALUE MISSING] \\ \midrule
         \textbf{Total End-to-End Latency} & \textbf{$\approx$ 270\,ms} & \textbf{[VALUE MISSING]} \\ \bottomrule
     \end{tabular}
-    \caption{End-to-End Ingestion Latency (Sensors to Persistence)}
+    \caption{End-to-End Ingestion Latency (Sensors to Persistence). Source: Own compilation.}
     \label{tab:end_to_end_latency}
 \end{table}
 
@@ -37,7 +37,7 @@ A critical component of backend performance is the efficiency of telemetry retri
         TimescaleDB Hypertable (Chunking) & [VALUE MISSING] \\ \midrule
         \textbf{Performance Improvement} & \textbf{[PERCENTAGE \%]} \\ \bottomrule
     \end{tabular}
-    \caption{Query Performance Comparison for Time-Series Data}
+    \caption{Query Performance Comparison for Time-Series Data. Source: Own compilation.}
     \label{tab:timescaledb_performance}
 \end{table}
 
@@ -45,7 +45,7 @@ The results in Table \ref{tab:timescaledb_performance} confirm that hypertable c
 
 \subsection{Throughput and Scalability Stress Test}
 
-To evaluate the scalability of the Gateway pattern, a stress test was executed simulating a high-velocity telemetry influx. Using a Python-based simulation environment, a fleet of devices were orchestrated to publish concurrent payloads to the MQTT broker. This scenario was designed to represent a "Disaster Recovery" spike, where multiple edge nodes attempt to flush local caches simultaneously upon regaining internet connectivity.
+To evaluate the scalability of the Gateway pattern, a stress test was executed simulating a high-velocity telemetry influx. Using a Python-based simulation environment, a fleet of devices were orchestrated to publish concurrent payloads to the MQTT broker. This scenario was designed to represent a ``Disaster Recovery'' spike, where multiple edge nodes attempt to flush local caches simultaneously upon regaining internet connectivity.
 
 Under a simulated load of [NUMBER] concurrent writes, the system demonstrated [OBSERVATION, e.g., the ability to normalize traffic within 1.5 seconds]. This benchmark proves that the asynchronous nature of the MQTT gateway effectively buffers incoming traffic, shielding the core PostgreSQL instance from immediate transactional exhaustion.
 
@@ -63,7 +63,7 @@ The objective of these benchmarks was to validate the trade-offs necessitated by
         Connectivity Dependancy & Low (Fully autonomous) & \textbf{High (Cloud dependent)} \\
         End-to-End Latency & $\approx$10\,ms (Local) & \textbf{$\approx$300\,ms (Cloud)} \\ \bottomrule
     \end{tabularx}
-    \caption{Comparative Analysis of Edge-Centric vs. Cloud-Centric Design}
+    \caption{Comparative Analysis of Edge-Centric vs. Cloud-Centric Design. Source: Own compilation.}
     \label{tab:architecture_comparison}
 \end{table}
 

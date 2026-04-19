@@ -1,6 +1,6 @@
 \section{The Plant Up! Architecture}\label{sec:architecture}
 
-The architectural implementation of Plant Up! builds upon the theoretical concepts established in Chapter \ref{ch:theory} to create a functional, scalable IoT ecosystem. A defining feature of the Plant Up! system is the implementation of a "Thin Edge" paradigm, which centralizes all complex processing logic in the cloud. This design choice prioritizes computational scalability and advanced analytical capabilities over localized offline autonomy, significantly reducing hardware costs and complexity.
+The architectural implementation of Plant Up! builds upon the theoretical concepts established in Chapter \ref{ch:theory} to create a functional, scalable IoT ecosystem. A defining feature of the Plant Up! system is the implementation of a ``Thin Edge'' paradigm, which centralizes all complex processing logic in the cloud. This design choice prioritizes computational scalability and advanced analytical capabilities over localized offline autonomy, significantly reducing hardware costs and complexity.
 
 While the architecture is inspired by microservice isolation principles, the backend is deployed as a \textit{modular monolith} utilizing the Supabase Backend-as-a-Service (BaaS) platform. This strategy maintains logical service separation while leveraging a unified database environment for simplified deployment and management.
 
@@ -9,7 +9,7 @@ While the architecture is inspired by microservice isolation principles, the bac
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=1.0\textwidth]{Abudi/figures/plantup_fig1_master_v2.png}
-    \caption{Master Architecture illustrating the chronological data pipeline: sensors, ESP32, Wi-Fi/MQTT, Cloud Ingestion, unified PostgreSQL database, Edge Functions/AI, and the React Native app.}
+    \caption{Master Architecture illustrating the chronological data pipeline: sensors, ESP32, Wi-Fi/MQTT, Cloud Ingestion, unified PostgreSQL database, Edge Functions/AI, and the React Native app. Source: Own illustration.}
     \label{fig:plantup_fig1_master}
 \end{figure}
 
@@ -19,7 +19,7 @@ The architecture is designed strictly around the flow of telemetry: physical edg
     \centering
     \scalebox{1.25}{\IoTNavigator{1}{0}}
 \end{figure}
-At the start of the pipeline is the physical layer, utilizing an ESP32 microcontroller deployed within the plant's environment. Acting as a pure "Thin Edge" component, the ESP32 performs no local computational analysis. Instead, it interfaces with analog and digital sensors to measure environmental metrics---including soil moisture, temperature, humidity, and light intensity---structures them into standardized JSON payloads, and transmits them for remote processing. 
+At the start of the pipeline is the physical layer, utilizing an ESP32 microcontroller deployed within the plant's environment. Acting as a pure ``Thin Edge'' component, the ESP32 performs no local computational analysis. Instead, it interfaces with analog and digital sensors to measure environmental metrics, including soil moisture, temperature, humidity, and light intensity, structures them into standardized JSON payloads, and transmits them for remote processing. 
 
 The initial connectivity relies on Wi-Fi and MQTT for device-to-cloud communication. Direct device-to-smartphone technologies, such as Bluetooth Low Energy (BLE), were deliberately excluded because they limit real-time remote accessibility and can increase user friction. This Wi-Fi-to-Cloud pipeline supports a seamless global onboarding and monitoring experience. A quantitative performance benchmark of the MQTT protocol for this pipeline is evaluated in Chapter \ref{ch:results}.
 
@@ -35,7 +35,7 @@ Following the data flow, the incoming telemetry structured by the ESP32 must be 
 \end{figure}
 Positioned across the cloud boundary, this service acts as a logical ingestion gateway, rather than relying on a physical local gateway hub (such as a Raspberry Pi). It operates independently of user-facing services and serves as the strict security protocol barrier between the external hardware ecosystem and the protected backend environment. 
 
-By absorbing high-velocity MQTT payloads, this service translates hardware telemetry---including connectivity states, registration data, and sensor measurements---into consistent database entries. This abstraction protects the frontend application from underlying protocol complexities and isolates any hardware-level network issues from impacting user-facing application layers.
+By absorbing high-velocity MQTT payloads, this service translates hardware telemetry, including connectivity states, registration data, and sensor measurements, into consistent database entries. This abstraction protects the frontend application from underlying protocol complexities and isolates any hardware-level network issues from impacting user-facing application layers.
 
 
 

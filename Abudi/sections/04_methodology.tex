@@ -16,10 +16,10 @@ Architecture B serves as the control variant, implementing a \textit{Thick Edge}
 
 To isolate the execution location as the independent variable, the following constraints were maintained across both experimental variants:
 \begin{itemize}
-    \item \textbf{Hardware:} Identical ESP32 microcontrollers were utilized for both variants.
-    \item \textbf{Transport:} All communications were handled via the same MQTT message broker and Wi-Fi environment.
-    \item \textbf{Payload Structure:} Data was serialized into standardized JSON objects, differing only in transmission frequency and semantic content.
-    \item \textbf{Persistence:} Both variants utilized identical Supabase endpoints, targeting the same PostgreSQL schemata and TimescaleDB hypertables.
+    \item Hardware: Identical ESP32 microcontrollers were utilized for both variants.
+    \item Transport: All communications were handled via the same MQTT message broker and Wi-Fi environment.
+    \item Payload Structure: Data was serialized into standardized JSON objects, differing only in transmission frequency and semantic content.
+    \item Persistence: Both variants utilized identical Supabase endpoints, targeting the same PostgreSQL schemata and TimescaleDB hypertables.
 \end{itemize}
 
 \subsection{Measurement Methodology and Environment}
@@ -27,7 +27,7 @@ To isolate the execution location as the independent variable, the following con
 The diagnostic methodologies were standardized to ensure the reproducibility of the performance benchmarks.
 
 \subsubsection{Testing Environment}
-The backend infrastructure was hosted on a \textbf{[FIXED HOSTING ENVIRONMENT]} to provide a consistent operational baseline. Load generation for the stress tests was performed using \textbf{[INSERT TESTING TOOL, e.g., Python scripts]}, simulating diverse traffic patterns originating from external network subnets to replicate real-world latency.
+The backend infrastructure was hosted on a [FIXED HOSTING ENVIRONMENT] to provide a consistent operational baseline. Load generation for the stress tests was performed using [INSERT TESTING TOOL, e.g., Python scripts], simulating diverse traffic patterns originating from external network subnets to replicate real-world latency.
 
 \subsubsection{Latency Calculation}
 End-to-end ingestion latency was calculated using differential timestamping, as the asynchronous nature of the MQTT protocol does not support traditional request-response measurement. When the ESP32 generates a reading, a high-precision local timestamp is injected into the JSON payload. Upon successful insertion into the TimescaleDB hypertable, a server-side \texttt{created\_at} timestamp is recorded. The total latency is then derived from the difference between these two values, encompassing Wi-Fi transmission, MQTT brokering, gateway processing, and database latency.
