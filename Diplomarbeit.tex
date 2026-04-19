@@ -192,7 +192,7 @@
 %   #1 = Highlighted Layer Number (1,2,3,4,5,6,7, or 0 for none)
 %   #2 = Mode (0 = Project Bypassed View, 1 = Standard Reference Model)
 %--------------------------------------------------------------------------
-\newcommand{\IoTNavigator}[2]{
+\newcommand{\IoTNavigator}[3]{
     \begin{tikzpicture}[
         node distance=0cm,
         layer/.style={
@@ -243,12 +243,25 @@
 
         % Activation Logic (Overlays)
         \ifnum#1=7 \node[layer, active] at (L7) {7. Collaboration \& Processes}; \fi
+        \ifnum#3=7 \node[layer, active] at (L7) {7. Collaboration \& Processes}; \fi
+        
         \ifnum#1=6 \node[layer, active] at (L6) {6. Application}; \fi
+        \ifnum#3=6 \node[layer, active] at (L6) {6. Application}; \fi
+        
         \ifnum#1=5 \node[layer, active] at (L5) {5. Data Abstraction}; \fi
+        \ifnum#3=5 \node[layer, active] at (L5) {5. Data Abstraction}; \fi
+        
         \ifnum#1=4 \node[layer, active] at (L4) {4. Data Accumulation}; \fi
+        \ifnum#3=4 \node[layer, active] at (L4) {4. Data Accumulation}; \fi
+        
         \ifnum#1=3 \node[layer, active] at (L3) {3. Edge Computing}; \fi
+        \ifnum#3=3 \node[layer, active] at (L3) {3. Edge Computing}; \fi
+        
         \ifnum#1=2 \node[layer, active] at (L2) {2. Connectivity}; \fi
+        \ifnum#3=2 \node[layer, active] at (L2) {2. Connectivity}; \fi
+        
         \ifnum#1=1 \node[layer, active] at (L1) {1. Physical Devices}; \fi
+        \ifnum#3=1 \node[layer, active] at (L1) {1. Physical Devices}; \fi
 
         % Data Flow Arrow
         \draw[->, >=stealth, gray!50, rounded corners] 
@@ -502,6 +515,9 @@
 	\end{description}
 	\end{small}
     \makeatother
+    
+    \clearpage
+    \input{Abudi/sections/08_appendix_code.tex}
   }
 
 	\clearpage
