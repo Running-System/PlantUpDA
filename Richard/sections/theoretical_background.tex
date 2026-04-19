@@ -3,7 +3,7 @@
 Having established the core challenges of latency, energy efficiency, and data consistency in the previous sections, it is helpful to outline the theoretical foundations needed to understand the architectural decisions made in this thesis. This chapter covers the shift toward microservices architecture, the physical constraints of IoT hardware, the characteristics of communication protocols, and the fundamentals of distributed data consistency.
 
 \subsection{Microservices Architecture (MSA)}
-Microservices Architecture (MSA) represents a fundamental shift in modern software design. It organizes applications not as single monolithic systems, but as suites of small, relatively autonomous services that collaborate through well-defined interfaces \cite{awsMicroservices}. In a traditional monolithic setup, almost all functionality, ranging from user management to data processing, is tightly coupled within one large codebase. While this approach can simplify initial development and deployment, it often becomes an obstacle to scalability and fault tolerance as the application expands in complexity \cite{fowlerMicroservices}.
+Microservices Architecture (MSA) represents a fundamental shift in modern software design. It organizes applications not as single monolithic systems, but as suites of small, relatively autonomous services that collaborate through well-defined interfaces \cite{fowlerMicroservices}. In a traditional monolithic setup, almost all functionality, ranging from user management to data processing, is tightly coupled within one large codebase. While this approach can simplify initial development and deployment, it often becomes an obstacle to scalability and fault tolerance as the application expands in complexity \cite{newmanBuilding}.
 
 MSA addresses this limitation by treating the application as a collection of independent services. Each service generally runs in its own isolated process and communicates through lightweight channels, often using HTTP APIs or messaging systems \cite{newmanBuilding}. Each service takes responsibility for a specific business domain. For the ``Plant Up!'' platform, this architectural style is well-suited because it allows different parts of the system to be developed, modified, and scaled independently. For example, the service responsible for ingesting large volumes of sensor readings can be scaled horizontally during peak periods without placing the same load on the social feed service.
 
@@ -40,7 +40,7 @@ One of the established principles of MSA is the concept of a ``Database per Serv
 \end{figure}
 
 \subsubsection{Scalability and Elasticity}
-IoT workloads are characteristically intermittent. Long periods of sensor silence may be followed by sudden bursts of transmission activity whenever many devices wake up to report their status changes. MSA helps accommodate this variance by allowing the Ingestion Service to scale horizontally without allocating the same level of resources to the more stable Social Service.
+IoT workloads are characteristically intermittent. Long periods of sensor silence may be followed by sudden bursts of transmission activity whenever many devices wake up to report their status changes. MSA helps accommodate this variance by allowing the Ingestion Service to scale horizontally without allocating the same level of resources to the more stable Social Service \cite{alDhuraibiElasticity2018}.
 
 \subsection{Internet of Things (IoT) Constraints and Hardware}
 At the hardware foundation of ``Plant Up!'' is the ESP32-S3 microcontroller, a System-on-Chip (SoC) produced by Espressif Systems \cite{esp32s3Datasheet2026}. Despite offering useful processing power, it remains constrained by battery life. The choice of communication protocol directly determines how long the device must remain in an energy-intensive active state and therefore has a direct effect on battery longevity in household use.
@@ -54,13 +54,13 @@ The ESP32-S3 architecture provides several distinct power modes, each with a dif
 \end{itemize}
 
 \subsubsection{The Wake-Up Tax}
-While deep sleep provides substantial energy savings, it also introduces a noticeable ``wake-up tax''. Upon waking to perform a reading, the device must re-initialize the Wi-Fi module, reconnect to the access point, and negotiate a fresh IP address on the local network. This process typically takes between 1 and 3 seconds and consumes around 150\,mA on average before a single byte of useful data is transmitted \cite{adafruitWake}. The choice of communication protocol therefore has a direct impact on the amount of additional handshake overhead introduced during this transition.
+While deep sleep provides substantial energy savings, it also introduces a noticeable ``wake-up tax''. Upon waking to perform a reading, the device must re-initialize the Wi-Fi module, reconnect to the access point, and re-enter the normal transmission path before payload data can be sent. This additional active interval is a central trade-off in duty-cycled IoT designs, because each sleep cycle saves idle energy but adds wake-up and synchronization overhead \cite{espIdfS3SleepModes, kozlowskiSosnowskiDutyCycling2019}. The choice of communication protocol therefore has a direct impact on the amount of additional handshake overhead introduced during this transition.
 
 \subsection{Communication Protocols: MQTT vs. REST}
-Choosing the primary communication protocol is one of the most important architectural decisions at the data layer. It has a direct effect on energy efficiency, latency, and long-term reliability. This subsection examines the two protocols considered for the ``Plant Up!'' sensor layer.
+Choosing the primary communication protocol is one of the most important architectural decisions at the data layer. IoT systems are commonly constrained by heterogeneous networks, limited device resources, and the need for interoperable standards, which makes protocol selection a central design concern rather than a purely implementation-level detail \cite{chenKunz2016IotProtocols}. It has a direct effect on energy efficiency, latency, and long-term reliability. This subsection examines the two protocols considered for the ``Plant Up!'' sensor layer.
 
 \subsubsection{MQTT (Message Queuing Telemetry Transport)}
-MQTT operates as a lightweight binary messaging protocol that was designed for networks characterized by unreliability and limited bandwidth \cite{psiborg2024mqtt}. Rather than relying on direct point-to-point connections, it uses a publish-subscribe routing model.
+MQTT operates as a lightweight binary messaging protocol for constrained and unreliable networks \cite{oasisMQTT}. Rather than relying on direct point-to-point connections, it uses a publish-subscribe routing model. Earlier performance evaluations of MQTT in constrained middleware and IoT environments identify latency, bandwidth consumption, and processing overhead as key protocol-level metrics \cite{thangavel2014mqttCoap, seoane2021CoapMqttSecurity, yamin2018MqttCoap}.
 
 Architecture and Decoupling:
 Unlike the standard REST approach, which connects two endpoints directly, MQTT introduces a central broker to act as an intermediary. The sensor, acting as the publisher, sends data to a designated topic such as \texttt{plantup/sensor/01} without requiring knowledge of which backend services consume that data. The broker handles message routing and forwards the data to all subscribed backend services, such as the Ingestion Service. This architecture decouples devices both in space, because they do not need to know each other's IP addresses, and in time, because messages can be queued temporarily if a consuming service is offline or unreachable.
@@ -68,15 +68,15 @@ Unlike the standard REST approach, which connects two endpoints directly, MQTT i
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/mqtt_converted.png}
-    \caption{MQTT Publish/Subscribe Model: The Broker acts as a central hub, efficiently distributing messages from sensors to various services \cite{psiborg2024mqtt}.}
+    \caption{MQTT Publish/Subscribe Model: The Broker acts as a central hub, efficiently distributing messages from sensors to various services \cite{oasisMQTT}.}
     \label{fig:mqtt_diagram}
 \end{figure}
 
 Packet Structure:
-MQTT further improves efficiency through its binary transmission format, which reduces textual overhead. The fixed transmission header requires only 2 bytes of space~\cite{oasisMqtt31}. This contrasts with traditional HTTP headers, which can accumulate to several hundred bytes per message~\cite{rfc7230Http}.
+MQTT further improves efficiency through its binary transmission format, which reduces textual overhead. The fixed transmission header requires only 2 bytes of space~\cite{oasisMQTT}. This contrasts with traditional HTTP headers, which can accumulate to several hundred bytes per message~\cite{rfc7230Http, yokotaniSasaki2016MqttHttp, chenKunz2016IotProtocols, jara2023mqtt}.
 
 Quality of Service (QoS):
-MQTT further differentiates itself by providing three levels of delivery assurance~\cite{oasisMqtt31}:
+MQTT further differentiates itself by providing three levels of delivery assurance~\cite{oasisMQTT}:
 \begin{itemize}
     \item QoS 0 (At most once): A fire-and-forget approach. It consumes the least energy, but messages that are lost in transit are not retransmitted.
     \item QoS 1 (At least once): Prioritizes guaranteed delivery by requiring a return acknowledgment (PUBACK). This level is generally suitable for transmitting critical sensor data.
@@ -84,7 +84,7 @@ MQTT further differentiates itself by providing three levels of delivery assuran
 \end{itemize}
 
 \subsubsection{REST (Representational State Transfer)}
-REST remains the dominant architectural style of the modern web and relies on standardized HTTP methods~\cite{rfc7230Http}. It follows a synchronous and resource-oriented model.
+REST remains the dominant architectural style of the modern web and relies on standardized HTTP methods~\cite{fieldingRest2000, rfc7230Http}. It follows a synchronous and resource-oriented model.
 
 Request-Response Model:
 REST adheres to a traditional client-server paradigm. The client issues a formatted request, such as GET or POST, and then waits for the server to respond before proceeding.
@@ -92,15 +92,15 @@ REST adheres to a traditional client-server paradigm. The client issues a format
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{images/rest_converted.png}
-    \caption{REST Request-Response Workflow: Stateless clients must establish a new connection for every request, incurring significant overhead \cite{dreamfactory2024rest}.}
+    \caption{REST Request-Response Workflow: Stateless clients must establish a new connection for every request, incurring significant overhead \cite{fieldingRest2000, rfc7230Http}.}
     \label{fig:rest_diagram}
 \end{figure}
 
 Statelessness and Overhead:
-Under REST principles, the server retains no state between sequential requests. Consequently, each transmission must carry its own context, including authentication tokens, headers, and metadata. Furthermore, if the IoT device enters deep sleep between readings, it must perform a full TCP three-way handshake and often an additional TLS handshake for \textit{every single transmission}. This mandatory connection overhead makes REST less energy-efficient than a partially persistent MQTT session for frequent, small data packets.
+Under REST principles, the server retains no state between sequential requests \cite{fieldingRest2000}. Consequently, each transmission must carry its own context, including authentication tokens, headers, and metadata. Furthermore, if the IoT device enters deep sleep between readings, it must perform a full TCP three-way handshake and often an additional TLS handshake for \textit{every single transmission}. This mandatory connection overhead makes REST less energy-efficient than a partially persistent MQTT session for frequent, small data packets \cite{rfc8446Tls, chenKunz2016IotProtocols, jara2023mqtt}.
 
 \subsection{Data Consistency and the CAP Theorem}
-In distributed systems, the CAP theorem states that consistency, availability, and partition tolerance cannot all be fully guaranteed at the same time in the presence of a network partition \cite{brewerCap, designGurusCAP, jaiswalCAP}.
+In distributed systems, the CAP theorem states that consistency, availability, and partition tolerance cannot all be fully guaranteed at the same time in the presence of a network partition \cite{gilbertLynchCap2002}.
 
 For a project like ``Plant Up!'', partition tolerance (P) is not optional because home sensor networks are inherently unstable and intermittent. This practical constraint forces an architectural choice between prioritizing CP or AP behavior:
 \begin{itemize}
