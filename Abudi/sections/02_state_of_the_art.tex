@@ -3,12 +3,12 @@ Before establishing the technical implementation of a scalable smart gardening s
 
 \subsection{The IoT World Forum Reference Model (7-Layer Model)}
 
-Analyzing a large-scale, distributed IoT architecture requires a clear structural framework. This thesis utilizes the IoT World Forum 7-Layer Reference Model, which provides a holistic view encompassing physical hardware, connectivity, and cloud services. This model serves as the baseline for differentiating between Edge (or Fog) and Cloud computing \cite{iot_reference_model}.
+Analyzing a large-scale, distributed IoT architecture requires a clear structural framework. This thesis utilizes the IoT World Forum 7-Layer Reference Model, which provides a holistic view encompassing physical hardware, connectivity, and cloud services (see Figure \ref{fig:iot_reference_model}). This model serves as the baseline for differentiating between Edge (or Fog) and Cloud computing \cite{iot_reference_model}.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \scalebox{1.3}{\IoTNavigator{0}{1}{0}}
-    \caption{The 7-Layer IoT World Forum Reference Model (Unified Visual Representation). Source: Own illustration.}
+    \caption{The 7-Layer IoT World Forum Reference Model (Unified Visual Representation). Source: Own work.}
     \label{fig:iot_reference_model}
 \end{figure}
 
@@ -21,34 +21,33 @@ IoT backends must simultaneously handle diverse workloads, including structured 
 
 \subsubsection{Backend-as-a-Service (BaaS) and the SQL vs. NoSQL Paradigm}
 
-Backend-as-a-Service (BaaS) provides developers with managed infrastructure, including databases, authentication, and serverless APIs. While early BaaS platforms frequently utilized NoSQL document stores (such as Firebase), these architectures can face challenges with complex analytical queries and relational integrity in advanced IoT ecosystems \cite{closefuture_supabase_firebase, supabase_alternatives}. 
+Backend-as-a-Service (BaaS) provides developers with managed infrastructure, including databases, authentication, and serverless APIs. While early BaaS platforms frequently utilized NoSQL document stores (such as Firebase), these architectures can face challenges with complex analytical queries and relational integrity in advanced IoT ecosystems \cite{closefuture_supabase_firebase, supabase_alternatives}.
+Modern BaaS architectures often utilize Relational Database Management Systems (RDBMS), such as PostgreSQL, which provide data integrity alongside real-time subscription capabilities for mobile clients (as illustrated in Figure \ref{fig:realtime_architecture}) \cite{blog_elest_supabase_self_host}.
 
-Modern BaaS architectures often utilize Relational Database Management Systems (RDBMS), such as PostgreSQL, which provide data integrity alongside real-time subscription capabilities for mobile clients \cite{blog_elest_supabase_self_host}.
-
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth,height=0.45\textheight,keepaspectratio]{Abudi/figures/realtime_architekture.png}
-    \caption{Real-time Architecture Flow in Modern BaaS \cite{realtime_architecture}. Source: Own illustration.}
+    \caption{Real-time Architecture Flow in Modern BaaS \cite{realtime_architecture}. Source: Own work.}
     \label{fig:realtime_architecture}
 \end{figure}
 
 When selecting a BaaS for an IoT ecosystem, extensibility is a critical factor. While standard relational databases ensure transactional consistency (ACID properties), they may require optimization to handle high-velocity sensor streams. Consequently, a BaaS is often enhanced with specialized extensions, such as time-series modules, to optimize the SQL engine for sensor data ingestion \cite{closefuture_supabase_firebase, blog_elest_supabase_self_host}.
 
-\subsubsection{Time-Series Databases: Challenges with Standard SQL for Sensor Streams}
+\newpage
+\subsubsection{Time-Series Databases and the TimescaleDB Extension}
 
-Traditional relational databases, while effective for standard transactional workloads, can experience performance issues when managing high-velocity IoT sensor streams \cite{tigerdata_tsdb_vs_rdbms}. A primary cause is index degradation. 
+Traditional relational databases, while effective for standard transactional workloads, can experience performance issues when managing high-velocity IoT sensor streams \cite{tigerdata_tsdb_vs_rdbms}. A primary cause is index degradation. Standard B-tree indexes can become resource-intensive to maintain as table sizes increase with continuous telemetry data. High ingestion rates can lead to significant RAM consumption by the index, potentially impacting read query performance and server stability. To address this, specialized time-series extensions are implemented to replace standard indexing with time-based partitioning \cite{milvus_rdbms_limitations}.
 
-Standard B-tree indexes can become resource-intensive to maintain as table sizes increase with continuous telemetry data. High ingestion rates can lead to significant RAM consumption by the index, potentially impacting read query performance and server stability. To address this, specialized time-series extensions are implemented to replace standard indexing with time-based partitioning \cite{milvus_rdbms_limitations}.
+The TimescaleDB extension solves these challenges by transforming PostgreSQL into a dedicated time-series engine while keeping the standard SQL interface. 
 
-\subsubsection{The TimescaleDB Extension: Hypertables and Chunking}
-Standard relational databases often struggle with the sheer volume of incoming sensor data, but the TimescaleDB extension solves this by transforming PostgreSQL into a dedicated time-series engine while keeping the standard SQL interface. The core of this optimization is the use of ``hypertables,'' which appear as normal tables to the developer but are actually partitioned into smaller physical ``chunks'' sorted by time intervals, such as days or weeks \cite{tigerdata_tsdb_compared, tigerdata_best_practices_hypertables, tigerdata_timescale_alternatives, tigerdata_caggs_retention}. This approach exploits the fact that most IoT queries target recent data; by directing inserts into only the active chunk, the system avoids scanning through massive amounts of historical logs, which keeps ingestion fast and range queries responsive even as the dataset grows. To further reduce the load, TimescaleDB supports continuous aggregates that precompute summaries like hourly averages in the background, alongside retention policies that automatically compress or purge old data to save space \cite{tigerdata_best_practices_hypertables, tigerdata_timescale_alternatives, tigerdata_caggs_retention, tigerdata_tsdb_compared}. Ultimately, this chunked architecture reduces the I/O and indexing pressure that usually bogs down standard tables, as shown in Figure \ref{fig:hypertable_vs_normal}, providing a high-performance solution that doesn't sacrifice SQL compatibility.
-
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth,keepaspectratio]{Abudi/figures/HyperTableVSNormal.png}
-    \caption{Architectural comparison between a standard PostgreSQL table and a TimescaleDB hypertable with chunked storage. Source: Own illustration.}
+    \caption{Architectural comparison between a standard PostgreSQL table and a TimescaleDB hypertable with chunked storage. Source: Own work.}
     \label{fig:hypertable_vs_normal}
 \end{figure}
+
+The core of this optimization is the use of ``hypertables,'' which appear as normal tables to the developer but are actually partitioned into smaller physical ``chunks'' sorted by time intervals, such as days or weeks \cite{tigerdata_tsdb_compared, tigerdata_best_practices_hypertables, tigerdata_timescale_alternatives, tigerdata_caggs_retention}. This approach exploits the fact that most IoT queries target recent data; by directing inserts into only the active chunk, the system avoids scanning through massive amounts of historical logs, which keeps ingestion fast and range queries responsive even as the dataset grows. To further reduce the load, TimescaleDB supports continuous aggregates that precompute summaries like hourly averages in the background, alongside retention policies that automatically compress or purge old data to save space \cite{tigerdata_best_practices_hypertables, tigerdata_timescale_alternatives, tigerdata_caggs_retention, tigerdata_tsdb_compared}. Ultimately, this chunked architecture reduces the I/O and indexing pressure that usually bogs down standard tables, as shown in Figure \ref{fig:hypertable_vs_normal}, providing a high-performance solution that doesn't sacrifice SQL compatibility.
 
 
 \subsection{Microservices in IoT}
@@ -63,12 +62,19 @@ Connecting an ESP32 directly to a database presents a significant security risk,
 \subsubsection{Service Inter-communication: Synchronous vs. Asynchronous Patterns}
 Inter-service communication is fundamental to system reliability, particularly in high-volume sensor networks. Synchronous configurations, such as standard HTTP requests, require services to wait for responses, which often leads to cascading delays when network traffic increases \cite{gfg_microservices_communication}. To mitigate this risk, scalable IoT architectures frequently utilize asynchronous, event-driven communication. In this model, a service publishes a message to a broker and continues processing without waiting for a reply \cite{gfg_sync_vs_async_system_design}. This approach enhances architectural resilience; for instance, if a large number of devices reconnect simultaneously, an asynchronous Gateway can queue the incoming traffic, allowing the database to process data at a sustainable rate \cite{cerbos_inter_service_communication}.
 
-\subsection{Edge vs. Cloud}
-The allocation of computational logic is a critical design choice in IoT engineering, typically falling on a spectrum between the cloud and the edge. In a cloud-centric model, edge hardware acts as a ``thin'' component that exclusively transmits data to remote servers for processing \cite{digitalocean_edge_vs_cloud, blog_elest_supabase_self_host}. While this centralizes computing power for tasks like complex time-series aggregations, it creates a dependency on stable network connectivity and introduces potential latency \cite{nsf_par_10184999, gfg_cloud_computing}. Conversely, an edge-centric approach places decision-making logic directly on the microcontroller, providing localized autonomy and low latency as shown in Figure \ref{fig:cloud_vs_edge}. This model enables rapid responses and offline fault tolerance, though it is constrained by limited hardware resources and increased maintenance complexity \cite{scalecomputing_edge_vs_cloud, scalecomputing_edge_devices, blog_elest_supabase_self_host}. Balancing these factors through ``Thick'' or ``Thin'' edge strategies is essential for ensuring that systems like Plant Up! remain both analytically capable and operationally resilient.
+\newpage
+\subsection{Edge vs. Cloud Computing: Strategic Logic Allocation}
+The allocation of computational logic is a critical design choice in IoT engineering, typically falling on a spectrum between the centralized cloud and the localized edge. This decision directly impacts the system's responsiveness, reliability, and scalability.
 
-\begin{figure}[htbp]
+In a cloud-centric model (often referred to as a ``thin edge'' strategy), edge hardware acts as a minimal component that exclusively focuses on data acquisition and transmission to remote servers \cite{digitalocean_edge_vs_cloud, blog_elest_supabase_self_host}. This approach centralizes computing power, making it ideal for tasks that require significant resources, such as complex time-series aggregations or machine learning inference. However, it introduces a critical dependency on stable network connectivity; any outage renders the edge devices "dumb," potentially leading to missed actions or data loss. Furthermore, the round-trip time (RTT) for data to reach the cloud and return a command introduces latency that may be unacceptable for time-critical operations \cite{nsf_par_10184999, gfg_cloud_computing}.
+
+Conversely, an edge-centric approach (or ``thick edge'') places decision-making logic directly on the microcontroller or a local gateway. As illustrated in Figure \ref{fig:cloud_vs_edge}, this provides localized autonomy and near-zero latency. By processing data at the source, systems can respond instantly to sensor triggers—such as deactivating a pump if a leak is detected—without waiting for cloud verification. This model also enhances architectural resilience, as devices can continue to function during network interruptions. However, edge computing is strictly constrained by hardware limitations; microcontrollers like the ESP32 have limited RAM and processing cycles compared to cloud virtual machines \cite{scalecomputing_edge_vs_cloud, scalecomputing_edge_devices}. 
+
+In the context of the Plant Up! project, balancing these factors is essential. While the cloud is used for historical data storage and global user access (Layer 6 and 7 of the IoT World Forum model), the edge layer (Layer 3) must maintain enough intelligence to ensure plant safety even in offline scenarios. This hybrid approach ensures that the system remains both analytically capable and operationally resilient, leveraging the strengths of both environments \cite{blog_elest_supabase_self_host}.
+
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{Abudi/figures/cloud vs edge.png}
-    \caption{Visual Comparison of Cloud vs. Edge Architectures. Source: Own illustration.}
+    \caption{Visual Comparison of Cloud vs. Edge Architectures. Source: Own work.}
     \label{fig:cloud_vs_edge}
 \end{figure}

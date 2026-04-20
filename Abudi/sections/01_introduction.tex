@@ -2,13 +2,13 @@
 
 The digitalization of houseplant care represents a growing intersection between the Internet of Things (IoT) and daily domestic life. As urbanization increases and living spaces become denser, the desire to maintain greenery has led to an emerging market for smart gardening devices. A common limitation of existing products is their operation as isolated ecosystems; while they may provide localized alerts for individual plants, they often lack broader community interaction. The Plant Up! ecosystem was developed specifically to address this gap. By combining continuous environmental monitoring with a collaborative, gamified social platform, Plant Up! aims to transition routine plant care from an isolated task into a data-driven, shared social experience.
 
-\subsection{The Architectural Challenge: Latency and System Dependability}
+\subsection{Architectural Challenges: Latency and Dependability}
 
 Designing a social smart gardening platform requires a robust backend infrastructure capable of simultaneous management of continuous sensor data and complex user interactions. The primary technical challenges center on two factors: managing network latency and ensuring system availability.
 
 If an architecture relies exclusively on a centralized cloud server for processing every data point, it inherently introduces Round-Trip Time (RTT) delays. In a traditional configuration, a device records sensor data, transmits the payload to a remote server, and waits for the server to evaluate thresholds before receiving a response. This frequent communication can degrade real-time responsiveness. Furthermore, if network connectivity is lost, the system's functionality is compromised due to a lack of localized autonomous processing.
 
-These challenges form the architectural focus of this thesis, which investigates the trade-offs between Edge-Centric and Cloud-Centric processing paradigms. The objective is to optimize both system responsiveness and long-term reliability. A detailed theoretical analysis of these models is provided in Chapter 3.
+These challenges form the architectural focus of this thesis, which investigates the trade-offs between Edge-Centric and Cloud-Centric processing paradigms. The objective is to optimize both system responsiveness and long-term reliability. A detailed theoretical analysis of these models is provided in Section 3.2 .
 
 \subsection{Research Objective}
 

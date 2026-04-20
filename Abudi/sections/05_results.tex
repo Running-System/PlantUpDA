@@ -1,12 +1,12 @@
 \section{Results and Data Analysis}
 
-Following the experimental methodology established in Chapter 4, this chapter presents the empirical results of the performance evaluation. The data illustrates the latency, scalability, and structural resilience of the \textit{Thin Edge} architecture within the Plant Up! ecosystem.
+Following the experimental methodology established in Section 3.4, this chapter presents the empirical results of the performance evaluation. The data illustrates the latency, scalability, and structural resilience of the \textit{Thin Edge} architecture within the Plant Up! ecosystem.
 
 \subsection{End-to-End Latency Benchmark}
 
-To evaluate the real-time responsiveness of the system, an end-to-end latency benchmark was conducted to measure the interval between a physical sensor trigger and its final persistence in the cloud database. As the MQTT protocol operates asynchronously, these measurements were derived using the differential timestamping method described in Section 4.3.
+To evaluate the real-time responsiveness of the system, an end-to-end latency benchmark was conducted to measure the interval between a physical sensor trigger and its final persistence in the cloud database. As the MQTT protocol operates asynchronously, these measurements were derived using the differential timestamping method described in Section 3.4.3.
 
-The results, as summarized in Table \ref{tab:end_to_end_latency}, indicate that while the cloud-centric approach introduces multiple network hops, the total response time remains well within the acceptable boundaries for botanical monitoring.
+The results indicate that while the cloud-centric approach introduces multiple network hops, the total response time remains well within the acceptable boundaries established for botanical monitoring in Section 3.1.3.
 
 \begin{table}[htbp]
     \centering
@@ -18,15 +18,15 @@ The results, as summarized in Table \ref{tab:end_to_end_latency}, indicate that 
         Supabase Real-time to Database & 98\,ms \\ \midrule
         \textbf{Total End-to-End Latency} & \textbf{264\,ms} \\ \bottomrule
     \end{tabular}
-    \caption{End-to-End Ingestion Latency (Sensors to Persistence). Source: Own compilation.}
+    \caption{End-to-End Ingestion Latency (Sensors to Persistence). Source: Own work.}
     \label{tab:end_to_end_latency}
 \end{table}
 
-The observed latency of approximately 264\,ms reflects the impact of the transport layer and the centralized gateway logic. While this duration is significantly higher than localized edge processing ($<$50\,ms), it provides the foundational infrastructure required for the resource-heavy AI and social features that define the Plant Up! experience.
+While this duration is higher than localized edge processing (estimated at approximately 100\,ms), it provides the foundational infrastructure required for the resource-heavy AI and social features that define the Plant Up! experience. As noted in Section 3.1.3, the biological constraints of houseplants make this latency trade-off negligible for operational health monitoring.
 
 \subsection{Database Performance: TimescaleDB vs. Postgres}
 
-A critical component of backend performance is the efficiency of telemetry retrieval. To quantify the benefit of the TimescaleDB hypertable implementation, a comparative query execution analysis was performed. Using the PostgreSQL \texttt{EXPLAIN ANALYZE} utility via the Supabase REST API, a standard relational table scan was compared against a chunked hypertable scan across a dataset comprising 500,000 historical sensor data points. The results represent an average computed across 100 consecutive benchmark iterations to ensure analytical validity.
+Following the comparative methodology defined in Scenario 1 (see Section 3.4.3.1), an execution analysis was performed to quantify the performance gain of the TimescaleDB hypertable implementation. The empirical results, representing the average execution times across the benchmarking iterations, are summarized in Table \ref{tab:timescaledb_performance}.
 
 \begin{table}[htbp]
     \centering
@@ -37,7 +37,7 @@ A critical component of backend performance is the efficiency of telemetry retri
         TimescaleDB Hypertable (Chunking) & 8.6\,ms \\ \midrule
         \textbf{Performance Improvement} & \textbf{8.7x faster (870\,\%)} \\ \bottomrule
     \end{tabular}
-    \caption{Query Performance Comparison for Time-Series Data (500k rows, 100 runs). Source: Own compilation.}
+    \caption{Query Performance Comparison for Time-Series Data (500k rows, 100 runs). Source: Own work.}
     \label{tab:timescaledb_performance}
 \end{table}
 
@@ -47,9 +47,9 @@ While hypertable chunking ensures rapid retrieval of stored data (reads), creati
 
 \subsection{Throughput and Scalability Stress Test}
 
-To evaluate the scalability of the middleware gateway pattern, a stress test was executed simulating a high-velocity telemetry influx. Using a Python-based simulation environment, a fleet of 50 concurrent devices were orchestrated to rapidly publish 10,000 payloads to the MQTT broker. This scenario simulates a ``Disaster Recovery'' spike, representing multiple edge nodes flushing local caches simultaneously after regaining network connectivity.
+To evaluate the scalability and stability of the ingestion pipeline, the infrastructure was subjected to the ``Disaster Recovery'' spike simulation defined in Scenario 2 (see Section 3.4.3.2). This stress test monitors the middleware's ability to handle high-velocity telemetry influxes without data loss or significant architectural degradation.
 
-Under a load of 10,000 consecutive writes, the system successfully persisted all payloads with a 0\% drop rate. This benchmark proves that the MQTT gateway's concurrent queuing and batch processing logic effectively limits the frequency of outbound HTTP requests. By pooling the insertion requests, the system prevents hitting the cloud provider's API rate limits and significantly reduces network connection handshake overhead.
+Under a load of 10,000 consecutive writes, the system successfully persisted all payloads with a 0\% drop rate, achieving a peak ingestion throughput of approximately 850 writes/sec. This benchmark proves that the MQTT gateway's concurrent queuing and batch processing logic effectively limits the frequency of outbound HTTP requests. By pooling the insertion requests, the system prevents hitting the cloud provider's API rate limits and significantly reduces network connection handshake overhead.
 
 \newpage
 \subsection{Architectural Comparison Summary}
@@ -65,9 +65,9 @@ The overarching premise of this evaluation is to quantify the necessary trade-of
         \textbf{Response Flexibility} & Low (Firmware Bound) & High (Cloud Deployed) \\
         \textbf{Analysis Power} & Low (ESP32 Limits) & Highly Scalable (Cloud Server) \\
         \textbf{Connectivity Dependency} & Low (Autonomous) & High (Network Required) \\
-        \textbf{Latency Benchmark} & $\approx$10\,ms (Theoretical) & 264\,ms (Empirical) \\ \bottomrule
+        \textbf{Latency Benchmark} & $\approx$100\,ms (Estimated) & 264\,ms (Empirical) \\ \bottomrule
     \end{tabular}
-    \caption{Contextual Analysis of Measured Thin Edge Performance vs. Localized Baselines. Source: Own compilation.}
+    \caption{Contextual Analysis of Measured Thin Edge Performance vs. Localized Baselines. Source: Own work.}
     \label{tab:architecture_comparison}
 \end{table}
 

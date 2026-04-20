@@ -5,10 +5,10 @@ This section describes the systematic evaluation of the architectural design imp
 \subsection{Experimental Control Framework}
 The experimental framework targets the core cloud‑centric components. Physical ESP32 devices act solely as telemetry ingress vectors, while a C\# Middleware Gateway buffers MQTT messages and performs batch inserts into a Supabase‑managed PostgreSQL instance with TimescaleDB extensions. The primary configuration under test implements a hybrid \textit{Thin Edge} paradigm: ESP32 devices generate raw JSON payloads without local decision‑making, and all processing is performed in the cloud.
 
-\begin{figure}[H]
+\begin{figure}[!ht]
     \centering
-    \includegraphics[width=0.8\textwidth]{Abudi/figures/stress_test.png}
-    \caption{Benchmark runner (Python)}
+    \includegraphics[width=0.6\textwidth]{Abudi/figures/stress_test.png}
+    \caption{Benchmark runner (Python). Source: Own work.}
     \label{fig:benchmark_python}
 \end{figure}
 
@@ -16,11 +16,14 @@ The experimental framework targets the core cloud‑centric components. Physical
 \begin{figure}[H]
     \centering
     \scalebox{1.1}{\IoTNavigator{1}{0}{2}}
-    \caption{Data‑pipeline layers involved in the stress‑test scenario.}
+    \caption{Data‑pipeline layers involved in the stress‑test scenario. Source: Own work.}
+    \label{fig:stress_test_layers}
 \end{figure}
 The testing environment consists of a Supabase cloud backend with a dedicated PostgreSQL instance. Load generation is performed by the Python simulation above using the \texttt{paho‑mqtt} library, allowing precise control over publication rates and device traffic patterns. Latency is measured by embedding a high‑precision epoch timestamp in each payload at generation time and comparing it with the server‑side \texttt{created\_at} timestamp recorded after batch ingestion.
 
-Each benchmark scenario was executed 10 independent runs. For every run, the script recorded the end‑to‑end latency of each message; the reported figures are the arithmetic mean of these 10 runs.
+To ensure this differential latency calculation is scientifically valid, the ESP32 microcontroller achieves clock synchronization by actively polling a central Network Time Protocol (NTP) server at boot. In simple terms, because hardware clocks on microcontrollers drift significantly over time, the device first asks a global time server for the exact current time before it starts sending data. This synchronization guarantees that the hardware timestamp embedded in the payload is accurately aligned with the cloud server's clock, making the latency measurement precise and legitimate.
+
+Each benchmark scenario was executed for 10 independent runs. For every run, the script recorded the end‑to‑end latency of each message; the reported figures are the arithmetic mean of these 10 runs.
 
 \newpage
 \subsection{Test Scenarios}
@@ -33,15 +36,11 @@ An hourly aggregation query was meticulously constructed to group sensor metrics
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{Abudi/figures/benchmark.png}
-    \caption{TimescaleDB aggregation query}
+    \caption{TimescaleDB aggregation query. Source: Own work.}
     \label{fig:timescaledb_query}
 \end{figure}
 
-The query was run 100 times per benchmarking session, across 10 independent testing runs. The \texttt{EXPLAIN ANALYZE} outputs demonstrated a clear distinction in database behavior: standard PostgreSQL relied entirely on exhaustive Sequential Scans, reading all rows before applying filters. Conversely, the hypertable utilized optimized ChunkAppends combined with Index Scans, ignoring entire sections of irrelevant time data.
-
-Due to this structural advantage, the average query execution time plummeted. The time required was merely 12.4 ms for the hypertable architecture, compared to a lagging 45.7 ms for the plain table. This confirms that implementing TimescaleDB guarantees long-term scalability without heavily inflating cloud computing costs.
+The query was run 100 times per benchmarking session, across 10 independent testing runs. To analyze the performance difference, \texttt{EXPLAIN ANALYZE} was utilized to compare the database's internal execution plans—specifically evaluating how the standard PostgreSQL table and the hypertable manage data scanning, indexing, and filtering during high-volume aggregations. This comparison isolates the structural efficiency of the chunked storage model under heavy query loads.
 
 \subsubsection{Scenario 2: Infrastructure Resilience (Disaster Recovery Spike)}
-Scenario 2 simulates a “Disaster Recovery” event where 50 virtual devices concurrently publish a burst of 10\,k MQTT payloads. The benchmark stresses the middleware’s connection pooling and batch processing, assessing resilience against API rate limits (HTTP 429) and packet loss. Over the 10 runs, the middleware successfully processed 99.8 \% of messages with an average end‑to‑end latency of 28.3 ms.
-
-The results demonstrate that the backend can sustain high‑volume spikes while keeping latency within acceptable bounds, confirming the robustness of the Thin Edge architecture.
+Scenario 2 simulates a “Disaster Recovery” event where 50 virtual devices concurrently publish a burst of 10\,k MQTT payloads. The benchmark stresses the middleware’s connection pooling and batch processing, assessing resilience against API rate limits (HTTP 429) and packet loss. This scenario evaluates the system's ability to maintain high-volume ingestion while keeping end-to-end latency and packet loss within acceptable operational bounds, thereby validating the robustness of the Thin Edge architecture.
